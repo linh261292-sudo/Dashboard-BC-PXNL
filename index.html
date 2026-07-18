@@ -1399,18 +1399,6 @@
   ]
 };
 
-  /* ================= CẤU HÌNH BÃI (cố định, không đổi theo dữ liệu) ================= */
-  var yardOrder = ['Đống 1','Đống 2.1','Đống 2.2','Đống 3'];
-  // Theo Dim_PhanDoan / Dim_ViTri (bộ dữ liệu Power BI): mỗi đống có đủ 7 phân đoạn G→F→E→D→C→B→A
-  // (khoảng cách thực tế 280m→0m), 5 lớp/phân đoạn — hiển thị đủ ô kể cả ô đang trống.
-  var segMeters = {G:'280–240m', F:'240–200m', E:'200–160m', D:'160–120m', C:'120–80m', B:'80–40m', A:'40–0m'};
-  var yardSegments = {
-    'Đống 1':   {kin:['G','F'], ho:['E','D','C','B','A']},
-    'Đống 2.1': {kin:['G','F'], ho:['E','D','C','B','A']},
-    'Đống 2.2': {kin:['G','F'], ho:['E','D','C','B','A']},
-    'Đống 3':   {kin:['G','F'], ho:['E','D','C','B','A']}
-  };
-
   /* ================= format helpers ================= */
   function fmt1(n){ return n.toLocaleString('vi-VN', {minimumFractionDigits:1, maximumFractionDigits:1}); }
   function pct1(n){ return n.toFixed(1).replace('.', ',') + '%'; }

@@ -258,7 +258,8 @@
   <div class="navfoot">
     Nguồn: <b>So_do_luu_kho_than.xlsx</b><br>
     Kỳ báo cáo: <b>Tháng 7/2026</b><br>
-    Cập nhật đến <b>16/07/2026</b>
+    Cập nhật đến <b>16/07/2026</b><br>
+    <span style="opacity:.65;">Tự động cập nhật mỗi giờ bởi Trợ lý cập nhật BC HTNL PXNL SH1</span>
   </div>
 </nav>
 
@@ -319,6 +320,16 @@
               <div class="k-value" style="color:var(--green-soft);" id="k4Value">–<span class="unit">ngày</span></div>
               <div class="k-sub" id="k4Sub">Theo tiêu thụ BQ 7 ngày</div>
             </div>
+            <div class="card" data-reveal-child>
+              <div class="k-label">Than tồn tàu SB tại Cảng SH1</div>
+              <div class="k-value" id="kSB1Value">–<span class="unit">tấn</span></div>
+              <div class="k-sub" id="kSB1Sub">–</div>
+            </div>
+            <div class="card" data-reveal-child>
+              <div class="k-label">Ngày dự trữ còn lại theo tàu SB trên Cảng:</div>
+              <div class="k-value" style="color:var(--green-soft);" id="kSB2Value">–<span class="unit">ngày</span></div>
+              <div class="k-sub" id="kSB2Sub">–</div>
+            </div>
           </div>
         </div>
 
@@ -368,7 +379,7 @@
     <div class="panel-inner">
       <div class="eyebrow" data-reveal="fade">04 · Sơ đồ bố trí than</div>
       <h2 class="title" data-reveal="fade">Bố trí lưu kho 3D theo đống / khu vực / tầng</h2>
-      <p class="subtitle" data-reveal="fade" style="margin-bottom:18px;">Mỗi đống có đủ 7 phân đoạn G→A theo đúng khoảng cách thực tế (280m→0m): phần <b style="color:var(--blue-soft);">Kín</b> (nhà kho có mái, G–F, 280–200m) và phần <b style="color:var(--green-soft);">Hở</b> (bãi ngoài trời, E–A, 200–0m). Hiển thị đầy đủ mọi vị trí kể cả ô đang trống; mỗi tầng than được vẽ thành 1 lớp phẳng đồng đều, tô đậm đúng đoạn mét đang có than để nhận biết ngay vị trí đang chất hàng.</p>
+      <p class="subtitle" data-reveal="fade" style="margin-bottom:18px;">Mỗi đống có đủ 7 phân đoạn G→A theo đúng khoảng cách thực tế (280m→0m): phần <b style="color:var(--blue-soft);">Kín</b> (nhà kho có mái, G–F, 280–200m) và phần <b style="color:var(--green-soft);">Hở</b> (bãi ngoài trời, E–A, 200–0m) — riêng Đống 2.1 và Đống 2.2 bố trí liền kề sát nhau đúng thực tế mặt bằng. Hiển thị đầy đủ mọi vị trí kể cả ô đang trống; mỗi tầng than được vẽ thành 1 lớp phẳng đồng đều, tô đậm đúng đoạn mét đang có than để nhận biết ngay vị trí đang chất hàng. Màu khối than thể hiện trạng thái lô hàng: <b style="color:#00B050;">xanh lá</b> — đang lưu kho, <b style="color:#B33A3A;">đỏ</b> — đang nhập, <b style="color:#D98A1B;">vàng</b> — đang cấp.</p>
 
       <div class="panel-card" data-reveal>
         <div class="scene3d-stage" id="stage3d">
@@ -382,10 +393,19 @@
           </div>
           <div class="scene3d-hint">Kéo chuột theo mọi hướng để xoay toàn cảnh 360° — từ trên xuống, từ dưới lên hay từ phía sau · Cuộn để phóng to/thu nhỏ · Di chuột vào khối để xem chi tiết lô hàng · Nút <b>⟲</b> để về góc nhìn mặc định</div>
         </div>
-        <div class="legend" style="margin-top:14px;">
-          <span><i style="background:var(--blue);"></i> Khu vực Kín (F–G, có mái)</span>
-          <span><i style="background:var(--green);"></i> Khu vực Hở (A–E)</span>
-          <span><i style="background:rgba(10,42,74,0.18);"></i> Nền bãi trống</span>
+        <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
+          <div class="legend" style="margin-top:0;">
+            <span style="color:var(--ink-faint); font-weight:700;">Khu vực bãi:</span>
+            <span><i style="background:var(--blue);"></i> Kín (F–G, có mái)</span>
+            <span><i style="background:var(--green);"></i> Hở (A–E)</span>
+            <span><i style="background:rgba(10,42,74,0.18);"></i> Nền bãi trống</span>
+          </div>
+          <div class="legend" style="margin-top:0;">
+            <span style="color:var(--ink-faint); font-weight:700;">Trạng thái lô than:</span>
+            <span><i style="background:#00B050;"></i> Đang lưu kho</span>
+            <span><i style="background:#B33A3A;"></i> Đang nhập</span>
+            <span><i style="background:#D98A1B;"></i> Đang cấp</span>
+          </div>
         </div>
       </div>
     </div>
@@ -709,8 +729,10 @@
       "layer": 1,
       "segment": "E",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 11-03",
       "date": "11/07/2026",
-      "qty": 3000.0
+      "qty": 3000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -718,8 +740,10 @@
       "layer": 2,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 11-03",
       "date": "11/07/2026",
-      "qty": 2500.0
+      "qty": 2500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -727,8 +751,10 @@
       "layer": 3,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 11-03",
       "date": "11/07/2026",
-      "qty": 1500.0
+      "qty": 1500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -736,8 +762,10 @@
       "layer": 4,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-03",
       "date": "11/07/2026",
-      "qty": 514.04
+      "qty": 514.04,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -745,8 +773,10 @@
       "layer": 1,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-03",
       "date": "11/07/2026",
-      "qty": 5000.0
+      "qty": 5000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -754,8 +784,10 @@
       "layer": 2,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-03",
       "date": "12/07/2026",
-      "qty": 4060.74
+      "qty": 4060.74,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -763,8 +795,10 @@
       "layer": 1,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "14/07/2026",
-      "qty": 3000.0
+      "qty": 3000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -772,8 +806,10 @@
       "layer": 2,
       "segment": "D",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 1334.59
+      "qty": 1334.59,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -781,8 +817,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -790,8 +828,10 @@
       "layer": 1,
       "segment": "F",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -799,8 +839,10 @@
       "layer": 2,
       "segment": "G",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -808,8 +850,10 @@
       "layer": 2,
       "segment": "F",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -817,8 +861,10 @@
       "layer": 3,
       "segment": "F",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 200.0
+      "qty": 200.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -826,8 +872,10 @@
       "layer": 3,
       "segment": "G",
       "vessel": "OG06/17",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "15/07/2026",
-      "qty": 226.0
+      "qty": 226.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -835,8 +883,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG01/24",
+      "sbVessel": "Việt Thuận 10-05",
       "date": "01/07/2026",
-      "qty": 2256.73
+      "qty": 2256.73,
+      "status": "nhap"
     },
     {
       "yard": "Đống 3",
@@ -844,8 +894,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 10-03",
       "date": "05/07/2026",
-      "qty": 2500.0
+      "qty": 2500.0,
+      "status": "cap"
     },
     {
       "yard": "Đống 3",
@@ -853,8 +905,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 12-02",
       "date": "05/07/2026",
-      "qty": 2408.11
+      "qty": 2408.11,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -862,8 +916,10 @@
       "layer": 1,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "08/07/2026",
-      "qty": 3900.0
+      "qty": 3900.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -871,8 +927,10 @@
       "layer": 2,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "08/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -880,8 +938,10 @@
       "layer": 3,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "08/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -889,8 +949,10 @@
       "layer": 1,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "09/07/2026",
-      "qty": 4000.0
+      "qty": 4000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -898,8 +960,10 @@
       "layer": 2,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "09/07/2026",
-      "qty": 3000.0
+      "qty": 3000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -907,8 +971,10 @@
       "layer": 3,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "10/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -916,8 +982,10 @@
       "layer": 4,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "10/07/2026",
-      "qty": 1614.0
+      "qty": 1614.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -925,8 +993,10 @@
       "layer": 3,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "10/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -934,8 +1004,10 @@
       "layer": 4,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-01",
       "date": "10/07/2026",
-      "qty": 253.87
+      "qty": 253.87,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -943,8 +1015,10 @@
       "layer": 1,
       "segment": "D",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-01",
       "date": "10/07/2026",
-      "qty": 4000.0
+      "qty": 4000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -952,8 +1026,10 @@
       "layer": 2,
       "segment": "D",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-01",
       "date": "11/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -961,8 +1037,10 @@
       "layer": 1,
       "segment": "E",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-01",
       "date": "11/07/2026",
-      "qty": 1016.0
+      "qty": 1016.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -970,8 +1048,10 @@
       "layer": 3,
       "segment": "D",
       "vessel": "OG02/24",
+      "sbVessel": "Việt Thuận 11-01",
       "date": "11/07/2026",
-      "qty": 600.0
+      "qty": 600.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -979,8 +1059,10 @@
       "layer": 3,
       "segment": "D",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-05",
       "date": "12/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -988,8 +1070,10 @@
       "layer": 4,
       "segment": "D",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-05",
       "date": "12/07/2026",
-      "qty": 326.0
+      "qty": 326.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -997,8 +1081,10 @@
       "layer": 1,
       "segment": "E",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-05",
       "date": "13/07/2026",
-      "qty": 2500.0
+      "qty": 2500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -1006,8 +1092,10 @@
       "layer": 2,
       "segment": "E",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-05",
       "date": "13/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -1015,8 +1103,10 @@
       "layer": 3,
       "segment": "E",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-05",
       "date": "13/07/2026",
-      "qty": 700.21
+      "qty": 700.21,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -1024,8 +1114,10 @@
       "layer": 3,
       "segment": "E",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "13/07/2026",
-      "qty": 784.0
+      "qty": 784.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1033,8 +1125,10 @@
       "layer": 1,
       "segment": "A",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "13/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1042,8 +1136,10 @@
       "layer": 2,
       "segment": "A",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1051,8 +1147,10 @@
       "layer": 1,
       "segment": "B",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1060,8 +1158,10 @@
       "layer": 3,
       "segment": "C",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1069,8 +1169,10 @@
       "layer": 3,
       "segment": "B",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1078,8 +1180,10 @@
       "layer": 2,
       "segment": "B",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1087,8 +1191,10 @@
       "layer": 1,
       "segment": "C",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1096,8 +1202,10 @@
       "layer": 2,
       "segment": "C",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1105,8 +1213,10 @@
       "layer": 3,
       "segment": "A",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -1114,8 +1224,10 @@
       "layer": 1,
       "segment": "D",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 12-01",
       "date": "14/07/2026",
-      "qty": 2500.0
+      "qty": 2500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1123,8 +1235,10 @@
       "layer": 4,
       "segment": "F",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 300.0
+      "qty": 300.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1132,8 +1246,10 @@
       "layer": 4,
       "segment": "G",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 300.0
+      "qty": 300.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1141,8 +1257,10 @@
       "layer": 1,
       "segment": "F",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1150,8 +1268,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1159,8 +1279,10 @@
       "layer": 2,
       "segment": "F",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 1200.0
+      "qty": 1200.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1168,8 +1290,10 @@
       "layer": 2,
       "segment": "G",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 1200.0
+      "qty": 1200.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1177,8 +1301,10 @@
       "layer": 3,
       "segment": "F",
       "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 678.95
+      "qty": 678.95,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1186,8 +1312,10 @@
       "layer": 1,
       "segment": "A",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "13/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1195,8 +1323,10 @@
       "layer": 2,
       "segment": "A",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1204,8 +1334,10 @@
       "layer": 1,
       "segment": "B",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 1226.53
+      "qty": 1226.53,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1213,8 +1345,10 @@
       "layer": 1,
       "segment": "C",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1222,8 +1356,10 @@
       "layer": 3,
       "segment": "C",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1231,8 +1367,10 @@
       "layer": 3,
       "segment": "B",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -1240,8 +1378,10 @@
       "layer": 1,
       "segment": "D",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1249,8 +1389,10 @@
       "layer": 2,
       "segment": "C",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1258,8 +1400,10 @@
       "layer": 2,
       "segment": "B",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 800.0
+      "qty": 800.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.2",
@@ -1267,8 +1411,10 @@
       "layer": 3,
       "segment": "A",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-02",
       "date": "14/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 3",
@@ -1276,8 +1422,10 @@
       "layer": 2,
       "segment": "D",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 622.0
+      "qty": 622.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1285,8 +1433,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1294,8 +1444,10 @@
       "layer": 1,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 2000.0
+      "qty": 2000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1303,8 +1455,10 @@
       "layer": 2,
       "segment": "G",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 1200.0
+      "qty": 1200.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1312,8 +1466,10 @@
       "layer": 2,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 1200.0
+      "qty": 1200.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1321,8 +1477,10 @@
       "layer": 3,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1330,8 +1488,10 @@
       "layer": 3,
       "segment": "G",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "15/07/2026",
-      "qty": 500.0
+      "qty": 500.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1339,8 +1499,10 @@
       "layer": 4,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "16/07/2026",
-      "qty": 330.0
+      "qty": 430.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -1348,8 +1510,10 @@
       "layer": 4,
       "segment": "G",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-06",
       "date": "16/07/2026",
-      "qty": 339.26
+      "qty": 439.26,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1357,8 +1521,10 @@
       "layer": 1,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
       "date": "16/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1366,8 +1532,10 @@
       "layer": 2,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
       "date": "16/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1375,8 +1543,10 @@
       "layer": 1,
       "segment": "G",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
       "date": "16/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1384,8 +1554,10 @@
       "layer": 2,
       "segment": "G",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
       "date": "16/07/2026",
-      "qty": 1000.0
+      "qty": 1000.0,
+      "status": "luukho"
     },
     {
       "yard": "Đống 1",
@@ -1393,11 +1565,25 @@
       "layer": 3,
       "segment": "F",
       "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
       "date": "16/07/2026",
-      "qty": 836.0
+      "qty": 836.0,
+      "status": "luukho"
     }
   ]
 };
+
+  /* ================= CẤU HÌNH BÃI (cố định, không đổi theo dữ liệu) ================= */
+  var yardOrder = ['Đống 1','Đống 2.1','Đống 2.2','Đống 3']; // thu tu dung cho bang/bieu do (danh sach tang dan)
+  // Theo Dim_PhanDoan / Dim_ViTri (bộ dữ liệu Power BI): mỗi đống có đủ 7 phân đoạn G→F→E→D→C→B→A
+  // (khoảng cách thực tế 280m→0m), 5 lớp/phân đoạn — hiển thị đủ ô kể cả ô đang trống.
+  var segMeters = {G:'280–240m', F:'240–200m', E:'200–160m', D:'160–120m', C:'120–80m', B:'80–40m', A:'40–0m'};
+  var yardSegments = {
+    'Đống 1':   {kin:['G','F'], ho:['E','D','C','B','A']},
+    'Đống 2.1': {kin:['G','F'], ho:['E','D','C','B','A']},
+    'Đống 2.2': {kin:['G','F'], ho:['E','D','C','B','A']},
+    'Đống 3':   {kin:['G','F'], ho:['E','D','C','B','A']}
+  };
 
   /* ================= format helpers ================= */
   function fmt1(n){ return n.toLocaleString('vi-VN', {minimumFractionDigits:1, maximumFractionDigits:1}); }
@@ -1523,6 +1709,9 @@
       };
     });
     R.sbTotals = R.sbVessels.reduce(function(s,v){ s.klNor+=v.klNor; s.done+=v.done; s.remain+=v.remain; return s; }, {klNor:0,done:0,remain:0});
+    // Số ngày dự trữ riêng theo lượng than còn lại trên các tàu SB tại cảng (chưa nhập bãi),
+    // so với tốc độ tiêu thụ bình quân 7 ngày gần nhất — khác với R.reserveDays (tính trên toàn bộ tồn kho tại bãi).
+    R.sbReserveDays = R.avgTieuthu7 > 0 ? (R.sbTotals.remain / R.avgTieuthu7) : 0;
 
     // vessel còn lại nhiều nhất trong số tàu mẹ (dùng cho đề xuất hành động)
     R.topRemainOG = R.ogVessels.slice().sort(function(a,b){ return b.remain-a.remain; })[0];
@@ -1563,6 +1752,10 @@
     set('p1DonutHint', 'Tỷ trọng khối lượng than theo hình thức lưu chứa — '+R.reportDate);
     set('p1Legend', '<span><i style="background:var(--blue);"></i> Kín — '+kComma1(R.kin)+' tấn ('+pct1(R.kinPct)+')</span><span><i style="background:var(--green);"></i> Hở — '+kComma1(R.ho)+' tấn ('+pct1(R.hoPct)+')</span>');
     set('p1Note', 'Chênh lệch chỉ <b>~'+fmt(R.discrepancyAbs)+' tấn ('+R.discrepancyPct.toFixed(2).replace('.',',')+'%)</b> giữa số liệu sản lượng và số liệu theo bãi — hai phương pháp đo (cân/băng tải theo ngày so với đo hình học từng lô than) đang khớp nhau rất tốt.');
+    set('kSB1Value', fmt1(R.sbTotals.remain)+'<span class="unit">tấn</span>');
+    set('kSB1Sub', R.sbVessels.length+' tàu SB (' + R.sbVessels.map(function(v){ return v.name; }).join(', ') + ')');
+    set('kSB2Value', digital2(R.sbReserveDays)+'<span class="unit">ngày</span>');
+    set('kSB2Sub', fmt1(R.sbTotals.remain)+' tấn tàu SB ÷ tiêu thụ BQ 7 ngày: '+fmt(R.avgTieuthu7)+' tấn/ngày');
 
     // ---- Slide 3: theo đống ----
     function listVi(labels){
@@ -1935,24 +2128,61 @@
       return box;
     }
 
-    // colors
+    // colors — nền bãi (pad) vẫn tô theo khu vực Kín/Hở; khối than (layer) tô theo TRẠNG THÁI lô hàng
     var KIN_TOP='#3FA9E0', KIN_FRONT='#0083C7', KIN_SIDE='#0083C7';
     var HO_TOP='#4FCE85', HO_FRONT='#00B050', HO_SIDE='#00B050';
     var PAD_TOP='rgba(255,255,255,0.16)', PAD_FRONT='rgba(255,255,255,0.09)', PAD_SIDE='rgba(255,255,255,0.09)';
     var ROOF_COLOR='rgba(63,169,224,0.28)';
 
+    // Trạng thái lô than (cột TrangThaiKho / NgayCapHet trong sổ lưu kho):
+    //   luukho (NgayCapHet rỗng)  -> xanh lá — đang lưu kho bình thường
+    //   nhap   (TrangThaiKho=Nhap)-> đỏ      — đang nhập than vào bãi
+    //   cap    (TrangThaiKho=Cap) -> vàng    — đang cấp than ra khỏi bãi
+    var STATUS_COLORS = {
+      luukho:{top:HO_TOP, front:HO_FRONT, side:HO_SIDE},
+      nhap:{top:'#F2857A', front:'#B33A3A', side:'#B33A3A'},
+      cap:{top:'#FFD37A', front:'#D98A1B', side:'#D98A1B'}
+    };
+    var STATUS_LABEL = {luukho:'', nhap:' — <b style="color:#F2857A;">Đang nhập</b>', cap:' — <b style="color:#FFD37A;">Đang cấp</b>'};
+    // 1 ô có thể gộp nhiều lô cùng tầng; ưu tiên hiển thị trạng thái "đang thao tác" (nhập/cấp)
+    // để không bỏ sót hoạt động đang diễn ra, nếu không có lô nào đang thao tác thì tô xanh lá (lưu kho).
+    function groupStatus(group){
+      if(group.some(function(b){ return b.status==='nhap'; })) return 'nhap';
+      if(group.some(function(b){ return b.status==='cap'; })) return 'cap';
+      return 'luukho';
+    }
+
+    // Thứ tự bố trí từ trước ra sau trên sơ đồ 3D — RIÊNG cho khung nhìn không gian, khớp đúng
+    // mặt bằng thực tế tại kho (đã đổi chỗ Đống 1↔Đống 3 và Đống 2.1↔Đống 2.2 so với thứ tự
+    // liệt kê ở bảng/biểu đồ các slide khác, vốn vẫn giữ thứ tự tăng dần 1 → 2.1 → 2.2 → 3).
+    var yard3DOrder = ['Đống 3','Đống 2.2','Đống 2.1','Đống 1'];
+
     // compute total width to center scene
     var maxSegCount = 0;
-    yardOrder.forEach(function(y){ maxSegCount = Math.max(maxSegCount, yardSegments[y].ho.length + yardSegments[y].kin.length); });
+    yard3DOrder.forEach(function(y){ maxSegCount = Math.max(maxSegCount, yardSegments[y].ho.length + yardSegments[y].kin.length); });
     var totalW = maxSegCount * (SEG_W+SEG_GAP);
-    var totalD = yardOrder.length * YARD_D;
+
+    // Khoảng cách (theo trục Z) giữa các đống: bình thường là YARD_D, riêng giữa Đống 2.1 và Đống 2.2
+    // thu hẹp lại gần bằng bề sâu của chính khối than/nền chứa (CELL_D) để các khối than 2 đống
+    // này thực sự chạm/dính sát nhau (không chỉ nền floor trang trí chạm mà khối than vẫn còn hở).
+    var TIGHT_GAP = CELL_D - 2; // nhỏ hơn CELL_D 2px để khối than (rộng CELL_D-2) chạm khít, không còn khe hở
+    var zCenters = [];
+    yard3DOrder.forEach(function(yard, yi){
+      if(yi === 0){ zCenters.push(0); return; }
+      var prevYard = yard3DOrder[yi-1];
+      var isTightPair = (prevYard === 'Đống 2.1' && yard === 'Đống 2.2') || (prevYard === 'Đống 2.2' && yard === 'Đống 2.1');
+      var gap = isTightPair ? TIGHT_GAP : YARD_D;
+      zCenters.push(zCenters[yi-1] + gap);
+    });
+    var zMid = (Math.min.apply(null, zCenters) + Math.max.apply(null, zCenters)) / 2;
+    zCenters = zCenters.map(function(z){ return z - zMid; });
 
     var HO_PAD_TOP='rgba(79,206,133,0.55)', HO_PAD_FRONT='rgba(79,206,133,0.32)';
     var KIN_PAD_TOP='rgba(63,169,224,0.55)', KIN_PAD_FRONT='rgba(63,169,224,0.32)';
 
-    yardOrder.forEach(function(yard, yi){
+    yard3DOrder.forEach(function(yard, yi){
       var segList = yardSegments[yard].kin.concat(yardSegments[yard].ho); // G,F,E,D,C,B,A — đúng thứ tự khoảng cách thực tế
-      var zCenter = yi*YARD_D - totalD/2 + YARD_D/2;
+      var zCenter = zCenters[yi];
       var segSpan = segList.length*(SEG_W+SEG_GAP) - SEG_GAP;
 
       // group floor tile for this yard row (visually groups each đống, like the paired tables on Page 1)
@@ -2021,12 +2251,17 @@
           var group = layerGroups[layerNum];
           var groupQty = group.reduce(function(s,b){ return s+b.qty; }, 0);
           var bh = LAYER_H;
-          var top = isKin ? KIN_TOP : HO_TOP, front = isKin ? KIN_FRONT : HO_FRONT, side = isKin ? KIN_SIDE : HO_SIDE;
+          var st = groupStatus(group);
+          var colors = STATUS_COLORS[st];
+          var top = colors.top, front = colors.front, side = colors.side;
           var box = makeBox(SEG_W-2, bh, CELL_D-2, top, front, side);
           placeBox(box, xCenter, elev, bh, zCenter);
           box.style.cursor = 'pointer';
           box.addEventListener('mousemove', function(e){
-            var lines = group.map(function(b){ return 'Tàu '+b.vessel+' · '+b.date+' · <b>'+fmt(b.qty)+' tấn</b>'; }).join('<br>');
+            var lines = group.map(function(b){
+              var sbTxt = b.sbVessel ? (' · Sà lan <b>'+b.sbVessel+'</b>') : '';
+              return 'Tàu '+b.vessel+sbTxt+' · '+b.date+' · <b>'+fmt(b.qty)+' tấn</b>'+(STATUS_LABEL[b.status]||'');
+            }).join('<br>');
             var head = '<b>'+group[0].yard+' · '+seg+(isKin?' (Kín)':' (Hở)')+' · Tầng '+layerNum+'</b><br>';
             var foot = group.length>1 ? ('<br>Tổng tầng: <b>'+fmt(groupQty)+' tấn</b>') : '';
             showTip(e.pageX, e.pageY, head+lines+foot);

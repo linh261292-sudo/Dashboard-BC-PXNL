@@ -559,118 +559,845 @@
   /* Chỉ chứa số liệu thô — mọi tính toán/diễn giải nằm trong computeReport() bên dưới, để mỗi lần
      script Python cập nhật lại khối RAW_DATA này, toàn bộ 8 slide tự tính lại và hiển thị đồng bộ. */
   var RAW_DATA = {
-    reportDate: "16/07/2026",
-    month: 7,
-    year: 2026,
-    monthDays: [
-      {day:1, nhap:14174, tieuthu:10759.31, tonkho:41689.23},
-      {day:2, nhap:10293.85, tieuthu:10658.7, tonkho:41324.38},
-      {day:3, nhap:13362, tieuthu:10336.99, tonkho:44349.39},
-      {day:4, nhap:16455, tieuthu:8852.9, tonkho:51951.49},
-      {day:5, nhap:15362.93, tieuthu:6166.19, tonkho:61148.23},
-      {day:6, nhap:15559.63, tieuthu:9059.71, tonkho:67648.15},
-      {day:7, nhap:11775.79, tieuthu:11317.19, tonkho:68106.75},
-      {day:8, nhap:9121.84, tieuthu:9913.63, tonkho:67314.96},
-      {day:9, nhap:8984.16, tieuthu:7584.49, tonkho:68714.63},
-      {day:10, nhap:12420.75, tieuthu:6912.39, tonkho:74222.99},
-      {day:11, nhap:15615, tieuthu:7434.31, tonkho:82403.68},
-      {day:12, nhap:11425.74, tieuthu:6714, tonkho:87115.42},
-      {day:13, nhap:10585.19, tieuthu:9324.6, tonkho:88376.01},
-      {day:14, nhap:17159.53, tieuthu:9618.31, tonkho:95917.23},
-      {day:15, nhap:17728, tieuthu:10116.29, tonkho:103528.94},
-      {day:16, nhap:15253, tieuthu:8354.91, tonkho:110427.03}
-    ],
-    // "Loại" != 'SB' trong sheet TheodoiTàu OG = tàu mẹ (OG); "Loại" == 'SB' = tàu con/sà lan trung chuyển
-    ogVessels: [
-      {name:"VIET THUAN 56-06", contract:"HĐ17", code:"OG06", klNor:53270, done:31608.55, remain:21661.45},
-      {name:"JADE", contract:"HĐ24", code:"OG04", klNor:75430, done:29889.16, remain:45540.84},
-      {name:"KN SINGAPORE", contract:"HĐ24", code:"OG03", klNor:77000, done:25082.79, remain:51917.21}
-    ],
-    sbVessels: [
-      {name:"VIỆT THUẬN 12-07", parentCode:"OG03", klNor:11403.9, done:4836, remain:6567.9},
-      {name:"VIỆT THUẬN 11-07", parentCode:"OG04", klNor:10647.76, done:7678.95, remain:2968.81}
-    ],
-    // Lô than đang tồn tại bãi (Sheet1, các dòng có KLTieuThu rỗng) — nguồn cho bảng/slide 3, 3D slide 4, slide 7, 8
-    stockRows: [
-    {"yard":"Đống 1","zone":"Kín","layer":1,"segment":"G","vessel":"OG04/24","date":"16/07/2026","qty":2000},
-    {"yard":"Đống 1","zone":"Kín","layer":1,"segment":"G","vessel":"OG03/24","date":"16/07/2026","qty":1000},
-    {"yard":"Đống 1","zone":"Kín","layer":2,"segment":"G","vessel":"OG04/24","date":"16/07/2026","qty":1200},
-    {"yard":"Đống 1","zone":"Kín","layer":2,"segment":"G","vessel":"OG03/24","date":"16/07/2026","qty":1000},
-    {"yard":"Đống 1","zone":"Kín","layer":1,"segment":"F","vessel":"OG04/24","date":"16/07/2026","qty":2000},
-    {"yard":"Đống 1","zone":"Kín","layer":1,"segment":"F","vessel":"OG03/24","date":"16/07/2026","qty":1000},
-    {"yard":"Đống 1","zone":"Kín","layer":2,"segment":"F","vessel":"OG04/24","date":"16/07/2026","qty":1200},
-    {"yard":"Đống 1","zone":"Kín","layer":2,"segment":"F","vessel":"OG03/24","date":"16/07/2026","qty":1000},
-    {"yard":"Đống 1","zone":"Kín","layer":3,"segment":"F","vessel":"OG04/24","date":"16/07/2026","qty":678.95},
-    {"yard":"Đống 1","zone":"Kín","layer":3,"segment":"F","vessel":"OG03/24","date":"16/07/2026","qty":836},
-    {"yard":"Đống 2.1","zone":"Kín","layer":1,"segment":"G","vessel":"OG06/17","date":"15/07/2026","qty":2000},
-    {"yard":"Đống 2.1","zone":"Kín","layer":1,"segment":"G","vessel":"OG03/24","date":"15/07/2026","qty":2000},
-    {"yard":"Đống 2.1","zone":"Kín","layer":2,"segment":"G","vessel":"OG06/17","date":"15/07/2026","qty":800},
-    {"yard":"Đống 2.1","zone":"Kín","layer":2,"segment":"G","vessel":"OG03/24","date":"15/07/2026","qty":1200},
-    {"yard":"Đống 2.1","zone":"Kín","layer":3,"segment":"G","vessel":"OG06/17","date":"15/07/2026","qty":226},
-    {"yard":"Đống 2.1","zone":"Kín","layer":3,"segment":"G","vessel":"OG03/24","date":"15/07/2026","qty":500},
-    {"yard":"Đống 2.1","zone":"Kín","layer":4,"segment":"G","vessel":"OG04/24","date":"16/07/2026","qty":300},
-    {"yard":"Đống 2.1","zone":"Kín","layer":4,"segment":"G","vessel":"OG03/24","date":"16/07/2026","qty":339.26},
-    {"yard":"Đống 2.1","zone":"Kín","layer":1,"segment":"F","vessel":"OG06/17","date":"15/07/2026","qty":2000},
-    {"yard":"Đống 2.1","zone":"Kín","layer":1,"segment":"F","vessel":"OG03/24","date":"15/07/2026","qty":2000},
-    {"yard":"Đống 2.1","zone":"Kín","layer":2,"segment":"F","vessel":"OG06/17","date":"15/07/2026","qty":800},
-    {"yard":"Đống 2.1","zone":"Kín","layer":2,"segment":"F","vessel":"OG03/24","date":"15/07/2026","qty":1200},
-    {"yard":"Đống 2.1","zone":"Kín","layer":3,"segment":"F","vessel":"OG06/17","date":"15/07/2026","qty":200},
-    {"yard":"Đống 2.1","zone":"Kín","layer":3,"segment":"F","vessel":"OG03/24","date":"15/07/2026","qty":500},
-    {"yard":"Đống 2.1","zone":"Kín","layer":4,"segment":"F","vessel":"OG04/24","date":"16/07/2026","qty":300},
-    {"yard":"Đống 2.1","zone":"Kín","layer":4,"segment":"F","vessel":"OG03/24","date":"16/07/2026","qty":330},
-    {"yard":"Đống 2.1","zone":"Hở","layer":1,"segment":"E","vessel":"OG02/24","date":"08/07/2026","qty":3900},
-    {"yard":"Đống 2.1","zone":"Hở","layer":2,"segment":"E","vessel":"OG02/24","date":"08/07/2026","qty":2000},
-    {"yard":"Đống 2.1","zone":"Hở","layer":3,"segment":"E","vessel":"OG02/24","date":"08/07/2026","qty":800},
-    {"yard":"Đống 2.1","zone":"Hở","layer":3,"segment":"E","vessel":"OG02/24","date":"10/07/2026","qty":800},
-    {"yard":"Đống 2.1","zone":"Hở","layer":4,"segment":"E","vessel":"OG02/24","date":"10/07/2026","qty":253.87},
-    {"yard":"Đống 2.1","zone":"Hở","layer":1,"segment":"D","vessel":"OG02/24","date":"10/07/2026","qty":4000},
-    {"yard":"Đống 2.1","zone":"Hở","layer":2,"segment":"D","vessel":"OG06/17","date":"11/07/2026","qty":2500},
-    {"yard":"Đống 2.1","zone":"Hở","layer":2,"segment":"D","vessel":"OG02/24","date":"11/07/2026","qty":1000},
-    {"yard":"Đống 2.1","zone":"Hở","layer":3,"segment":"D","vessel":"OG06/17","date":"11/07/2026","qty":1500},
-    {"yard":"Đống 2.1","zone":"Hở","layer":3,"segment":"D","vessel":"OG02/24","date":"11/07/2026","qty":600},
-    {"yard":"Đống 2.1","zone":"Hở","layer":4,"segment":"D","vessel":"OG06/17","date":"11/07/2026","qty":514.04},
-    {"yard":"Đống 2.2","zone":"Kín","layer":1,"segment":"G","vessel":"OG01/24","date":"01/07/2026","qty":2256.73},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"E","vessel":"OG02/24","date":"09/07/2026","qty":4000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"E","vessel":"OG02/24","date":"09/07/2026","qty":3000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"E","vessel":"OG02/24","date":"10/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":4,"segment":"E","vessel":"OG02/24","date":"10/07/2026","qty":1614},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"D","vessel":"OG06/17","date":"11/07/2026","qty":5000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"D","vessel":"OG06/17","date":"12/07/2026","qty":4060.74},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"D","vessel":"OG04/24","date":"12/07/2026","qty":500},
-    {"yard":"Đống 2.2","zone":"Hở","layer":4,"segment":"D","vessel":"OG04/24","date":"12/07/2026","qty":326},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"C","vessel":"OG04/24","date":"14/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"C","vessel":"OG03/24","date":"14/07/2026","qty":500},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"C","vessel":"OG04/24","date":"14/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"C","vessel":"OG03/24","date":"14/07/2026","qty":500},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"C","vessel":"OG04/24","date":"14/07/2026","qty":800},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"C","vessel":"OG03/24","date":"14/07/2026","qty":500},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"B","vessel":"OG04/24","date":"14/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"B","vessel":"OG03/24","date":"14/07/2026","qty":1226.53},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"B","vessel":"OG04/24","date":"14/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"B","vessel":"OG03/24","date":"14/07/2026","qty":800},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"B","vessel":"OG04/24","date":"14/07/2026","qty":800},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"B","vessel":"OG03/24","date":"14/07/2026","qty":500},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"A","vessel":"OG04/24","date":"13/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":1,"segment":"A","vessel":"OG03/24","date":"13/07/2026","qty":1000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"A","vessel":"OG04/24","date":"14/07/2026","qty":2000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":2,"segment":"A","vessel":"OG03/24","date":"14/07/2026","qty":1000},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"A","vessel":"OG04/24","date":"14/07/2026","qty":500},
-    {"yard":"Đống 2.2","zone":"Hở","layer":3,"segment":"A","vessel":"OG03/24","date":"14/07/2026","qty":500},
-    {"yard":"Đống 3","zone":"Kín","layer":1,"segment":"G","vessel":"OG02/24","date":"05/07/2026","qty":2500},
-    {"yard":"Đống 3","zone":"Kín","layer":1,"segment":"G","vessel":"OG02/24","date":"05/07/2026","qty":2408.11},
-    {"yard":"Đống 3","zone":"Hở","layer":1,"segment":"E","vessel":"OG06/17","date":"11/07/2026","qty":3000},
-    {"yard":"Đống 3","zone":"Hở","layer":1,"segment":"E","vessel":"OG02/24","date":"11/07/2026","qty":1016},
-    {"yard":"Đống 3","zone":"Hở","layer":1,"segment":"E","vessel":"OG04/24","date":"13/07/2026","qty":2500},
-    {"yard":"Đống 3","zone":"Hở","layer":2,"segment":"E","vessel":"OG04/24","date":"13/07/2026","qty":1000},
-    {"yard":"Đống 3","zone":"Hở","layer":3,"segment":"E","vessel":"OG04/24","date":"13/07/2026","qty":700.21},
-    {"yard":"Đống 3","zone":"Hở","layer":3,"segment":"E","vessel":"OG04/24","date":"13/07/2026","qty":784},
-    {"yard":"Đống 3","zone":"Hở","layer":1,"segment":"D","vessel":"OG06/17","date":"14/07/2026","qty":3000},
-    {"yard":"Đống 3","zone":"Hở","layer":1,"segment":"D","vessel":"OG04/24","date":"14/07/2026","qty":2500},
-    {"yard":"Đống 3","zone":"Hở","layer":1,"segment":"D","vessel":"OG03/24","date":"14/07/2026","qty":1000},
-    {"yard":"Đống 3","zone":"Hở","layer":2,"segment":"D","vessel":"OG06/17","date":"15/07/2026","qty":1334.59},
-    {"yard":"Đống 3","zone":"Hở","layer":2,"segment":"D","vessel":"OG03/24","date":"15/07/2026","qty":622}
-    ]
-  };
+  "reportDate": "16/07/2026",
+  "month": 7,
+  "year": 2026,
+  "monthDays": [
+    {
+      "day": 1,
+      "nhap": 14174.0,
+      "tieuthu": 10759.31,
+      "tonkho": 41689.23
+    },
+    {
+      "day": 2,
+      "nhap": 10293.85,
+      "tieuthu": 10658.7,
+      "tonkho": 41324.38
+    },
+    {
+      "day": 3,
+      "nhap": 13362.0,
+      "tieuthu": 10336.99,
+      "tonkho": 44349.39
+    },
+    {
+      "day": 4,
+      "nhap": 16455.0,
+      "tieuthu": 8852.9,
+      "tonkho": 51951.49
+    },
+    {
+      "day": 5,
+      "nhap": 15362.93,
+      "tieuthu": 6166.19,
+      "tonkho": 61148.23
+    },
+    {
+      "day": 6,
+      "nhap": 15559.63,
+      "tieuthu": 9059.71,
+      "tonkho": 67648.15
+    },
+    {
+      "day": 7,
+      "nhap": 11775.79,
+      "tieuthu": 11317.19,
+      "tonkho": 68106.75
+    },
+    {
+      "day": 8,
+      "nhap": 9121.84,
+      "tieuthu": 9913.63,
+      "tonkho": 67314.96
+    },
+    {
+      "day": 9,
+      "nhap": 8984.16,
+      "tieuthu": 7584.49,
+      "tonkho": 68714.63
+    },
+    {
+      "day": 10,
+      "nhap": 12420.75,
+      "tieuthu": 6912.39,
+      "tonkho": 74222.99
+    },
+    {
+      "day": 11,
+      "nhap": 15615.0,
+      "tieuthu": 7434.31,
+      "tonkho": 82403.68
+    },
+    {
+      "day": 12,
+      "nhap": 11425.74,
+      "tieuthu": 6714.0,
+      "tonkho": 87115.42
+    },
+    {
+      "day": 13,
+      "nhap": 10585.19,
+      "tieuthu": 9324.6,
+      "tonkho": 88376.01
+    },
+    {
+      "day": 14,
+      "nhap": 17159.53,
+      "tieuthu": 9618.31,
+      "tonkho": 95917.23
+    },
+    {
+      "day": 15,
+      "nhap": 17728.0,
+      "tieuthu": 10116.29,
+      "tonkho": 103528.94
+    },
+    {
+      "day": 16,
+      "nhap": 15253.0,
+      "tieuthu": 8354.91,
+      "tonkho": 110427.03
+    }
+  ],
+  "ogVessels": [
+    {
+      "name": "VIET THUAN 56-06",
+      "contract": "HĐ17",
+      "code": "OG06",
+      "klNor": 53270.0,
+      "done": 31608.55,
+      "remain": 21661.45
+    },
+    {
+      "name": "JADE",
+      "contract": "HĐ24",
+      "code": "OG04",
+      "klNor": 75430.0,
+      "done": 29889.16,
+      "remain": 45540.84
+    },
+    {
+      "name": "KN SINGAPORE",
+      "contract": "HĐ24",
+      "code": "OG03",
+      "klNor": 77000.0,
+      "done": 25082.79,
+      "remain": 51917.21
+    }
+  ],
+  "sbVessels": [
+    {
+      "name": "VIỆT THUẬN 12-07",
+      "parentCode": "OG03",
+      "klNor": 11403.9,
+      "done": 4836.0,
+      "remain": 6567.9
+    },
+    {
+      "name": "VIỆT THUẬN 11-07",
+      "parentCode": "OG04",
+      "klNor": 10647.76,
+      "done": 7678.95,
+      "remain": 2968.81
+    }
+  ],
+  "stockRows": [
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "E",
+      "vessel": "OG06/17",
+      "date": "11/07/2026",
+      "qty": 3000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "11/07/2026",
+      "qty": 2500.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "11/07/2026",
+      "qty": 1500.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 4,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "11/07/2026",
+      "qty": 514.04
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "11/07/2026",
+      "qty": 5000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "12/07/2026",
+      "qty": 4060.74
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "14/07/2026",
+      "qty": 3000.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 1334.59
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "F",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "F",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 200.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "G",
+      "vessel": "OG06/17",
+      "date": "15/07/2026",
+      "qty": 226.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG01/24",
+      "date": "01/07/2026",
+      "qty": 2256.73
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG02/24",
+      "date": "05/07/2026",
+      "qty": 2500.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG02/24",
+      "date": "05/07/2026",
+      "qty": 2408.11
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "08/07/2026",
+      "qty": 3900.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "08/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "08/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "09/07/2026",
+      "qty": 4000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "09/07/2026",
+      "qty": 3000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "10/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 4,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "10/07/2026",
+      "qty": 1614.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "10/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 4,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "10/07/2026",
+      "qty": 253.87
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "D",
+      "vessel": "OG02/24",
+      "date": "10/07/2026",
+      "qty": 4000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG02/24",
+      "date": "11/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "E",
+      "vessel": "OG02/24",
+      "date": "11/07/2026",
+      "qty": 1016.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "D",
+      "vessel": "OG02/24",
+      "date": "11/07/2026",
+      "qty": 600.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "D",
+      "vessel": "OG04/24",
+      "date": "12/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 4,
+      "segment": "D",
+      "vessel": "OG04/24",
+      "date": "12/07/2026",
+      "qty": 326.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "E",
+      "vessel": "OG04/24",
+      "date": "13/07/2026",
+      "qty": 2500.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "E",
+      "vessel": "OG04/24",
+      "date": "13/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "E",
+      "vessel": "OG04/24",
+      "date": "13/07/2026",
+      "qty": 700.21
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "E",
+      "vessel": "OG04/24",
+      "date": "13/07/2026",
+      "qty": 784.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "A",
+      "vessel": "OG04/24",
+      "date": "13/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "A",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "B",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "C",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "B",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "B",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "C",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "C",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "A",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "D",
+      "vessel": "OG04/24",
+      "date": "14/07/2026",
+      "qty": 2500.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 300.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 300.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 1200.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 1200.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "date": "16/07/2026",
+      "qty": 678.95
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "A",
+      "vessel": "OG03/24",
+      "date": "13/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "A",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "B",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 1226.53
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "C",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "C",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "B",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 1,
+      "segment": "D",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "C",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "B",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 800.0
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Hở",
+      "layer": 3,
+      "segment": "A",
+      "vessel": "OG03/24",
+      "date": "14/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 622.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 2000.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 1200.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 1200.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "date": "15/07/2026",
+      "qty": 500.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 330.0
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 339.26
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 1000.0
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "date": "16/07/2026",
+      "qty": 836.0
+    }
+  ]
+};
 
   /* ================= CẤU HÌNH BÃI (cố định, không đổi theo dữ liệu) ================= */
   var yardOrder = ['Đống 1','Đống 2.1','Đống 2.2','Đống 3'];

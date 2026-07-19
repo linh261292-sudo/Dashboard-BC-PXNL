@@ -579,7 +579,7 @@
   /* Chỉ chứa số liệu thô — mọi tính toán/diễn giải nằm trong computeReport() bên dưới, để mỗi lần
      script Python cập nhật lại khối RAW_DATA này, toàn bộ 8 slide tự tính lại và hiển thị đồng bộ. */
   var RAW_DATA = {
-  "reportDate": "16/07/2026",
+  "reportDate": "18/07/2026",
   "month": 7,
   "year": 2026,
   "monthDays": [
@@ -678,6 +678,18 @@
       "nhap": 15253.0,
       "tieuthu": 8354.91,
       "tonkho": 110427.03
+    },
+    {
+      "day": 17,
+      "nhap": 14179.0,
+      "tieuthu": 9094.0,
+      "tonkho": 115512.03
+    },
+    {
+      "day": 18,
+      "nhap": 13712.55,
+      "tieuthu": 8995.0,
+      "tonkho": 120229.58
     }
   ],
   "ogVessels": [
@@ -694,32 +706,39 @@
       "contract": "HĐ24",
       "code": "OG04",
       "klNor": 75430.0,
-      "done": 29889.16,
-      "remain": 45540.84
+      "done": 43529.2,
+      "remain": 31900.8
     },
     {
       "name": "KN SINGAPORE",
       "contract": "HĐ24",
       "code": "OG03",
       "klNor": 77000.0,
-      "done": 25082.79,
-      "remain": 51917.21
+      "done": 39334.3,
+      "remain": 37665.7
     }
   ],
   "sbVessels": [
     {
-      "name": "VIỆT THUẬN 12-07",
-      "parentCode": "OG03",
-      "klNor": 11403.9,
-      "done": 4836.0,
-      "remain": 6567.9
+      "name": "VIỆT THUẬN 11-01 (OG03-HĐ24)",
+      "parentCode": null,
+      "klNor": 10590.85,
+      "done": 7689.5,
+      "remain": 2901.35
     },
     {
-      "name": "VIỆT THUẬN 11-07",
-      "parentCode": "OG04",
-      "klNor": 10647.76,
-      "done": 7678.95,
-      "remain": 2968.81
+      "name": "VIỆT THUẬN 11-03 (OG04-HĐ24)",
+      "parentCode": null,
+      "klNor": 10681.18,
+      "done": 10675.6,
+      "remain": 5.58
+    },
+    {
+      "name": "VIỆT THUẬN 10-03 (OG06-HĐ17)",
+      "parentCode": null,
+      "klNor": 10569.71,
+      "done": 1827.0,
+      "remain": 8742.71
     }
   ],
   "stockRows": [
@@ -732,39 +751,6 @@
       "sbVessel": "Việt Thuận 11-03",
       "date": "11/07/2026",
       "qty": 3000.0,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 2,
-      "segment": "D",
-      "vessel": "OG06/17",
-      "sbVessel": "Việt Thuận 11-03",
-      "date": "11/07/2026",
-      "qty": 2500.0,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 3,
-      "segment": "D",
-      "vessel": "OG06/17",
-      "sbVessel": "Việt Thuận 11-03",
-      "date": "11/07/2026",
-      "qty": 1500.0,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 4,
-      "segment": "D",
-      "vessel": "OG06/17",
-      "sbVessel": "Việt Thuận 10-03",
-      "date": "11/07/2026",
-      "qty": 514.04,
       "status": "luukho"
     },
     {
@@ -878,37 +864,15 @@
       "status": "luukho"
     },
     {
-      "yard": "Đống 2.2",
+      "yard": "Đống 3",
       "zone": "Kín",
       "layer": 1,
-      "segment": "G",
-      "vessel": "OG01/24",
-      "sbVessel": "Việt Thuận 10-05",
-      "date": "01/07/2026",
-      "qty": 2256.73,
+      "segment": "F",
+      "vessel": "OG06/17",
+      "sbVessel": null,
+      "date": "19/07/2026",
+      "qty": 1827.0,
       "status": "nhap"
-    },
-    {
-      "yard": "Đống 3",
-      "zone": "Kín",
-      "layer": 1,
-      "segment": "G",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 10-03",
-      "date": "05/07/2026",
-      "qty": 2500.0,
-      "status": "cap"
-    },
-    {
-      "yard": "Đống 3",
-      "zone": "Kín",
-      "layer": 1,
-      "segment": "G",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 12-02",
-      "date": "05/07/2026",
-      "qty": 2408.11,
-      "status": "luukho"
     },
     {
       "yard": "Đống 2.1",
@@ -919,7 +883,7 @@
       "sbVessel": "Việt Thuận 11-02",
       "date": "08/07/2026",
       "qty": 3900.0,
-      "status": "luukho"
+      "status": "cap"
     },
     {
       "yard": "Đống 2.1",
@@ -930,7 +894,7 @@
       "sbVessel": "Việt Thuận 11-02",
       "date": "08/07/2026",
       "qty": 2000.0,
-      "status": "luukho"
+      "status": "cap"
     },
     {
       "yard": "Đống 2.1",
@@ -940,8 +904,8 @@
       "vessel": "OG02/24",
       "sbVessel": "Việt Thuận 11-02",
       "date": "08/07/2026",
-      "qty": 800.0,
-      "status": "luukho"
+      "qty": 830.57,
+      "status": "cap"
     },
     {
       "yard": "Đống 2.2",
@@ -988,50 +952,6 @@
       "status": "luukho"
     },
     {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 3,
-      "segment": "E",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 12-01",
-      "date": "10/07/2026",
-      "qty": 800.0,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 4,
-      "segment": "E",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 11-01",
-      "date": "10/07/2026",
-      "qty": 253.87,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 1,
-      "segment": "D",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 11-01",
-      "date": "10/07/2026",
-      "qty": 4000.0,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 2,
-      "segment": "D",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 11-01",
-      "date": "11/07/2026",
-      "qty": 1000.0,
-      "status": "luukho"
-    },
-    {
       "yard": "Đống 3",
       "zone": "Hở",
       "layer": 1,
@@ -1040,17 +960,6 @@
       "sbVessel": "Việt Thuận 11-01",
       "date": "11/07/2026",
       "qty": 1016.0,
-      "status": "luukho"
-    },
-    {
-      "yard": "Đống 2.1",
-      "zone": "Hở",
-      "layer": 3,
-      "segment": "D",
-      "vessel": "OG02/24",
-      "sbVessel": "Việt Thuận 11-01",
-      "date": "11/07/2026",
-      "qty": 600.0,
       "status": "luukho"
     },
     {
@@ -1303,7 +1212,18 @@
       "vessel": "OG04/24",
       "sbVessel": "Việt Thuận 11-07",
       "date": "16/07/2026",
-      "qty": 678.95,
+      "qty": 1095.47,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
+      "date": "16/07/2026",
+      "qty": 1095.47,
       "status": "luukho"
     },
     {
@@ -1567,8 +1487,305 @@
       "vessel": "OG03/24",
       "sbVessel": "Việt Thuận 12-07",
       "date": "16/07/2026",
-      "qty": 836.0,
+      "qty": 1194.0,
       "status": "luukho"
+    },
+    {
+      "yard": "Đống 1",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
+      "date": "17/07/2026",
+      "qty": 1194.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
+      "date": "17/07/2026",
+      "qty": 2300.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
+      "date": "17/07/2026",
+      "qty": 2300.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 12-07",
+      "date": "17/07/2026",
+      "qty": 400.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-07",
+      "date": "17/07/2026",
+      "qty": 564.72,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "17/07/2026",
+      "qty": 1800.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "17/07/2026",
+      "qty": 1000.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "17/07/2026",
+      "qty": 1800.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 300.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 300.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 1000.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 1500.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "G",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 400.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 400.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 1000.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 400.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "F",
+      "vessel": "OG04/24",
+      "sbVessel": "Việt Thuận 11-03",
+      "date": "18/07/2026",
+      "qty": 1500.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": "Việt Thuận 11-01",
+      "date": "18/07/2026",
+      "qty": 1500.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 300.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.1",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 300.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 800.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 2,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 1500.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "G",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 500.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 4,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 478.01,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 2.2",
+      "zone": "Kín",
+      "layer": 3,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 500.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Hở",
+      "layer": 2,
+      "segment": "D",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "18/07/2026",
+      "qty": 400.0,
+      "status": "luukho"
+    },
+    {
+      "yard": "Đống 3",
+      "zone": "Kín",
+      "layer": 1,
+      "segment": "F",
+      "vessel": "OG03/24",
+      "sbVessel": null,
+      "date": "19/07/2026",
+      "qty": 1214.0,
+      "status": "nhap"
     }
   ]
 };

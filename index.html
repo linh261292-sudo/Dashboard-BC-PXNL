@@ -2282,10 +2282,12 @@
     var LAYER_H = 15, LAYER_GAP = 1.5;
     var PAD_H = 5;
     var ROOF_ELEV = 150, ROOF_H = 5;
-    // Đống than dạng hình thang: chỉ thu bậc thang ở 2 cạnh bên (mặt cắt ngang đống) từ tầng 1 lên
-    // tầng trên cùng, mô phỏng mặt cắt nghiêng ~38° của đống than thực tế — mỗi tầng thu vào STEP_D
-    // mỗi bên so với tầng ngay dưới, không thu nhỏ dưới ngưỡng MIN_D để vẫn nhìn rõ tầng trên cùng.
-    var STEP_D = 8, MIN_D = 24;
+    // Đống than dạng hình thang: thu bậc thang ở CẢ 2 cặp cạnh bên — cạnh bên theo chiều sâu (mặt cắt
+    // ngang, STEP_D) và cạnh bên theo chiều dài dọc đống (2 đầu phân đoạn ngoài cùng, STEP_W) — mô
+    // phỏng mặt cắt nghiêng ~38° của đống than thực tế ở mọi phía nhìn vào. Các phân đoạn ở giữa dọc
+    // đống giữ nguyên bề rộng (không thu), chỉ 2 phân đoạn ở 2 đầu (đầu tiên/cuối cùng trong dãy
+    // A-G) mới thu vào ở cạnh ngoài của chúng — để cả dãy nhìn thành 1 khối hình thang liền mạch.
+    var STEP_D = 8, MIN_D = 24, STEP_W = 8, MIN_W = 20;
 
     function face(w,h,transform,bg,extra){
       var d = document.createElement('div');
@@ -2406,6 +2408,9 @@
       segList.forEach(function(seg, si){
         var isKin = yardSegments[yard].kin.indexOf(seg) > -1;
         var xCenter = si*(SEG_W+SEG_GAP) - totalW/2 + SEG_W/2;
+        // cạnh ngoài theo chiều dài đống: 'start' = phân đoạn đầu dãy (thu vào từ cạnh -X),
+        // 'end' = phân đoạn cuối dãy (thu vào từ cạnh +X), null = phân đoạn giữa (giữ nguyên bề rộng)
+        var xEdge = (si===0) ? 'start' : (si===segList.length-1 ? 'end' : null);
 
         // stacked blocks for this yard+segment
         var cellBlocks = stockBlocks.filter(function(b){ return b.yard===yard && b.segment===seg; }).sort(function(a,b){ return a.layer-b.layer; });
@@ -2452,11 +2457,24 @@
           var st = groupStatus(group);
           var colors = STATUS_COLORS[st];
           var top = colors.top, front = colors.front, sideColor = colors.side;
-          // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang.
-          // Chỉ thu bậc thang ở 2 cạnh bên (chiều sâu/cắt ngang đống — đúng mặt cắt hình thang thực tế);
-          // chiều dài dọc theo đống (dọc các phân đoạn A-G) giữ nguyên, không thu vào.
-          var boxW = SEG_W-2;
-          // Chiều sâu (boxD, cắt ngang đống = 2 cạnh bên hình thang) — riêng Đống 2.1/2.2 chỉ thu vào
+          // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang,
+          // thu vào ở CẢ 2 cặp cạnh bên (dọc chiều dài đống VÀ cắt ngang chiều sâu đống).
+          // --- Chiều dài (boxW, dọc theo phân đoạn A-G): chỉ 2 phân đoạn ở 2 đầu dãy mới thu vào ở
+          // cạnh ngoài của chúng (cạnh giáp phân đoạn kế tiếp giữ thẳng); các phân đoạn giữa giữ nguyên
+          // bề rộng — để cả dãy A-G nhìn thành 1 khối hình thang liền mạch chứ không phải từng đoạn nhỏ.
+          var fullW = SEG_W-2;
+          var boxW, xOffset;
+          if(xEdge === 'start'){ // đầu dãy: cạnh -X (ngoài) thu vào, cạnh +X (giáp đoạn kế) giữ thẳng
+            boxW = Math.max(fullW - li*STEP_W, MIN_W);
+            xOffset = (fullW-boxW)/2;
+          } else if(xEdge === 'end'){ // cuối dãy: cạnh +X (ngoài) thu vào, cạnh -X (giáp đoạn trước) giữ thẳng
+            boxW = Math.max(fullW - li*STEP_W, MIN_W);
+            xOffset = -(fullW-boxW)/2;
+          } else { // phân đoạn giữa: giữ nguyên bề rộng
+            boxW = fullW;
+            xOffset = 0;
+          }
+          // --- Chiều sâu (boxD, cắt ngang đống = 2 cạnh bên hình thang) — riêng Đống 2.1/2.2 chỉ thu vào
           // 1 vách ngoài, giữ thẳng vách trong (giáp đống bên cạnh) để cả cụm 2.1+2.2 liền thành 1 khối
           // hình thang chung.
           var fullD = CELL_D-2;
@@ -2472,7 +2490,7 @@
             zOffset = 0;
           }
           var box = makeBox(boxW, bh, boxD, top, front, sideColor);
-          placeBox(box, xCenter, elev, bh, zCenter + zOffset);
+          placeBox(box, xCenter + xOffset, elev, bh, zCenter + zOffset);
           box.style.cursor = 'pointer';
           box.addEventListener('mousemove', function(e){
             var lines = group.map(function(b){

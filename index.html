@@ -2278,7 +2278,7 @@
     var scene = document.getElementById('scene3d');
     if(!world) return;
 
-    var SEG_W = 60, SEG_GAP = 5, YARD_D = 128, CELL_D = 92;
+    var SEG_W = 60, SEG_GAP = 1, YARD_D = 128, CELL_D = 92; // SEG_GAP nhỏ để các phân đoạn A-G nằm sát liền kề nhau, đúng thực tế đống than liền khối
     var LAYER_H = 15, LAYER_GAP = 1.5;
     var PAD_H = 5;
     var ROOF_ELEV = 150, ROOF_H = 5;
@@ -2287,7 +2287,7 @@
     // phỏng mặt cắt nghiêng ~38° của đống than thực tế ở mọi phía nhìn vào. Các phân đoạn ở giữa dọc
     // đống giữ nguyên bề rộng (không thu), chỉ 2 phân đoạn ở 2 đầu (đầu tiên/cuối cùng trong dãy
     // A-G) mới thu vào ở cạnh ngoài của chúng — để cả dãy nhìn thành 1 khối hình thang liền mạch.
-    var STEP_D = 8, MIN_D = 24, STEP_W = 8, MIN_W = 20;
+    var STEP_D = 8, MIN_D = 24, STEP_W = 13, MIN_W = 18;
 
     function face(w,h,transform,bg,extra){
       var d = document.createElement('div');
@@ -2385,6 +2385,16 @@
       var mySide = tightSide[yi];
       var segSpan = segList.length*(SEG_W+SEG_GAP) - SEG_GAP;
 
+      // Số tầng (số lớp than đã xếp) tại từng phân đoạn — dùng để so với phân đoạn liền kề: hễ 1 phân
+      // đoạn "cao" hơn hẳn phân đoạn bên cạnh (kể cả ở giữa dãy, không chỉ 2 đầu ngoài cùng) thì phần
+      // nhô cao hơn đó sẽ thu bậc thang vào đúng phía giáp phân đoạn thấp hơn — để bậc thang chạy dọc
+      // theo mọi chỗ lệch tầng dọc đống, không chỉ riêng 2 đầu dãy.
+      var segLayerCount = segList.map(function(seg){
+        var layerSet = {};
+        stockBlocks.forEach(function(b){ if(b.yard===yard && b.segment===seg) layerSet[b.layer]=true; });
+        return Object.keys(layerSet).length;
+      });
+
       // group floor tile for this yard row (visually groups each đống, like the paired tables on Page 1)
       var floor = makeBox(segSpan+22, 3, CELL_D+22, 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.03)', 'rgba(255,255,255,0.03)');
       placeBox(floor, 0, -3, 3, zCenter);
@@ -2408,9 +2418,9 @@
       segList.forEach(function(seg, si){
         var isKin = yardSegments[yard].kin.indexOf(seg) > -1;
         var xCenter = si*(SEG_W+SEG_GAP) - totalW/2 + SEG_W/2;
-        // cạnh ngoài theo chiều dài đống: 'start' = phân đoạn đầu dãy (thu vào từ cạnh -X),
-        // 'end' = phân đoạn cuối dãy (thu vào từ cạnh +X), null = phân đoạn giữa (giữ nguyên bề rộng)
-        var xEdge = (si===0) ? 'start' : (si===segList.length-1 ? 'end' : null);
+        // số tầng của phân đoạn liền kề trái/phải (0 nếu không có phân đoạn liền kề, hoặc liền kề trống)
+        var leftNCount = si>0 ? segLayerCount[si-1] : 0;
+        var rightNCount = si<segList.length-1 ? segLayerCount[si+1] : 0;
 
         // stacked blocks for this yard+segment
         var cellBlocks = stockBlocks.filter(function(b){ return b.yard===yard && b.segment===seg; }).sort(function(a,b){ return a.layer-b.layer; });
@@ -2459,21 +2469,16 @@
           var top = colors.top, front = colors.front, sideColor = colors.side;
           // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang,
           // thu vào ở CẢ 2 cặp cạnh bên (dọc chiều dài đống VÀ cắt ngang chiều sâu đống).
-          // --- Chiều dài (boxW, dọc theo phân đoạn A-G): chỉ 2 phân đoạn ở 2 đầu dãy mới thu vào ở
-          // cạnh ngoài của chúng (cạnh giáp phân đoạn kế tiếp giữ thẳng); các phân đoạn giữa giữ nguyên
-          // bề rộng — để cả dãy A-G nhìn thành 1 khối hình thang liền mạch chứ không phải từng đoạn nhỏ.
+          // --- Chiều dài (boxW, dọc theo phân đoạn A-G): so sánh với phân đoạn liền kề trái/phải — hễ
+          // tầng hiện tại (li) cao hơn số tầng của phân đoạn bên cạnh (hoặc không có phân đoạn bên cạnh,
+          // tức đây là mép ngoài cùng của cả đống) thì cạnh đó thu bậc thang vào; nếu phân đoạn bên cạnh
+          // cũng cao bằng hoặc hơn thì giữ thẳng (2 khối liền tầng nhau không có lý do để hở ra). Nhờ vậy
+          // bậc thang lên đều dọc suốt chiều dài đống, ở MỌI chỗ lệch tầng chứ không chỉ 2 đầu dãy.
           var fullW = SEG_W-2;
-          var boxW, xOffset;
-          if(xEdge === 'start'){ // đầu dãy: cạnh -X (ngoài) thu vào, cạnh +X (giáp đoạn kế) giữ thẳng
-            boxW = Math.max(fullW - li*STEP_W, MIN_W);
-            xOffset = (fullW-boxW)/2;
-          } else if(xEdge === 'end'){ // cuối dãy: cạnh +X (ngoài) thu vào, cạnh -X (giáp đoạn trước) giữ thẳng
-            boxW = Math.max(fullW - li*STEP_W, MIN_W);
-            xOffset = -(fullW-boxW)/2;
-          } else { // phân đoạn giữa: giữ nguyên bề rộng
-            boxW = fullW;
-            xOffset = 0;
-          }
+          var leftInset = (li >= leftNCount) ? (li-leftNCount)*STEP_W : 0;
+          var rightInset = (li >= rightNCount) ? (li-rightNCount)*STEP_W : 0;
+          var boxW = Math.max(fullW - leftInset - rightInset, MIN_W);
+          var xOffset = (leftInset - rightInset)/2;
           // --- Chiều sâu (boxD, cắt ngang đống = 2 cạnh bên hình thang) — riêng Đống 2.1/2.2 chỉ thu vào
           // 1 vách ngoài, giữ thẳng vách trong (giáp đống bên cạnh) để cả cụm 2.1+2.2 liền thành 1 khối
           // hình thang chung.

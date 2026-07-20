@@ -493,29 +493,14 @@
       <h2 class="title" data-reveal="fade">Đánh giá mức dự trữ nhiên liệu</h2>
       <p class="subtitle" data-reveal="fade" style="margin-bottom:24px;" id="p7Subtitle">–</p>
 
-      <div class="two-col">
-        <div class="alert-hero" data-reveal>
-          <div class="pill warn" style="margin-bottom:16px;" id="p7Pill">–</div>
-          <div class="big-num" style="color:var(--green-soft);" id="p7BigNum">–<small style="color:var(--green-soft);">ngày</small></div>
-          <div style="color:var(--ink-muted); font-size:13px; margin-top:10px;" id="p7Desc">–</div>
-          <div class="kpi-grid" style="margin-top:20px; grid-template-columns:repeat(3,1fr);">
-            <div class="card"><div class="k-label">Tiêu thụ BQ 7 ngày</div><div class="k-value" id="p7K1">–<span class="unit">tấn/ngày</span></div></div>
-            <div class="card"><div class="k-label" id="p7K2Label">Tồn kho</div><div class="k-value" id="p7K2">–<span class="unit">K tấn</span></div></div>
-            <div class="card"><div class="k-label">Tồn &gt;30 ngày <span class="pill" id="p7K3Pill" style="background:rgba(0,176,80,0.16); color:var(--green-soft); border-color:rgba(0,176,80,0.3);">–</span></div><div class="k-value" id="p7K3" style="color:var(--green-soft);">–<span class="unit">tấn</span></div></div>
-          </div>
+      <div class="alert-hero" data-reveal style="max-width:640px;">
+        <div class="pill warn" style="margin-bottom:16px;" id="p7Pill">–</div>
+        <div class="big-num" style="color:var(--green-soft);" id="p7BigNum">–<small style="color:var(--green-soft);">ngày</small></div>
+        <div style="color:var(--ink-muted); font-size:13px; margin-top:10px;" id="p7Desc">–</div>
+        <div class="kpi-grid" style="margin-top:20px; grid-template-columns:repeat(2,1fr);">
+          <div class="card"><div class="k-label">Tiêu thụ BQ 7 ngày</div><div class="k-value" id="p7K1">–<span class="unit">tấn/ngày</span></div></div>
+          <div class="card"><div class="k-label" id="p7K2Label">Tồn kho</div><div class="k-value" id="p7K2">–<span class="unit">K tấn</span></div></div>
         </div>
-
-        <div class="panel-card" data-reveal>
-          <h3>Đề xuất hành động</h3>
-          <div class="hint">Ưu tiên xử lý để duy trì đà phục hồi tồn kho</div>
-          <ul class="action-list" id="actionList"></ul>
-        </div>
-      </div>
-
-      <div class="panel-card" data-reveal style="margin-top:18px;">
-        <h3>Cảnh báo lô than lưu kho &gt;30 ngày</h3>
-        <div class="hint" id="p7StaleHint">Tính theo số ngày từ ngày nhập đến ngày báo cáo — nguồn: sổ theo dõi lô hàng tại bãi</div>
-        <div id="staleCard"></div>
       </div>
 
       <footer class="meta" id="footerMeta">Báo cáo được tổng hợp từ file So_do_luu_kho_than.xlsx · NMNĐ Sông Hậu 1</footer>
@@ -2063,49 +2048,6 @@
     set('p7K1', fmt(R.avgTieuthu7)+'<span class="unit">tấn/ngày</span>');
     set('p7K2Label', 'Tồn kho '+R.reportDateShort);
     set('p7K2', digitalK2(R.tonkhoProd)+'<span class="unit">K tấn</span>');
-    var staleCount = R.staleLots.length;
-    set('p7K3Pill', staleCount ? (staleCount+' lô') : 'Không có');
-    document.getElementById('p7K3Pill').style.background = staleCount ? 'rgba(232,92,92,0.16)' : 'rgba(0,176,80,0.16)';
-    document.getElementById('p7K3Pill').style.color = staleCount ? 'var(--red)' : 'var(--green-soft)';
-    document.getElementById('p7K3Pill').style.borderColor = staleCount ? 'rgba(232,92,92,0.3)' : 'rgba(0,176,80,0.3)';
-    var staleQty = R.staleLots.reduce(function(s,x){ return s+x.b.qty; }, 0);
-    set('p7K3', fmt(staleQty)+'<span class="unit">tấn</span>');
-    document.getElementById('p7K3').style.color = staleCount ? 'var(--red)' : 'var(--green-soft)';
-
-    // action list (đề xuất hành động)
-    var actions = [];
-    actions.push('Tiếp tục đẩy nhanh tiến độ bốc dỡ '+R.ogVessels.length+' tàu mẹ đang giao nhận (còn '+fmt(R.ogTotals.remain)+' tấn)'+(R.top2RemainNames ? (' — đặc biệt '+R.top2RemainNames+', chiếm phần lớn khối lượng còn lại.') : '.'));
-    actions.push('Duy trì lịch nhập CSU đều đặn để giữ vùng đệm dự trữ trên 10 ngày, tránh quay lại vùng cảnh báo.');
-    if(staleCount){
-      actions.push('Xử lý ưu tiên '+staleCount+' lô than đã lưu kho quá 30 ngày (tổng '+fmt(staleQty)+' tấn) để giảm rủi ro chất lượng than.');
-    } else {
-      actions.push('Toàn bộ '+R.totalLots+' lô than tại bãi đều nhập trong vòng ≤'+R.maxDaysInStock+' ngày — chưa có lô nào vượt ngưỡng lưu kho 30 ngày, tiếp tục theo dõi định kỳ để duy trì trạng thái này.');
-    }
-    if(R.yardsKinOnly.length || R.yardsHoOnly.length){
-      var imbalanceNames = R.yardsKinOnly.concat(R.yardsHoOnly).map(function(y){return y.label;}).join(', ');
-      actions.push('Rà soát phương án phân bổ than nhập mới sang '+imbalanceNames+' (hiện mất cân đối kín/hở) để cân đối tải trọng giữa các đống.');
-    } else {
-      actions.push('Các đống hiện đã cân đối giữa khu kín và bãi hở — tiếp tục duy trì phương án phân bổ hiện tại.');
-    }
-    actions.push('Đối chiếu định kỳ giữa số liệu sản lượng và số liệu theo bãi (chênh lệch hiện chỉ ~'+fmt(R.discrepancyAbs)+' tấn, '+R.discrepancyPct.toFixed(2).replace('.',',')+'%) để duy trì độ tin cậy số liệu báo cáo.');
-    actions.push('Theo dõi sát tồn kho hàng ngày để kịp thời điều chỉnh nếu tốc độ tiêu thụ tăng đột biến.');
-    set('actionList', actions.map(function(a,i){ return '<li><span class="idx">'+(i+1)+'</span> '+a+'</li>'; }).join(''));
-
-    // stale lot warning card
-    set('p7StaleHint', 'Tính theo số ngày từ ngày nhập đến ngày báo cáo ('+R.reportDate+') — nguồn: sổ theo dõi lô hàng tại bãi');
-    if(!staleCount){
-      set('staleCard', '<div style="display:flex; align-items:center; gap:14px; padding:22px 18px; border-radius:12px; background:rgba(0,176,80,0.08); border:1px solid rgba(0,176,80,0.25);">'+
-        '<span style="font-size:26px;">✓</span><div>'+
-        '<div style="font-family:Sora,sans-serif; font-weight:700; color:var(--green-soft); font-size:15px;">Không có lô than nào lưu kho quá 30 ngày</div>'+
-        '<div style="color:var(--ink-muted); font-size:12.5px; margin-top:4px;">Toàn bộ '+R.totalLots+' lô than đang tồn tại bãi ('+fmt(R.yardTotalStock)+' tấn) đều nhập trong vòng '+R.maxDaysInStock+' ngày gần nhất'+(R.longestLot ? (' — lô lâu nhất là <b style="color:var(--ink);">'+R.maxDaysInStock+' ngày</b> (tàu '+R.longestLot.b.vessel+', '+R.longestLot.b.yard+' - '+R.longestLot.b.zone+' - Phân đoạn '+R.longestLot.b.segment+', nhập '+R.longestLot.b.date+').') : '.')+'</div></div></div>');
-    } else {
-      var rows = R.staleLots.slice(0,10).map(function(x){
-        return '<tr><td>'+x.b.vessel+'</td><td>'+x.b.yard+' - '+x.b.zone+' - '+x.b.segment+'</td><td>'+x.b.date+'</td><td class="num">'+x.daysInStock+'</td><td class="num">'+fmt(x.b.qty)+'</td></tr>';
-      }).join('');
-      set('staleCard', '<div style="padding:16px 18px; border-radius:12px; background:rgba(232,92,92,0.08); border:1px solid rgba(232,92,92,0.3); margin-bottom:14px;">'+
-        '<div style="font-family:Sora,sans-serif; font-weight:700; color:var(--red); font-size:15px;">⚠ Có '+staleCount+' lô than lưu kho quá 30 ngày (tổng '+fmt(staleQty)+' tấn)</div></div>'+
-        '<table class="data-tbl"><thead><tr><th>Tàu</th><th>Vị trí</th><th>Ngày nhập</th><th class="num">Số ngày lưu kho</th><th class="num">Khối lượng (tấn)</th></tr></thead><tbody>'+rows+'</tbody></table>');
-    }
 
     set('footerMeta', 'Báo cáo được tổng hợp từ file So_do_luu_kho_than.xlsx · NMNĐ Sông Hậu 1 · Cập nhật '+R.reportDate);
   })(REPORT);
@@ -2340,6 +2282,10 @@
     var LAYER_H = 15, LAYER_GAP = 1.5;
     var PAD_H = 5;
     var ROOF_ELEV = 150, ROOF_H = 5;
+    // Đống than dạng hình thang, thu nhỏ dần theo kiểu bậc thang từ tầng 1 lên tầng trên cùng
+    // (mô phỏng mặt cắt nghiêng ~38° của đống than thực tế) — mỗi tầng thu vào STEP_W/STEP_D
+    // mỗi bên so với tầng ngay dưới, không thu nhỏ dưới ngưỡng MIN_W/MIN_D để vẫn nhìn rõ tầng trên cùng.
+    var STEP_W = 6, STEP_D = 8, MIN_W = 18, MIN_D = 24;
 
     function face(w,h,transform,bg,extra){
       var d = document.createElement('div');
@@ -2492,14 +2438,17 @@
           layerGroups[b.layer].push(b);
         });
         var layerNums = Object.keys(layerGroups).map(Number).sort(function(a,b){ return a-b; });
-        layerNums.forEach(function(layerNum){
+        layerNums.forEach(function(layerNum, li){
           var group = layerGroups[layerNum];
           var groupQty = group.reduce(function(s,b){ return s+b.qty; }, 0);
           var bh = LAYER_H;
           var st = groupStatus(group);
           var colors = STATUS_COLORS[st];
           var top = colors.top, front = colors.front, side = colors.side;
-          var box = makeBox(SEG_W-2, bh, CELL_D-2, top, front, side);
+          // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang
+          var boxW = Math.max(SEG_W-2 - li*STEP_W*2, MIN_W);
+          var boxD = Math.max(CELL_D-2 - li*STEP_D*2, MIN_D);
+          var box = makeBox(boxW, bh, boxD, top, front, side);
           placeBox(box, xCenter, elev, bh, zCenter);
           box.style.cursor = 'pointer';
           box.addEventListener('mousemove', function(e){

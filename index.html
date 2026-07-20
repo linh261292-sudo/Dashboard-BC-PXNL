@@ -2282,10 +2282,10 @@
     var LAYER_H = 15, LAYER_GAP = 1.5;
     var PAD_H = 5;
     var ROOF_ELEV = 150, ROOF_H = 5;
-    // Đống than dạng hình thang, thu nhỏ dần theo kiểu bậc thang từ tầng 1 lên tầng trên cùng
-    // (mô phỏng mặt cắt nghiêng ~38° của đống than thực tế) — mỗi tầng thu vào STEP_W/STEP_D
-    // mỗi bên so với tầng ngay dưới, không thu nhỏ dưới ngưỡng MIN_W/MIN_D để vẫn nhìn rõ tầng trên cùng.
-    var STEP_W = 6, STEP_D = 8, MIN_W = 18, MIN_D = 24;
+    // Đống than dạng hình thang: chỉ thu bậc thang ở 2 cạnh bên (mặt cắt ngang đống) từ tầng 1 lên
+    // tầng trên cùng, mô phỏng mặt cắt nghiêng ~38° của đống than thực tế — mỗi tầng thu vào STEP_D
+    // mỗi bên so với tầng ngay dưới, không thu nhỏ dưới ngưỡng MIN_D để vẫn nhìn rõ tầng trên cùng.
+    var STEP_D = 8, MIN_D = 24;
 
     function face(w,h,transform,bg,extra){
       var d = document.createElement('div');
@@ -2358,11 +2358,17 @@
     // này thực sự chạm/dính sát nhau (không chỉ nền floor trang trí chạm mà khối than vẫn còn hở).
     var TIGHT_GAP = CELL_D - 2; // nhỏ hơn CELL_D 2px để khối than (rộng CELL_D-2) chạm khít, không còn khe hở
     var zCenters = [];
+    // tightSide[yi]: null = đống độc lập (Đống 1, Đống 3) -> bậc thang thu đều 2 vách như bình thường.
+    // 'next'/'prev' = đống có đống liền kề chạm sát (Đống 2.1 <-> Đống 2.2) -> CHỈ thu bậc ở vách phía
+    // ngoài (xa đống kia); vách phía giáp đống kia giữ thẳng đứng, không thu, để 2.1+2.2 nhìn thành
+    // 1 khối hình thang liền mạch, bậc thang chỉ lộ ra ở 2 vách ngoài cùng (theo yêu cầu bố trí thực tế).
+    var tightSide = yard3DOrder.map(function(){ return null; });
     yard3DOrder.forEach(function(yard, yi){
       if(yi === 0){ zCenters.push(0); return; }
       var prevYard = yard3DOrder[yi-1];
       var isTightPair = (prevYard === 'Đống 2.1' && yard === 'Đống 2.2') || (prevYard === 'Đống 2.2' && yard === 'Đống 2.1');
       var gap = isTightPair ? TIGHT_GAP : YARD_D;
+      if(isTightPair){ tightSide[yi-1] = 'next'; tightSide[yi] = 'prev'; }
       zCenters.push(zCenters[yi-1] + gap);
     });
     var zMid = (Math.min.apply(null, zCenters) + Math.max.apply(null, zCenters)) / 2;
@@ -2374,6 +2380,7 @@
     yard3DOrder.forEach(function(yard, yi){
       var segList = yardSegments[yard].kin.concat(yardSegments[yard].ho); // G,F,E,D,C,B,A — đúng thứ tự khoảng cách thực tế
       var zCenter = zCenters[yi];
+      var mySide = tightSide[yi];
       var segSpan = segList.length*(SEG_W+SEG_GAP) - SEG_GAP;
 
       // group floor tile for this yard row (visually groups each đống, like the paired tables on Page 1)
@@ -2444,12 +2451,28 @@
           var bh = LAYER_H;
           var st = groupStatus(group);
           var colors = STATUS_COLORS[st];
-          var top = colors.top, front = colors.front, side = colors.side;
-          // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang
-          var boxW = Math.max(SEG_W-2 - li*STEP_W*2, MIN_W);
-          var boxD = Math.max(CELL_D-2 - li*STEP_D*2, MIN_D);
-          var box = makeBox(boxW, bh, boxD, top, front, side);
-          placeBox(box, xCenter, elev, bh, zCenter);
+          var top = colors.top, front = colors.front, sideColor = colors.side;
+          // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang.
+          // Chỉ thu bậc thang ở 2 cạnh bên (chiều sâu/cắt ngang đống — đúng mặt cắt hình thang thực tế);
+          // chiều dài dọc theo đống (dọc các phân đoạn A-G) giữ nguyên, không thu vào.
+          var boxW = SEG_W-2;
+          // Chiều sâu (boxD, cắt ngang đống = 2 cạnh bên hình thang) — riêng Đống 2.1/2.2 chỉ thu vào
+          // 1 vách ngoài, giữ thẳng vách trong (giáp đống bên cạnh) để cả cụm 2.1+2.2 liền thành 1 khối
+          // hình thang chung.
+          var fullD = CELL_D-2;
+          var boxD, zOffset;
+          if(mySide === 'next'){ // vách giáp đống kế tiếp (z lớn hơn) giữ thẳng — thu vào từ vách -Z
+            boxD = Math.max(fullD - li*STEP_D, MIN_D);
+            zOffset = (fullD-boxD)/2;
+          } else if(mySide === 'prev'){ // vách giáp đống trước (z nhỏ hơn) giữ thẳng — thu vào từ vách +Z
+            boxD = Math.max(fullD - li*STEP_D, MIN_D);
+            zOffset = -(fullD-boxD)/2;
+          } else { // đống độc lập: thu đều 2 vách như trước
+            boxD = Math.max(fullD - li*STEP_D*2, MIN_D);
+            zOffset = 0;
+          }
+          var box = makeBox(boxW, bh, boxD, top, front, sideColor);
+          placeBox(box, xCenter, elev, bh, zCenter + zOffset);
           box.style.cursor = 'pointer';
           box.addEventListener('mousemove', function(e){
             var lines = group.map(function(b){

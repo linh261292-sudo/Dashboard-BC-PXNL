@@ -2282,12 +2282,15 @@
     var LAYER_H = 15, LAYER_GAP = 1.5;
     var PAD_H = 5;
     var ROOF_ELEV = 150, ROOF_H = 5;
-    // Đống than dạng hình thang: thu bậc thang ở CẢ 2 cặp cạnh bên — cạnh bên theo chiều sâu (mặt cắt
-    // ngang, STEP_D) và cạnh bên theo chiều dài dọc đống (2 đầu phân đoạn ngoài cùng, STEP_W) — mô
-    // phỏng mặt cắt nghiêng ~38° của đống than thực tế ở mọi phía nhìn vào. Các phân đoạn ở giữa dọc
-    // đống giữ nguyên bề rộng (không thu), chỉ 2 phân đoạn ở 2 đầu (đầu tiên/cuối cùng trong dãy
-    // A-G) mới thu vào ở cạnh ngoài của chúng — để cả dãy nhìn thành 1 khối hình thang liền mạch.
-    var STEP_D = 8, MIN_D = 24, STEP_W = 13, MIN_W = 18;
+    // Đống than dạng hình thang, góc chân thang khớp đúng góc nghỉ tự nhiên của than trong bản vẽ CAD
+    // (~38° so với phương ngang): với mỗi tầng cao thêm (LAYER_H+LAYER_GAP = 16.5px), cạnh than phải
+    // thu vào ngang một khoảng = chiều cao / tan(38°) ≈ 16.5 / 0.7813 ≈ 21px — dùng chung 1 bậc thang
+    // (STEP) cho cả 2 trục (chiều sâu cắt ngang & chiều dài dọc đống) để đúng cùng 1 góc nghỉ thực tế.
+    // Chiều sâu (STEP_D): thu bậc thang ở MỌI tầng (mô phỏng mặt cắt ngang đống, luôn hiện rõ hình thang).
+    // Chiều dài (STEP_W): CHỈ 2 phân đoạn ngoài cùng của khối than mới thu bậc thang; 2 phân đoạn liền kề
+    // nhau mà đều có than thì giữ phẳng, liền mạch, không hở ra ở ranh giới giữa chúng.
+    var STEP = Math.round((LAYER_H+LAYER_GAP) / Math.tan(38*Math.PI/180)); // ≈21
+    var STEP_D = STEP, MIN_D = 16, STEP_W = STEP, MIN_W = 14;
 
     function face(w,h,transform,bg,extra){
       var d = document.createElement('div');
@@ -2385,15 +2388,16 @@
       var mySide = tightSide[yi];
       var segSpan = segList.length*(SEG_W+SEG_GAP) - SEG_GAP;
 
-      // Số tầng (số lớp than đã xếp) tại từng phân đoạn — dùng để so với phân đoạn liền kề: hễ 1 phân
-      // đoạn "cao" hơn hẳn phân đoạn bên cạnh (kể cả ở giữa dãy, không chỉ 2 đầu ngoài cùng) thì phần
-      // nhô cao hơn đó sẽ thu bậc thang vào đúng phía giáp phân đoạn thấp hơn — để bậc thang chạy dọc
-      // theo mọi chỗ lệch tầng dọc đống, không chỉ riêng 2 đầu dãy.
-      var segLayerCount = segList.map(function(seg){
-        var layerSet = {};
-        stockBlocks.forEach(function(b){ if(b.yard===yard && b.segment===seg) layerSet[b.layer]=true; });
-        return Object.keys(layerSet).length;
+      // Chiều dọc theo đống (dãy phân đoạn A-G): CHỈ 2 đầu ngoài cùng của khối than mới lộ bậc thang;
+      // 2 phân đoạn liền kề nhau mà đều đang có than thì giữ phẳng/liền mạch (không thu bậc thang ở
+      // ranh giới giữa chúng) — chỉ phân đoạn ngoài cùng bên trái/phải THỰC SỰ có than mới thu vào.
+      var stockedSi = [];
+      segList.forEach(function(seg, si){
+        var hasAny = stockBlocks.some(function(b){ return b.yard===yard && b.segment===seg; });
+        if(hasAny) stockedSi.push(si);
       });
+      var minStockedSi = stockedSi.length ? Math.min.apply(null, stockedSi) : -1;
+      var maxStockedSi = stockedSi.length ? Math.max.apply(null, stockedSi) : -1;
 
       // group floor tile for this yard row (visually groups each đống, like the paired tables on Page 1)
       var floor = makeBox(segSpan+22, 3, CELL_D+22, 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.03)', 'rgba(255,255,255,0.03)');
@@ -2418,10 +2422,14 @@
       segList.forEach(function(seg, si){
         var isKin = yardSegments[yard].kin.indexOf(seg) > -1;
         var xCenter = si*(SEG_W+SEG_GAP) - totalW/2 + SEG_W/2;
-        // số tầng của phân đoạn liền kề trái/phải (0 nếu không có phân đoạn liền kề, hoặc liền kề trống)
-        var leftNCount = si>0 ? segLayerCount[si-1] : 0;
-        var rightNCount = si<segList.length-1 ? segLayerCount[si+1] : 0;
-
+        // 'start' = phân đoạn ngoài cùng bên trái ĐANG CÓ THAN (thu bậc thang từ cạnh -X),
+        // 'end' = phân đoạn ngoài cùng bên phải đang có than (thu từ cạnh +X), 'both' = chỉ 1 phân đoạn
+        // duy nhất có than (thu cả 2 cạnh), null = phân đoạn ở giữa, liền kề phân đoạn có than khác
+        // => giữ phẳng, không thu bậc thang (2 phân đoạn kế nhau cùng có than thì liền mạch, không hở).
+        var xEdge = null;
+        if(si===minStockedSi && si===maxStockedSi) xEdge = 'both';
+        else if(si===minStockedSi) xEdge = 'start';
+        else if(si===maxStockedSi) xEdge = 'end';
         // stacked blocks for this yard+segment
         var cellBlocks = stockBlocks.filter(function(b){ return b.yard===yard && b.segment===seg; }).sort(function(a,b){ return a.layer-b.layer; });
         var cellTotal = cellBlocks.reduce(function(s,b){ return s+b.qty; }, 0);
@@ -2467,18 +2475,25 @@
           var st = groupStatus(group);
           var colors = STATUS_COLORS[st];
           var top = colors.top, front = colors.front, sideColor = colors.side;
-          // bậc thang: tầng đáy (li=0) rộng/sâu nhất, mỗi tầng lên cao thu nhỏ lại 1 bậc → dáng hình thang,
-          // thu vào ở CẢ 2 cặp cạnh bên (dọc chiều dài đống VÀ cắt ngang chiều sâu đống).
-          // --- Chiều dài (boxW, dọc theo phân đoạn A-G): so sánh với phân đoạn liền kề trái/phải — hễ
-          // tầng hiện tại (li) cao hơn số tầng của phân đoạn bên cạnh (hoặc không có phân đoạn bên cạnh,
-          // tức đây là mép ngoài cùng của cả đống) thì cạnh đó thu bậc thang vào; nếu phân đoạn bên cạnh
-          // cũng cao bằng hoặc hơn thì giữ thẳng (2 khối liền tầng nhau không có lý do để hở ra). Nhờ vậy
-          // bậc thang lên đều dọc suốt chiều dài đống, ở MỌI chỗ lệch tầng chứ không chỉ 2 đầu dãy.
+          // bậc thang dọc theo đống (chiều dài, dãy phân đoạn A-G): CHỈ 2 đầu ngoài cùng của khối than
+          // (xEdge start/end) mới thu bậc thang, thu theo đúng góc chân than thực tế (~38° trong bản vẽ,
+          // mỗi tầng cao lên thì thu vào ngang STEP_W) — 2 phân đoạn liền kề nhau mà đều có than thì giữ
+          // phẳng/liền mạch (xEdge=null), không hở ra ở ranh giới giữa chúng.
           var fullW = SEG_W-2;
-          var leftInset = (li >= leftNCount) ? (li-leftNCount)*STEP_W : 0;
-          var rightInset = (li >= rightNCount) ? (li-rightNCount)*STEP_W : 0;
-          var boxW = Math.max(fullW - leftInset - rightInset, MIN_W);
-          var xOffset = (leftInset - rightInset)/2;
+          var boxW, xOffset;
+          if(xEdge === 'start'){
+            boxW = Math.max(fullW - li*STEP_W, MIN_W);
+            xOffset = (fullW-boxW)/2;
+          } else if(xEdge === 'end'){
+            boxW = Math.max(fullW - li*STEP_W, MIN_W);
+            xOffset = -(fullW-boxW)/2;
+          } else if(xEdge === 'both'){
+            boxW = Math.max(fullW - li*STEP_W*2, MIN_W);
+            xOffset = 0;
+          } else {
+            boxW = fullW;
+            xOffset = 0;
+          }
           // --- Chiều sâu (boxD, cắt ngang đống = 2 cạnh bên hình thang) — riêng Đống 2.1/2.2 chỉ thu vào
           // 1 vách ngoài, giữ thẳng vách trong (giáp đống bên cạnh) để cả cụm 2.1+2.2 liền thành 1 khối
           // hình thang chung.

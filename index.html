@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="60">
 <title>Báo cáo Kho Than — NMNĐ Sông Hậu 1</title>
 <style>
   :root{
@@ -539,7 +540,7 @@
 
       <div class="panel-card" data-reveal style="margin-top:20px;">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:4px;">
-          <h3 style="margin-bottom:0;">Dự tính hoàn thành nhập các hợp đồng (HĐ17, HĐ24, HĐ25)</h3>
+          <h3 style="margin-bottom:0;" id="hdForecastTitle">Dự tính hoàn thành nhập các hợp đồng</h3>
           <span class="pill warn">Chờ xác nhận số liệu KL Giao</span>
         </div>
         <div class="hint" id="hdForecastHint" style="margin-top:10px;">–</div>
@@ -1954,7 +1955,7 @@
       "name": "HĐ17",
       "start": "01-06-26",
       "end": "30-07-26",
-      "klGiao": 20000000.0,
+      "klGiao": 2000000.0,
       "klDaXep": 2000000.0,
       "klDaDoKho": 300000.0,
       "conLai": 1700000.0
@@ -1963,16 +1964,7 @@
       "name": "HĐ24",
       "start": "02-06-26",
       "end": "31-07-26",
-      "klGiao": 20000000.0,
-      "klDaXep": 2000000.0,
-      "klDaDoKho": 300000.0,
-      "conLai": 1700000.0
-    },
-    {
-      "name": "HĐ25",
-      "start": "03-06-26",
-      "end": "01-08-26",
-      "klGiao": 20000000.0,
+      "klGiao": 2000000.0,
       "klDaXep": 2000000.0,
       "klDaDoKho": 300000.0,
       "conLai": 1700000.0
@@ -2388,6 +2380,7 @@
     set('p7ReserveAfter', digital2(R.reserveDaysAfterOgIndo)+'<span class="unit">ngày</span>');
     set('p7OgIndoNote', 'Hiện <b style="color:var(--amber);">chưa có tàu nào xếp xong</b> (đã xếp Indonesia = 0 tấn/3 tàu) nên số ngày dự trữ hiện tại ('+digital2(R.reserveDays).replace('.',',')+' ngày) chưa gồm nguồn bổ sung này. Số '+digital2(R.reserveDaysAfterOgIndo).replace('.',',')+' ngày ở trên là mức dự trữ GIẢ ĐỊNH nếu toàn bộ '+fmt(R.ogIndoTotals.klHang)+' tấn của 3 tàu (dự kiến đến Vtau lần lượt '+R.ogIndoVtau.map(function(v){return v.etaVtau;}).join(', ')+') về đến kho đầy đủ, so với tiêu thụ bình quân 7 ngày hiện nay.');
 
+    set('hdForecastTitle', 'Dự tính hoàn thành nhập các hợp đồng'+(R.hdTracking.length ? ' ('+R.hdTracking.map(function(v){return v.name;}).join(', ')+')' : ''));
     set('hdForecastHint', 'Theo sheet "Theo dõi KL HĐ giao nhận" ('+R.hdTracking.length+' hợp đồng: '+R.hdTracking.map(function(v){return v.name;}).join(', ')+'), cập nhật '+R.reportDate+' — khối lượng còn lại chưa dỡ vào kho <b style="color:var(--ink);">'+fmt(R.hdTotals.conLai)+' tấn</b>.');
     var hdDaysToImportVN = R.hdDaysToImport.toLocaleString('vi-VN', {minimumFractionDigits:2, maximumFractionDigits:2});
     var hdDaysConsumptionVN = R.hdDaysOfConsumption.toLocaleString('vi-VN', {minimumFractionDigits:2, maximumFractionDigits:2});

@@ -253,7 +253,7 @@
     <li><a href="#p4" data-target="p4"><span class="num">05</span> Xu hướng tháng 7</a></li>
     <li><a href="#p5" data-target="p5"><span class="num">06</span> Nhập than &amp; tiêu thụ</a></li>
     <li><a href="#p6" data-target="p6"><span class="num">07</span> Tàu than (OG)</a></li>
-    <li><a href="#p7" data-target="p7"><span class="num">08</span> Cảnh báo &amp; đề xuất</a></li>
+    <li><a href="#p7" data-target="p7"><span class="num">08</span> Cảnh báo &amp; dự báo nguồn than</a></li>
   </ul>
   <div class="navfoot">
     Nguồn: <b>So_do_luu_kho_than.xlsx</b><br>
@@ -456,13 +456,25 @@
       <p class="subtitle" data-reveal="fade" style="margin-bottom:24px;" id="p6Subtitle">–</p>
 
       <div class="two-col">
-        <div class="panel-card" data-reveal>
-          <h3>Tàu OG tồn trong kho</h3>
-          <div class="hint" id="p6HintStock">Khối lượng than theo từng chuyến tàu đã nhập kho</div>
-          <table class="data-tbl">
-            <thead><tr><th>Tên tàu</th><th class="num">Khối lượng tồn (tấn)</th></tr></thead>
-            <tbody id="tbodyVesselStock"></tbody>
-          </table>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div class="panel-card" data-reveal>
+            <h3>Tàu OG tồn trong kho</h3>
+            <div class="hint" id="p6HintStock">Khối lượng than theo từng chuyến tàu đã nhập kho</div>
+            <table class="data-tbl">
+              <thead><tr><th>Tên tàu</th><th class="num">Khối lượng tồn (tấn)</th></tr></thead>
+              <tbody id="tbodyVesselStock"></tbody>
+            </table>
+          </div>
+
+          <div class="panel-card" data-reveal style="flex:1;">
+            <h3>Vị trí tàu OG: Indonesia → Vũng Tàu → Sông Hậu 1</h3>
+            <div class="hint" id="p6HintIndo">–</div>
+            <svg id="ogMap" viewBox="0 0 745 190" style="width:100%; height:auto; display:block; overflow:visible;" role="img" aria-label="Sơ đồ vị trí tàu OG trên tuyến Indonesia - Vũng Tàu - Sông Hậu 1"></svg>
+            <table class="data-tbl" style="margin-top:10px;">
+              <thead><tr><th>Tàu</th><th>Vị trí</th><th>Rời Indo</th><th>Đến Vtau</th><th class="num">KL hàng</th></tr></thead>
+              <tbody id="tbodyOGIndo"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="panel-card" data-reveal>
@@ -482,6 +494,15 @@
           <div id="progressBar" style="margin-top:20px;"></div>
         </div>
       </div>
+
+      <div class="panel-card" data-reveal style="margin-top:20px;">
+        <h3>Theo dõi khối lượng hợp đồng giao nhận</h3>
+        <div class="hint" id="hdTrackingHint">–</div>
+        <table class="data-tbl">
+          <thead><tr><th>Tên HĐ</th><th>Bắt đầu giao</th><th>Kết thúc</th><th class="num">KL Giao (tấn)</th><th class="num">KL đã xếp</th><th class="num">KL đã dỡ vào kho</th><th class="num">Còn lại (tấn)</th><th style="min-width:120px;">Tiến độ dỡ vào kho</th></tr></thead>
+          <tbody id="tbodyHdTracking"></tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -489,18 +510,44 @@
   <section class="panel" id="p7">
     <div class="bg-wrap"><div class="orb orb-amber" style="top:15%; left:70%;"></div></div>
     <div class="panel-inner">
-      <div class="eyebrow" data-reveal="fade">08 · Cảnh báo &amp; đề xuất</div>
-      <h2 class="title" data-reveal="fade">Đánh giá mức dự trữ nhiên liệu</h2>
+      <div class="eyebrow" data-reveal="fade">08 · Cảnh báo &amp; dự báo nguồn than về</div>
+      <h2 class="title" data-reveal="fade">Đánh giá dự trữ &amp; Dự báo nguồn than về</h2>
       <p class="subtitle" data-reveal="fade" style="margin-bottom:24px;" id="p7Subtitle">–</p>
 
-      <div class="alert-hero" data-reveal style="max-width:640px;">
-        <div class="pill warn" style="margin-bottom:16px;" id="p7Pill">–</div>
-        <div class="big-num" style="color:var(--green-soft);" id="p7BigNum">–<small style="color:var(--green-soft);">ngày</small></div>
-        <div style="color:var(--ink-muted); font-size:13px; margin-top:10px;" id="p7Desc">–</div>
-        <div class="kpi-grid" style="margin-top:20px; grid-template-columns:repeat(2,1fr);">
-          <div class="card"><div class="k-label">Tiêu thụ BQ 7 ngày</div><div class="k-value" id="p7K1">–<span class="unit">tấn/ngày</span></div></div>
-          <div class="card"><div class="k-label" id="p7K2Label">Tồn kho</div><div class="k-value" id="p7K2">–<span class="unit">K tấn</span></div></div>
+      <div class="two-col">
+        <div class="alert-hero" data-reveal>
+          <div class="pill warn" style="margin-bottom:16px;" id="p7Pill">–</div>
+          <div class="big-num" style="color:var(--green-soft);" id="p7BigNum">–<small style="color:var(--green-soft);">ngày</small></div>
+          <div style="color:var(--ink-muted); font-size:13px; margin-top:10px;" id="p7Desc">–</div>
+          <div class="kpi-grid" style="margin-top:20px; grid-template-columns:repeat(2,1fr);">
+            <div class="card"><div class="k-label">Tiêu thụ BQ 7 ngày</div><div class="k-value" id="p7K1">–<span class="unit">tấn/ngày</span></div></div>
+            <div class="card"><div class="k-label" id="p7K2Label">Tồn kho</div><div class="k-value" id="p7K2">–<span class="unit">tấn</span></div></div>
+          </div>
         </div>
+
+        <div class="panel-card" data-reveal>
+          <h3>Tàu OG đang về: Indonesia → Vũng Tàu</h3>
+          <div class="hint" id="p7HintOgIndo">–</div>
+          <div class="kpi-grid" style="margin-top:14px; grid-template-columns:repeat(2,1fr);">
+            <div class="card"><div class="k-label">Tổng KL 3 tàu OG sắp về</div><div class="k-value" id="p7OgIndoKL">–<span class="unit">tấn</span></div></div>
+            <div class="card"><div class="k-label">Dự trữ dự kiến sau khi về đủ</div><div class="k-value" id="p7ReserveAfter">–<span class="unit">ngày</span></div></div>
+          </div>
+          <div class="hint" id="p7OgIndoNote" style="margin-top:16px;">–</div>
+          <div class="hint" style="margin-top:14px; font-weight:600; color:var(--ink); opacity:0.85;">Xem vị trí &amp; tiến độ xếp hàng từng tàu tại Slide 07 · Tàu than (OG).</div>
+        </div>
+      </div>
+
+      <div class="panel-card" data-reveal style="margin-top:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:4px;">
+          <h3 style="margin-bottom:0;">Dự tính hoàn thành nhập các hợp đồng (HĐ17, HĐ24, HĐ25)</h3>
+          <span class="pill warn">Chờ xác nhận số liệu KL Giao</span>
+        </div>
+        <div class="hint" id="hdForecastHint" style="margin-top:10px;">–</div>
+        <div class="kpi-grid" style="margin-top:14px; grid-template-columns:repeat(2,1fr);">
+          <div class="card"><div class="k-label">Dự kiến nhập hết (theo tốc độ nhập BQ)</div><div class="k-value" id="hdDaysToImport">–<span class="unit">ngày</span></div></div>
+          <div class="card"><div class="k-label">Tương đương thời gian tiêu thụ</div><div class="k-value" id="hdDaysConsumption">–<span class="unit">ngày</span></div></div>
+        </div>
+        <div class="hint" id="hdForecastNote" style="margin-top:16px;">–</div>
       </div>
 
       <footer class="meta" id="footerMeta">Báo cáo được tổng hợp từ file So_do_luu_kho_than.xlsx · NMNĐ Sông Hậu 1</footer>
@@ -730,6 +777,70 @@
       "klNor": 10569.71,
       "done": 6235.29,
       "remain": 4334.42
+    }
+  ],
+  "ogIndonesiaVtau": [
+    {
+      "name": "VT",
+      "position": "Indonesia-Vũng Tàu",
+      "departIndo": "01-07-26",
+      "etaVtau": "01-08-26",
+      "contract": "HĐ17",
+      "code": "OG06",
+      "klHang": 53270.0,
+      "daXepIndo": 0.0,
+      "conLai": 53270.0
+    },
+    {
+      "name": "GH",
+      "position": "Indonesia",
+      "departIndo": "01-08-26",
+      "etaVtau": "01-09-26",
+      "contract": "HĐ24",
+      "code": "OG04",
+      "klHang": 75430.0,
+      "daXepIndo": 0.0,
+      "conLai": 75430.0
+    },
+    {
+      "name": "GS",
+      "position": "Sông Hậu 1",
+      "departIndo": "01-09-26",
+      "etaVtau": "01-10-26",
+      "contract": "HĐ24",
+      "code": "OG03",
+      "klHang": 77000.0,
+      "daXepIndo": 0.0,
+      "conLai": 77000.0
+    }
+  ],
+  "hdTracking": [
+    {
+      "name": "HĐ17",
+      "start": "01-07-26",
+      "end": "30-07-26",
+      "klGiao": 20000000.0,
+      "klDaXep": 20000000.0,
+      "klDaDoKho": 2000.0,
+      "conLai": 19998000.0
+    },
+    {
+      "name": "HĐ24",
+      "start": "02-07-26",
+      "end": "31-07-26",
+      "klGiao": 20000000.0,
+      "klDaXep": 20000000.0,
+      "klDaDoKho": 2000.0,
+      "conLai": 19998000.0
+    },
+    {
+      "name": "HĐ25",
+      "start": "03-07-26",
+      "end": "01-08-26",
+      "klGiao": 20000000.0,
+      "klDaXep": 20000000.0,
+      "klDaDoKho": 2000.0,
+      "conLai": 19998000.0
     }
   ],
   "stockRows": [
@@ -1833,6 +1944,13 @@
     var p = s.split('/'); return new Date(parseInt(p[2],10), parseInt(p[1],10)-1, parseInt(p[0],10));
   }
   function daysBetween(a,b){ return Math.round((a-b)/86400000); }
+  function addDaysFmt(baseDateStr, days){ // "16/07/2026" + N ngày -> "dd/mm/yyyy"
+    if(!isFinite(days)) return '–';
+    var d = parseVNDate(baseDateStr);
+    d.setDate(d.getDate() + Math.round(days));
+    var dd = ('0'+d.getDate()).slice(-2), mm = ('0'+(d.getMonth()+1)).slice(-2);
+    return dd+'/'+mm+'/'+d.getFullYear();
+  }
 
   /* ================= computeReport: mọi số liệu/diễn giải hiển thị trên 8 slide đều tính từ đây ================= */
   function computeReport(raw){
@@ -1868,6 +1986,9 @@
     var last7 = R.tieuthuArr.slice(Math.max(0, R.tieuthuArr.length-7));
     R.avgTieuthu7 = last7.reduce(function(s,v){return s+v;},0) / last7.length;
     R.reserveDays = R.avgTieuthu7 > 0 ? (R.tonkhoProd / R.avgTieuthu7) : 0;
+    // ---- khối lượng nhập bình quân 7 ngày gần nhất (dùng để dự tính tiến độ nhập các HĐ) ----
+    var last7Nhap = R.nhapArr.slice(Math.max(0, R.nhapArr.length-7));
+    R.avgNhap7 = last7Nhap.reduce(function(s,v){return s+v;},0) / last7Nhap.length;
     if(R.reserveDays >= 10){ R.statusWord = 'Ổn định'; R.statusColor = 'var(--green)'; R.statusColorSoft='var(--green-soft)'; R.alertPill='● Mức dự trữ ổn định — tiếp tục theo dõi'; }
     else if(R.reserveDays >= 5){ R.statusWord = 'Cần theo dõi'; R.statusColor = 'var(--amber)'; R.statusColorSoft='var(--amber)'; R.alertPill='● Mức dự trữ cần theo dõi sát'; }
     else { R.statusWord = 'Nguy cấp'; R.statusColor = 'var(--red)'; R.statusColorSoft='var(--red)'; R.alertPill='● Mức dự trữ ở ngưỡng nguy cấp — cần xử lý ngay'; }
@@ -1934,7 +2055,7 @@
       var parent = codeToName[v.parentCode];
       return {
         name:v.name,
-        fromLabel: parent ? (parent.name + ' (' + parent.code + ')') : v.parentCode,
+        fromLabel: parent ? (parent.name + ' (' + parent.code + ')') : (v.parentCode || '—'),
         klNor:v.klNor, done:v.done, remain:v.remain
       };
     });
@@ -1943,12 +2064,133 @@
     // so với tốc độ tiêu thụ bình quân 7 ngày gần nhất — khác với R.reserveDays (tính trên toàn bộ tồn kho tại bãi).
     R.sbReserveDays = R.avgTieuthu7 > 0 ? (R.sbTotals.remain / R.avgTieuthu7) : 0;
 
+    // ---- tàu OG đang xếp hàng tại Indonesia / trên đường về Vũng Tàu (sheet "Tau OG Indonesia-VTau") ----
+    R.ogIndoVtau = (raw.ogIndonesiaVtau || []).map(function(v){
+      var pct = v.klHang>0 ? (v.daXepIndo/v.klHang*100) : 0;
+      return {
+        name:v.name, position:v.position, departIndo:v.departIndo, etaVtau:v.etaVtau, contract:v.contract, code:v.code,
+        klHang:v.klHang, daXepIndo:v.daXepIndo, conLai:v.conLai, pct:pct
+      };
+    });
+    R.ogIndoTotals = R.ogIndoVtau.reduce(function(s,v){ s.klHang+=v.klHang; s.daXepIndo+=v.daXepIndo; s.conLai+=v.conLai; return s; }, {klHang:0,daXepIndo:0,conLai:0});
+    R.ogIndoTotals.pct = R.ogIndoTotals.klHang>0 ? (R.ogIndoTotals.daXepIndo/R.ogIndoTotals.klHang*100) : 0;
+    // Dự trữ dự kiến sau khi TOÀN BỘ khối lượng của các tàu OG (Indonesia→Vũng Tàu) này về đến kho,
+    // cộng thêm vào tồn kho hiện tại — so với tiêu thụ bình quân 7 ngày gần nhất.
+    R.reserveDaysAfterOgIndo = R.avgTieuthu7 > 0 ? ((R.tonkhoProd + R.ogIndoTotals.klHang) / R.avgTieuthu7) : 0;
+
+    // ---- theo dõi khối lượng hợp đồng giao nhận (sheet "Theo dõi KL HĐ giao nhận") ----
+    R.hdTracking = (raw.hdTracking || []).map(function(v){
+      var pct = v.klGiao>0 ? (v.klDaDoKho/v.klGiao*100) : 0;
+      return {
+        name:v.name, start:v.start, end:v.end, klGiao:v.klGiao, klDaXep:v.klDaXep,
+        klDaDoKho:v.klDaDoKho, conLai:v.conLai, pct:pct
+      };
+    });
+    R.hdTotals = R.hdTracking.reduce(function(s,v){ s.klGiao+=v.klGiao; s.klDaXep+=v.klDaXep; s.klDaDoKho+=v.klDaDoKho; s.conLai+=v.conLai; return s; }, {klGiao:0,klDaXep:0,klDaDoKho:0,conLai:0});
+    R.hdTotals.pct = R.hdTotals.klGiao>0 ? (R.hdTotals.klDaDoKho/R.hdTotals.klGiao*100) : 0;
+    // Dự tính thời gian nhập hết khối lượng CÒN LẠI của các hợp đồng (chưa dỡ vào kho), theo 2 mốc so sánh:
+    // (a) tốc độ nhập than bình quân 7 ngày gần nhất (R.avgNhap7) -> số ngày cần để nhập xong + ngày dự kiến hoàn thành;
+    // (b) tương đương bao nhiêu ngày tiêu thụ bình quân 7 ngày gần nhất (R.avgTieuthu7) của khối lượng đó.
+    R.hdDaysToImport = R.avgNhap7 > 0 ? (R.hdTotals.conLai / R.avgNhap7) : 0;
+    R.hdImportDoneDate = R.avgNhap7 > 0 ? addDaysFmt(R.reportDate, R.hdDaysToImport) : '–';
+    R.hdDaysOfConsumption = R.avgTieuthu7 > 0 ? (R.hdTotals.conLai / R.avgTieuthu7) : 0;
+
     // vessel còn lại nhiều nhất trong số tàu mẹ (dùng cho đề xuất hành động)
     R.topRemainOG = R.ogVessels.slice().sort(function(a,b){ return b.remain-a.remain; })[0];
     var sortedByRemain = R.ogVessels.slice().sort(function(a,b){ return b.remain-a.remain; });
     R.top2RemainNames = sortedByRemain.slice(0,2).map(function(v){ return v.name; }).join(' và ');
 
     return R;
+  }
+
+  /* ================= sơ đồ vị trí tàu OG: Indonesia -> Vũng Tàu (Slide 07) ================= */
+  function renderOgMap(list, reportDateStr){
+    var svg = document.getElementById('ogMap');
+    if(!svg) return;
+    if(!list || !list.length){ svg.innerHTML = ''; return; }
+    var NAVY = '#0A2A4A', BLUE = '#0083C7', GREEN = '#00B050', INK = '#12202E', INKM = '#4C6478';
+    var lineY = 100;
+    var WP = {
+      indo: {x:60,  label:'INDONESIA',  sub:'Cảng xếp hàng',     color:NAVY},
+      vtau: {x:370, label:'VŨNG TÀU',   sub:'Cảng trung chuyển', color:BLUE},
+      sh:   {x:680, label:'SÔNG HẬU 1', sub:'NMNĐ Sông Hậu 1',   color:GREEN}
+    };
+
+    function parseSlashDMY(s){ if(!s) return null; var p=s.split('/'); if(p.length!==3) return null; return new Date(parseInt(p[2],10),parseInt(p[1],10)-1,parseInt(p[0],10)); }
+    function parseDashDMY2(s){ if(!s) return null; var p=s.split('-'); if(p.length!==3) return null; var yyyy=parseInt(p[2],10); yyyy=yyyy<100?2000+yyyy:yyyy; return new Date(yyyy,parseInt(p[1],10)-1,parseInt(p[0],10)); }
+    function wpKey(s){
+      var t=(s||'').toLowerCase();
+      if(t.indexOf('sông hậu')>-1 || t.indexOf('song hau')>-1) return 'sh';
+      if(t.indexOf('vũng tàu')>-1 || t.indexOf('vung tau')>-1 || t.indexOf('vtau')>-1) return 'vtau';
+      if(t.indexOf('indonesia')>-1) return 'indo';
+      return null;
+    }
+    function parseWaypoints(pos){
+      var segs = (pos||'').split(/[-–]+/).map(function(s){ return s.trim(); }).filter(Boolean);
+      var keys = segs.map(wpKey).filter(Boolean);
+      var out = [];
+      keys.forEach(function(k){ if(out[out.length-1]!==k) out.push(k); });
+      return out;
+    }
+    var reportD = parseSlashDMY(reportDateStr);
+    function fracFor(v, fromKey, toKey){
+      if(fromKey==='indo' && toKey==='vtau' && v.departIndo && v.etaVtau && reportD){
+        var d0=parseDashDMY2(v.departIndo), d1=parseDashDMY2(v.etaVtau);
+        if(d0 && d1 && d1>d0){ return Math.max(0.1, Math.min(0.9, (reportD-d0)/(d1-d0))); }
+      }
+      return 0.5;
+    }
+
+    var atRest = {indo:[], vtau:[], sh:[]};
+    var transit = [];
+    list.forEach(function(v){
+      var wps = parseWaypoints(v.position);
+      if(wps.length>=2 && WP[wps[0]] && WP[wps[1]]){ transit.push({v:v, from:wps[0], to:wps[1]}); }
+      else if(wps.length===1 && WP[wps[0]]){ atRest[wps[0]].push(v); }
+    });
+
+    function portNode(wp){
+      return ''+
+        '<circle cx="'+wp.x+'" cy="'+lineY+'" r="16" fill="#fff" stroke="'+wp.color+'" stroke-width="2.5"/>'+
+        '<circle cx="'+wp.x+'" cy="'+lineY+'" r="5.5" fill="'+wp.color+'"/>'+
+        '<text x="'+wp.x+'" y="'+(lineY+38)+'" text-anchor="middle" font-family="Sora,sans-serif" font-weight="700" font-size="12.5" fill="'+INK+'">'+wp.label+'</text>'+
+        '<text x="'+wp.x+'" y="'+(lineY+53)+'" text-anchor="middle" font-size="9.5" fill="'+INKM+'">'+wp.sub+'</text>';
+    }
+    function chip(v, x, stackIndex, color, subLabel, dashed){
+      var chipH = 46, gap = 12;
+      var rectY = lineY - 30 - stackIndex*(chipH+gap) - chipH;
+      var connY1 = rectY + chipH;
+      return ''+
+        '<line x1="'+x+'" y1="'+connY1+'" x2="'+x+'" y2="'+lineY+'" stroke="'+color+'" stroke-width="1.5" stroke-dasharray="2 3" opacity="0.7"/>'+
+        '<circle cx="'+x+'" cy="'+lineY+'" r="4.5" fill="'+color+'"/>'+
+        '<rect x="'+(x-58)+'" y="'+rectY+'" width="116" height="'+chipH+'" rx="10" fill="#fff" stroke="'+color+'" stroke-width="1.3" stroke-dasharray="'+(dashed?'4 3':'none')+'"/>'+
+        '<text x="'+x+'" y="'+(rectY+18)+'" text-anchor="middle" font-family="Sora,sans-serif" font-weight="700" font-size="12.5" fill="'+INK+'">'+v.name+' ('+v.code+')</text>'+
+        '<text x="'+x+'" y="'+(rectY+31)+'" text-anchor="middle" font-size="9" fill="'+INKM+'">'+subLabel+'</text>';
+    }
+
+    var parts = [];
+    parts.push('<line x1="'+WP.indo.x+'" y1="'+lineY+'" x2="'+WP.vtau.x+'" y2="'+lineY+'" stroke="'+BLUE+'" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round" opacity="0.5"/>');
+    parts.push('<line x1="'+WP.vtau.x+'" y1="'+lineY+'" x2="'+WP.sh.x+'" y2="'+lineY+'" stroke="'+GREEN+'" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round" opacity="0.5"/>');
+    [[WP.indo.x,WP.vtau.x,BLUE],[WP.vtau.x,WP.sh.x,GREEN]].forEach(function(seg){
+      var mx=(seg[0]+seg[1])/2;
+      parts.push('<path d="M '+(mx-6)+' '+(lineY-5)+' L '+(mx+6)+' '+lineY+' L '+(mx-6)+' '+(lineY+5)+' Z" fill="'+seg[2]+'" opacity="0.55"/>');
+    });
+    parts.push(portNode(WP.indo));
+    parts.push(portNode(WP.vtau));
+    parts.push(portNode(WP.sh));
+    ['indo','vtau','sh'].forEach(function(key){
+      var wp = WP[key];
+      atRest[key].forEach(function(v,i){
+        parts.push(chip(v, wp.x, i, wp.color, fmt1(v.klHang)+' tấn · tại '+wp.label, false));
+      });
+    });
+    transit.forEach(function(t){
+      var f = fracFor(t.v, t.from, t.to);
+      var x = WP[t.from].x + (WP[t.to].x - WP[t.from].x)*f;
+      var lbl = 'Đang di chuyển '+(t.v.departIndo||'?')+' → '+(t.v.etaVtau||'?');
+      parts.push(chip(t.v, x, 0, BLUE, lbl, true));
+    });
+    svg.innerHTML = parts.join('');
   }
 
   var REPORT = computeReport(RAW_DATA);
@@ -2037,6 +2279,25 @@
       sbRows += '<tr class="total"><td>Tổng</td><td>—</td><td class="num">'+fmt1(R.sbTotals.klNor)+'</td><td class="num">'+fmt1(R.sbTotals.done)+'</td><td class="num">'+fmt1(R.sbTotals.remain)+'</td></tr>';
       set('tbodySB', sbRows);
     }
+    set('p6HintIndo', R.ogIndoVtau.length+' tàu mẹ đang trong kế hoạch xếp hàng Indonesia → Vũng Tàu — đã xếp <b style="color:var(--ink);">'+fmt(R.ogIndoTotals.daXepIndo)+'/'+fmt(R.ogIndoTotals.klHang)+' tấn ('+pct1(R.ogIndoTotals.pct)+')</b>, cập nhật '+R.reportDate+'.');
+    var ogIndoRows = R.ogIndoVtau.map(function(v){ return '<tr><td>'+v.name+' ('+v.code+')</td><td>'+v.position+'</td><td>'+v.departIndo+'</td><td>'+v.etaVtau+'</td><td class="num">'+fmt1(v.klHang)+'</td></tr>'; }).join('');
+    ogIndoRows += '<tr class="total"><td>Tổng</td><td>—</td><td>—</td><td>—</td><td class="num">'+fmt1(R.ogIndoTotals.klHang)+'</td></tr>';
+    set('tbodyOGIndo', ogIndoRows);
+    renderOgMap(R.ogIndoVtau, R.reportDate);
+    set('hdTrackingHint', R.hdTracking.length+' hợp đồng đang theo dõi — tổng KL giao <b style="color:var(--ink);">'+fmt(R.hdTotals.klGiao)+' tấn</b>, đã dỡ vào kho <b style="color:var(--ink);">'+fmt(R.hdTotals.klDaDoKho)+' tấn ('+pct1(R.hdTotals.pct)+')</b> — theo sheet "Theo dõi KL HĐ giao nhận", cập nhật '+R.reportDate+'.');
+    function miniBar(pct){
+      var p = Math.max(0, Math.min(100, pct));
+      var pLabel = p < 1 && p > 0 ? '<0,1' : digital2(p).replace(/\.00$/,'').replace('.',',');
+      return '<div style="display:flex; align-items:center; gap:8px;">'+
+        '<div style="flex:1; height:8px; border-radius:6px; background:rgba(10,42,74,0.08); overflow:hidden;"><div style="height:100%; width:'+Math.max(p,1.2)+'%; border-radius:6px; background:linear-gradient(90deg,#0083C7,#00B050);"></div></div>'+
+        '<span style="font-size:11px; color:var(--ink-muted); min-width:34px; text-align:right;">'+pLabel+'%</span>'+
+      '</div>';
+    }
+    var hdRows = R.hdTracking.map(function(v){
+      return '<tr><td>'+v.name+'</td><td>'+v.start+'</td><td>'+v.end+'</td><td class="num">'+fmt1(v.klGiao)+'</td><td class="num">'+fmt1(v.klDaXep)+'</td><td class="num">'+fmt1(v.klDaDoKho)+'</td><td class="num">'+fmt1(v.conLai)+'</td><td>'+miniBar(v.pct)+'</td></tr>';
+    }).join('');
+    hdRows += '<tr class="total"><td>Tổng</td><td>—</td><td>—</td><td class="num">'+fmt1(R.hdTotals.klGiao)+'</td><td class="num">'+fmt1(R.hdTotals.klDaXep)+'</td><td class="num">'+fmt1(R.hdTotals.klDaDoKho)+'</td><td class="num">'+fmt1(R.hdTotals.conLai)+'</td><td>'+miniBar(R.hdTotals.pct)+'</td></tr>';
+    set('tbodyHdTracking', hdRows);
 
     // ---- Slide 8: cảnh báo & đề xuất ----
     set('p7Subtitle', 'Tồn kho theo <b style="color:'+R.statusColorSoft+';">'+digital2(R.reserveDays).replace('.',',')+' ngày</b> dự trữ theo tốc độ tiêu thụ bình quân 7 ngày gần nhất, tính theo báo cáo sản lượng ngày '+R.reportDate+'.');
@@ -2047,7 +2308,19 @@
     set('p7Desc', 'Tồn kho '+fmt(R.tonkhoProd)+' tấn ('+R.reportDateShort+') chia cho tiêu thụ bình quân 7 ngày gần nhất '+fmt(R.avgTieuthu7)+' tấn/ngày. '+(R.dipIsInterior ? ('Kho đã tăng liên tục từ đáy '+fmt(R.dipValue)+' tấn ('+R.dipDay+'/'+R.month+'), nhờ nhiều chuyến CSU nhập về.') : ''));
     set('p7K1', fmt(R.avgTieuthu7)+'<span class="unit">tấn/ngày</span>');
     set('p7K2Label', 'Tồn kho '+R.reportDateShort);
-    set('p7K2', digitalK2(R.tonkhoProd)+'<span class="unit">K tấn</span>');
+    set('p7K2', digitalK2(R.tonkhoProd)+'<span class="unit">tấn</span>');
+
+    set('p7HintOgIndo', 'Theo sheet "Tau OG Indonesia-VTau", cập nhật '+R.reportDate+' — '+R.ogIndoVtau.length+' tàu mẹ, đã xếp xong tại Indonesia <b style="color:var(--ink);">'+fmt(R.ogIndoTotals.daXepIndo)+' tấn</b> trên tổng '+fmt(R.ogIndoTotals.klHang)+' tấn, dự kiến đến Vtau '+R.ogIndoVtau.map(function(v){return v.etaVtau;}).join(' – ')+'.');
+    set('p7OgIndoKL', fmt(R.ogIndoTotals.klHang)+'<span class="unit">tấn</span>');
+    set('p7ReserveAfter', digital2(R.reserveDaysAfterOgIndo)+'<span class="unit">ngày</span>');
+    set('p7OgIndoNote', 'Hiện <b style="color:var(--amber);">chưa có tàu nào xếp xong</b> (đã xếp Indonesia = 0 tấn/3 tàu) nên số ngày dự trữ hiện tại ('+digital2(R.reserveDays).replace('.',',')+' ngày) chưa gồm nguồn bổ sung này. Số '+digital2(R.reserveDaysAfterOgIndo).replace('.',',')+' ngày ở trên là mức dự trữ GIẢ ĐỊNH nếu toàn bộ '+fmt(R.ogIndoTotals.klHang)+' tấn của 3 tàu (dự kiến đến Vtau lần lượt '+R.ogIndoVtau.map(function(v){return v.etaVtau;}).join(', ')+') về đến kho đầy đủ, so với tiêu thụ bình quân 7 ngày hiện nay.');
+
+    set('hdForecastHint', 'Theo sheet "Theo dõi KL HĐ giao nhận" ('+R.hdTracking.length+' hợp đồng: '+R.hdTracking.map(function(v){return v.name;}).join(', ')+'), cập nhật '+R.reportDate+' — khối lượng còn lại chưa dỡ vào kho <b style="color:var(--ink);">'+fmt(R.hdTotals.conLai)+' tấn</b>.');
+    var hdDaysToImportVN = R.hdDaysToImport.toLocaleString('vi-VN', {minimumFractionDigits:2, maximumFractionDigits:2});
+    var hdDaysConsumptionVN = R.hdDaysOfConsumption.toLocaleString('vi-VN', {minimumFractionDigits:2, maximumFractionDigits:2});
+    set('hdDaysToImport', hdDaysToImportVN+'<span class="unit">ngày</span>');
+    set('hdDaysConsumption', hdDaysConsumptionVN+'<span class="unit">ngày</span>');
+    set('hdForecastNote', 'Còn lại <b style="color:var(--ink);">'+fmt(R.hdTotals.conLai)+' tấn</b> (KL Giao trừ KL đã dỡ vào kho) chia cho tốc độ nhập bình quân 7 ngày gần nhất <b style="color:var(--ink);">'+fmt1(R.avgNhap7)+' tấn/ngày</b> ⇒ dự kiến còn <b style="color:var(--blue);">'+hdDaysToImportVN+' ngày</b> để nhập hoàn thành hết các hợp đồng, tương đương hoàn thành khoảng <b style="color:var(--ink);">'+R.hdImportDoneDate+'</b>. So với tiêu thụ bình quân 7 ngày gần nhất '+fmt1(R.avgTieuthu7)+' tấn/ngày, khối lượng còn lại này tương đương <b style="color:var(--green);">'+hdDaysConsumptionVN+' ngày</b> tiêu thụ. <i style="color:var(--amber);">Lưu ý: KL Giao trong sheet nguồn hiện là số liệu nháp/mẫu, kết quả sẽ tự cập nhật khi Anh nhập lại số liệu chính thức.</i>');
 
     set('footerMeta', 'Báo cáo được tổng hợp từ file So_do_luu_kho_than.xlsx · NMNĐ Sông Hậu 1 · Cập nhật '+R.reportDate);
   })(REPORT);
@@ -2278,19 +2551,20 @@
     var scene = document.getElementById('scene3d');
     if(!world) return;
 
-    var SEG_W = 60, SEG_GAP = 1, YARD_D = 128, CELL_D = 92; // SEG_GAP nhỏ để các phân đoạn A-G nằm sát liền kề nhau, đúng thực tế đống than liền khối
+    var SEG_W = 60, SEG_GAP = 0, YARD_D = 128, CELL_D = 92; // SEG_GAP = 0: các phân đoạn A-G đặt sát liền nhau, không còn khoảng hở
     var LAYER_H = 15, LAYER_GAP = 1.5;
     var PAD_H = 5;
     var ROOF_ELEV = 150, ROOF_H = 5;
-    // Đống than dạng hình thang, góc chân thang khớp đúng góc nghỉ tự nhiên của than trong bản vẽ CAD
-    // (~38° so với phương ngang): với mỗi tầng cao thêm (LAYER_H+LAYER_GAP = 16.5px), cạnh than phải
-    // thu vào ngang một khoảng = chiều cao / tan(38°) ≈ 16.5 / 0.7813 ≈ 21px — dùng chung 1 bậc thang
-    // (STEP) cho cả 2 trục (chiều sâu cắt ngang & chiều dài dọc đống) để đúng cùng 1 góc nghỉ thực tế.
-    // Chiều sâu (STEP_D): thu bậc thang ở MỌI tầng (mô phỏng mặt cắt ngang đống, luôn hiện rõ hình thang).
-    // Chiều dài (STEP_W): CHỈ 2 phân đoạn ngoài cùng của khối than mới thu bậc thang; 2 phân đoạn liền kề
-    // nhau mà đều có than thì giữ phẳng, liền mạch, không hở ra ở ranh giới giữa chúng.
-    var STEP = Math.round((LAYER_H+LAYER_GAP) / Math.tan(38*Math.PI/180)); // ≈21
-    var STEP_D = STEP, MIN_D = 16, STEP_W = STEP, MIN_W = 14;
+    // Đống than dạng hình thang, bậc thang giữa các tầng thu vào theo 2 trục riêng biệt, cả 2 đều dùng
+    // khoảng cách bậc VỪA PHẢI (như thiết kế ban đầu) để bậc thang giữa tầng 1→2→3→4→5 đều hiện rõ,
+    // không bị "hết chỗ" thu (clamp) quá sớm khi lên các tầng cao:
+    // Chiều sâu/chiều ngang (STEP_D, trục CELL_D — mặt cắt ngang đống): thu bậc thang ở MỌI tầng.
+    // Chiều dài dọc đống (STEP_W, trục SEG_W): CHỈ 2 phân đoạn ngoài cùng của khối than mới thu bậc thang;
+    // 2 phân đoạn liền kề nhau mà đều có than thì giữ phẳng, liền mạch, không hở ra ở ranh giới giữa chúng.
+    var STEP_W = 8, MIN_W = 18;
+    var STEP_D = 8, MIN_D = 26;
+    var STEP_FLUSH = 3; // vách "giữ thẳng" (Đống 2.1/2.2 và Đống 1) không còn tuyệt đối thẳng đứng nữa —
+    // vẫn thu vào 1 khoảng nhỏ mỗi tầng để tránh mặt phẳng cứng, chỉ thu ít hơn nhiều so với vách ngoài.
 
     function face(w,h,transform,bg,extra){
       var d = document.createElement('div');
@@ -2363,17 +2637,17 @@
     // này thực sự chạm/dính sát nhau (không chỉ nền floor trang trí chạm mà khối than vẫn còn hở).
     var TIGHT_GAP = CELL_D - 2; // nhỏ hơn CELL_D 2px để khối than (rộng CELL_D-2) chạm khít, không còn khe hở
     var zCenters = [];
-    // tightSide[yi]: null = đống độc lập (Đống 1, Đống 3) -> bậc thang thu đều 2 vách như bình thường.
-    // 'next'/'prev' = đống có đống liền kề chạm sát (Đống 2.1 <-> Đống 2.2) -> CHỈ thu bậc ở vách phía
-    // ngoài (xa đống kia); vách phía giáp đống kia giữ thẳng đứng, không thu, để 2.1+2.2 nhìn thành
-    // 1 khối hình thang liền mạch, bậc thang chỉ lộ ra ở 2 vách ngoài cùng (theo yêu cầu bố trí thực tế).
+    // Theo đúng hình phác thảo anh vẽ: MỖI đống (kể cả Đống 2.1 và Đống 2.2, dù đặt sát nhau) đều là
+    // 1 hình thang cân ĐẦY ĐỦ, riêng biệt — thu đều cả 2 vách và luôn căn giữa so với tầng dưới (tầng 2
+    // nhỏ hơn tầng 1 và thu về giữa, tầng 3 nhỏ hơn tầng 2 và thu về giữa, ...), không đống nào giữ 1
+    // vách thẳng đứng vì "chạm nhau" nữa — Đống 2.1/2.2 chỉ đặt gần sát nhau về vị trí, còn hình dáng
+    // mỗi đống vẫn là 1 hình thang hoàn chỉnh, đối xứng, giống hệt Đống 1 và Đống 3.
     var tightSide = yard3DOrder.map(function(){ return null; });
     yard3DOrder.forEach(function(yard, yi){
       if(yi === 0){ zCenters.push(0); return; }
       var prevYard = yard3DOrder[yi-1];
       var isTightPair = (prevYard === 'Đống 2.1' && yard === 'Đống 2.2') || (prevYard === 'Đống 2.2' && yard === 'Đống 2.1');
       var gap = isTightPair ? TIGHT_GAP : YARD_D;
-      if(isTightPair){ tightSide[yi-1] = 'next'; tightSide[yi] = 'prev'; }
       zCenters.push(zCenters[yi-1] + gap);
     });
     var zMid = (Math.min.apply(null, zCenters) + Math.max.apply(null, zCenters)) / 2;
@@ -2388,16 +2662,14 @@
       var mySide = tightSide[yi];
       var segSpan = segList.length*(SEG_W+SEG_GAP) - SEG_GAP;
 
-      // Chiều dọc theo đống (dãy phân đoạn A-G): CHỈ 2 đầu ngoài cùng của khối than mới lộ bậc thang;
-      // 2 phân đoạn liền kề nhau mà đều đang có than thì giữ phẳng/liền mạch (không thu bậc thang ở
-      // ranh giới giữa chúng) — chỉ phân đoạn ngoài cùng bên trái/phải THỰC SỰ có than mới thu vào.
-      var stockedSi = [];
-      segList.forEach(function(seg, si){
-        var hasAny = stockBlocks.some(function(b){ return b.yard===yard && b.segment===seg; });
-        if(hasAny) stockedSi.push(si);
+      // Chiều dọc theo đống (dãy phân đoạn A-G): xét TỪNG CẶP phân đoạn liền kề (G-F, F-E, E-D, D-C,
+      // C-B, B-A) một cách ĐỘC LẬP — nếu 2 phân đoạn liền kề đều đang có than thì ranh giới giữa
+      // chúng vẽ dính liền, KHÔNG bậc thang ở đó; 1 phân đoạn chỉ thu bậc thang ở phía nào KHÔNG có
+      // phân đoạn liền kề chứa than (mép ngoài thật, hoặc giáp 1 khoảng trống giữa 2 đám than tách
+      // rời) — không dùng mép min/max toàn cục nữa để xử lý đúng cả trường hợp có khoảng trống ở giữa.
+      var hasStockArr = segList.map(function(seg){
+        return stockBlocks.some(function(b){ return b.yard===yard && b.segment===seg; });
       });
-      var minStockedSi = stockedSi.length ? Math.min.apply(null, stockedSi) : -1;
-      var maxStockedSi = stockedSi.length ? Math.max.apply(null, stockedSi) : -1;
 
       // group floor tile for this yard row (visually groups each đống, like the paired tables on Page 1)
       var floor = makeBox(segSpan+22, 3, CELL_D+22, 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.03)', 'rgba(255,255,255,0.03)');
@@ -2422,14 +2694,18 @@
       segList.forEach(function(seg, si){
         var isKin = yardSegments[yard].kin.indexOf(seg) > -1;
         var xCenter = si*(SEG_W+SEG_GAP) - totalW/2 + SEG_W/2;
-        // 'start' = phân đoạn ngoài cùng bên trái ĐANG CÓ THAN (thu bậc thang từ cạnh -X),
-        // 'end' = phân đoạn ngoài cùng bên phải đang có than (thu từ cạnh +X), 'both' = chỉ 1 phân đoạn
-        // duy nhất có than (thu cả 2 cạnh), null = phân đoạn ở giữa, liền kề phân đoạn có than khác
-        // => giữ phẳng, không thu bậc thang (2 phân đoạn kế nhau cùng có than thì liền mạch, không hở).
+        // Xét riêng 2 phía của CHÍNH phân đoạn này: phía trái (si-1) và phía phải (si+1) có đang chứa
+        // than không — độc lập theo từng cặp liền kề, không phụ thuộc mép min/max toàn đống.
+        // 'start' = phía trái KHÔNG có than liền kề (mép ngoài/hở, thu bậc thang từ cạnh -X), phía
+        // phải CÓ than liền kề (giữ liền mạch, không thu). 'end' = ngược lại. 'both' = cả 2 phía đều
+        // không có than liền kề (thu bậc thang cả 2 cạnh). null = cả 2 phía đều có than liền kề =>
+        // giữ phẳng, không thu bậc thang ở cả 2 ranh giới (dính liền với 2 phân đoạn bên cạnh).
+        var leftHasStock = (si>0) && hasStockArr[si-1];
+        var rightHasStock = (si<segList.length-1) && hasStockArr[si+1];
         var xEdge = null;
-        if(si===minStockedSi && si===maxStockedSi) xEdge = 'both';
-        else if(si===minStockedSi) xEdge = 'start';
-        else if(si===maxStockedSi) xEdge = 'end';
+        if(!leftHasStock && !rightHasStock) xEdge = 'both';
+        else if(!leftHasStock) xEdge = 'start';
+        else if(!rightHasStock) xEdge = 'end';
         // stacked blocks for this yard+segment
         var cellBlocks = stockBlocks.filter(function(b){ return b.yard===yard && b.segment===seg; }).sort(function(a,b){ return a.layer-b.layer; });
         var cellTotal = cellBlocks.reduce(function(s,b){ return s+b.qty; }, 0);
@@ -2475,39 +2751,80 @@
           var st = groupStatus(group);
           var colors = STATUS_COLORS[st];
           var top = colors.top, front = colors.front, sideColor = colors.side;
-          // bậc thang dọc theo đống (chiều dài, dãy phân đoạn A-G): CHỈ 2 đầu ngoài cùng của khối than
-          // (xEdge start/end) mới thu bậc thang, thu theo đúng góc chân than thực tế (~38° trong bản vẽ,
-          // mỗi tầng cao lên thì thu vào ngang STEP_W) — 2 phân đoạn liền kề nhau mà đều có than thì giữ
-          // phẳng/liền mạch (xEdge=null), không hở ra ở ranh giới giữa chúng.
-          var fullW = SEG_W-2;
+          // Áp dụng bậc thang cho TẤT CẢ 4 đống (Đống 1, 2.1, 2.2, 3):
+          // (a) Bậc thang dọc theo trục dài A→G, xét TỪNG CẶP phân đoạn liền kề độc lập (xem xEdge
+          //     phía trên): phía nào giáp phân đoạn liền kề CÓ than thì giữ NGUYÊN VẸN, tuyệt đối
+          //     không thu — để 2 phân đoạn liền kề cùng có than luôn dính liền, không hở/không bậc
+          //     thang ở đúng ranh giới đó. Phía nào KHÔNG giáp than (mép ngoài thật hoặc giáp khoảng
+          //     trống) mới thu bậc thang (STEP_W/tầng); 'both' (2 phía đều hở) thu đều cả 2 bên.
+          // (b) Bậc thang theo chiều ngang (bề sâu, trục Z) của TỪNG phân đoạn: định hướng theo trục
+          //     nhìn suốt from Đống 1 → 2.1 → 2.2 → Đống 3 — Đống 1/Đống 3 ở 2 đầu bãi nên có 1 vách
+          //     ngoài thật (thu CHÍNH, rõ) và 1 vách trong hướng vào bãi (thu NHẸ); Đống 2.1/2.2 ở
+          //     giữa, không có vách ngoài thật nên thu CĂN GIỮA đều 2 bên, mức vừa phải.
+          var fullW = SEG_W; // = SEG_W (không trừ 2) để 2 phân đoạn liền kề có than khít hoàn toàn, không hở
           var boxW, xOffset;
-          if(xEdge === 'start'){
+          if(xEdge === 'both'){
+            boxW = Math.max(fullW - li*STEP_W*2, MIN_W);
+            xOffset = 0;
+          } else if(xEdge === 'start'){
+            // phía trái (-X) hở, thu bậc thang; phía phải (+X) giáp than liền kề, giữ nguyên vẹn.
             boxW = Math.max(fullW - li*STEP_W, MIN_W);
             xOffset = (fullW-boxW)/2;
           } else if(xEdge === 'end'){
+            // phía phải (+X) hở, thu bậc thang; phía trái (-X) giáp than liền kề, giữ nguyên vẹn.
             boxW = Math.max(fullW - li*STEP_W, MIN_W);
             xOffset = -(fullW-boxW)/2;
-          } else if(xEdge === 'both'){
-            boxW = Math.max(fullW - li*STEP_W*2, MIN_W);
-            xOffset = 0;
           } else {
             boxW = fullW;
             xOffset = 0;
           }
-          // --- Chiều sâu (boxD, cắt ngang đống = 2 cạnh bên hình thang) — riêng Đống 2.1/2.2 chỉ thu vào
-          // 1 vách ngoài, giữ thẳng vách trong (giáp đống bên cạnh) để cả cụm 2.1+2.2 liền thành 1 khối
-          // hình thang chung.
           var fullD = CELL_D-2;
           var boxD, zOffset;
-          if(mySide === 'next'){ // vách giáp đống kế tiếp (z lớn hơn) giữ thẳng — thu vào từ vách -Z
-            boxD = Math.max(fullD - li*STEP_D, MIN_D);
-            zOffset = (fullD-boxD)/2;
-          } else if(mySide === 'prev'){ // vách giáp đống trước (z nhỏ hơn) giữ thẳng — thu vào từ vách +Z
-            boxD = Math.max(fullD - li*STEP_D, MIN_D);
-            zOffset = -(fullD-boxD)/2;
-          } else { // đống độc lập: thu đều 2 vách như trước
-            boxD = Math.max(fullD - li*STEP_D*2, MIN_D);
-            zOffset = 0;
+          // Đống 1 và Đống 2.1 (nửa bãi phía Đống 1): mỗi đống có đúng 1 vách ngoài thật (thu bậc
+          // thang CHÍNH, rõ, phía +Z) và 1 vách hướng về giữa bãi (thu NHẸ, phía -Z). Đống 2.2 và
+          // Đống 3 (theo yêu cầu): đổi sang thu CĂN GIỮA, đều 2 bên, mức vừa phải (STEP_D), không
+          // lệch về phía nào. Mỗi vách đều CHẶN riêng để tầng trên luôn nằm TRỌN trên nền tầng dưới ở
+          // MỌI tầng (2,3,4,5...), không đầu nào vượt mép.
+          if(yard === 'Đống 1'){
+            // Đống 1: vách ngoài thật (phía +Z) GIỮ NGUYÊN như đã chốt — thu STEP_D*2/tầng.
+            // Vách trong (phía -Z, hướng về giữa bãi) nay GIÃN RA thêm 1 tí — nới taper nhẹ
+            // lại chỉ còn 1/tầng (thay vì STEP_FLUSH=3/tầng trước đó) để bậc thang cân đối hơn.
+            var loEdgeD = Math.min(-fullD/2 + li*1, -MIN_D/2);          // vách trong — giãn ra thêm, chỉ thu nhẹ 1/tầng
+            var hiEdgeD = Math.max(fullD/2 - li*STEP_D*2, MIN_D/2);     // vách ngoài thật — giữ nguyên
+            boxD = hiEdgeD - loEdgeD;
+            zOffset = (hiEdgeD + loEdgeD)/2;
+          } else if(yard === 'Đống 2.1'){
+            // Đống 2.1: vách trong (phía -Z, hướng về giữa bãi) đã ở giới hạn tối đa — FLUSH
+            // hoàn toàn, luôn bằng gốc -fullD/2 (không thể giãn thêm vì sẽ nhô ra khỏi tầng 1).
+            // Theo yêu cầu, nay THU NHẸ VÁCH NGOÀI lại (giảm từ STEP_D*2=16/tầng xuống còn
+            // STEP_D=8/tầng) để 2 vách trông cân đối hơn về tỉ lệ.
+            var loEdgeD = -fullD/2;                                      // vách trong — flush hoàn toàn, không thu
+            var hiEdgeD = Math.max(fullD/2 - li*STEP_D, MIN_D/2);       // vách ngoài thật — thu nhẹ lại, còn STEP_D/tầng
+            boxD = hiEdgeD - loEdgeD;
+            zOffset = (hiEdgeD + loEdgeD)/2;
+          } else if(yard === 'Đống 3'){
+            // Đống 3: vách trong (phía +Z, hướng về Đống 2.2/giữa bãi) GIỮ NGUYÊN như đã
+            // chốt — thu 12/tầng dựa trên bảng boxD gốc (tầng1=90(gốc),80,70,60,50), có chặn
+            // mức tối thiểu MIN_D/2. Vách ngoài (phía -Z) nay GIÃN RA thêm 1 tí nữa — nới taper
+            // nhẹ lại chỉ còn 1/tầng (thay vì 3/tầng trước đó) để bậc thang trông cân đối hơn.
+            // Tầng 1 (li=0) vẫn giữ nguyên gốc. Mỗi vách vẫn CHẶN riêng nên tầng trên luôn
+            // nằm TRỌN trong tầng dưới ở MỌI cặp liền kề.
+            var targetBoxD = [fullD, 80, 70, 60, 50];
+            var baseD = (li < targetBoxD.length) ? targetBoxD[li] : Math.max(50 - (li-4)*10, MIN_D);
+            var loEdgeD = Math.min(-fullD/2 + li*1, -MIN_D/2);    // vách ngoài — giãn ra thêm, chỉ thu nhẹ 1/tầng
+            var hiEdgeD = Math.max(baseD/2 - li*12, MIN_D/2);     // vách trong — giữ nguyên, thu 12/tầng
+            boxD = hiEdgeD - loEdgeD;
+            zOffset = (hiEdgeD + loEdgeD)/2;
+          } else {
+            // Đống 2.2: vách trong (phía +Z, hướng về Đống 2.1/tâm bãi) GIỮ NGUYÊN như đã
+            // chốt — thu 13/tầng. Vách ngoài (phía -Z, hướng ra Đống 3/xa tâm bãi) nay GIÃN RA
+            // thêm 1 tí nữa — giảm tốc độ thu từ 3/tầng xuống còn 1/tầng để bậc thang trông
+            // cân đối hơn. Mỗi vách vẫn CHẶN riêng nên tầng trên luôn nằm TRỌN trong tầng dưới
+            // ở MỌI cặp liền kề.
+            var loEdgeD = Math.min(-fullD/2 + li*1, -MIN_D/2);   // vách ngoài — giãn ra thêm, còn 1/tầng
+            var hiEdgeD = Math.max(fullD/2 - li*13, MIN_D/2);    // vách trong — giữ nguyên, 13/tầng
+            boxD = hiEdgeD - loEdgeD;
+            zOffset = (hiEdgeD + loEdgeD)/2;
           }
           var box = makeBox(boxW, bh, boxD, top, front, sideColor);
           placeBox(box, xCenter + xOffset, elev, bh, zCenter + zOffset);

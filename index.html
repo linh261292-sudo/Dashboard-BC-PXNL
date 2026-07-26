@@ -4600,11 +4600,16 @@
     var dragging=false, startX=0, startY=0, startAz=curAz, startEl=curEl, pending=false;
     // "locked": khi bat, khoa hoan toan tuong tac (keo xoay/cuon zoom/nut +,-,⟲) de giu sơ đồ CO
     // DINH dung 1 vi tri, phuc vu luc trinh chieu khong muon nguoi xem lo tay lam xoay lech gioi.
+    // Trang thai nay duoc LUU vao localStorage (theo tung svgId) de khi trang HTML duoc tai lai
+    // (F5, hoac do co che tu-lam-moi khi co du lieu Excel moi - xem IIFE tu-reload o cuoi file),
+    // nut khoa van GIU NGUYEN trang thai da chon truoc do, khong bi reset ve mac dinh.
+    var LOCK_KEY = 'p3dLocked_' + svgId;
     var locked = false;
+    try { locked = localStorage.getItem(LOCK_KEY) === '1'; } catch(e){}
     function scheduleRender(){
       if(!pending){ pending = true; requestAnimationFrame(function(){ render(curAz); pending=false; }); }
     }
-    svg.style.cursor = 'grab';
+    svg.style.cursor = locked ? 'not-allowed' : 'grab';
     svg.style.touchAction = 'none';
     svg.addEventListener('pointerdown', function(e){
       if(locked) return;
@@ -4632,11 +4637,19 @@
     var btnOut = document.querySelector('#'+panelId+' [data-p3d-zoomout]');
     var btnReset = document.querySelector('#'+panelId+' [data-p3d-reset]');
     var btnLock = document.querySelector('#'+panelId+' [data-p3d-lock]');
+    // Neu trang thai khoa da duoc khoi phuc tu localStorage (locked=true ngay tu dau), dong bo
+    // ngay giao dien nut bam cho khop (chu/icon, class 'active') truoc khi nguoi dung kip thao tac.
+    if(btnLock && locked){
+      btnLock.classList.add('active');
+      btnLock.textContent = '▶';
+      btnLock.title = 'Mở khóa xoay';
+    }
     if(btnIn) btnIn.addEventListener('click', function(){ if(locked) return; curScale=Math.min(8,curScale*1.18); scheduleRender(); });
     if(btnOut) btnOut.addEventListener('click', function(){ if(locked) return; curScale=Math.max(0.8,curScale/1.18); scheduleRender(); });
     if(btnReset) btnReset.addEventListener('click', function(){ if(locked) return; curAz=BASE_AZ; curEl=BASE_EL; curScale=BASE_SCALE; scheduleRender(); });
     if(btnLock) btnLock.addEventListener('click', function(){
       locked = !locked;
+      try { localStorage.setItem(LOCK_KEY, locked ? '1' : '0'); } catch(e){}
       dragging = false;
       svg.style.cursor = locked ? 'not-allowed' : 'grab';
       btnLock.classList.toggle('active', locked);
@@ -4646,6 +4659,78 @@
   }
   buildStockpileScene('pExp3DSvg', {interactive:true});    // Slide 06: xoay tu do moi huong + zoom
 
+})();
+
+// ================================================================================================
+// TU DONG LAM MOI TRANG KHI CO DU LIEU EXCEL MOI DUOC DAY LEN GITHUB (phuc vu man hinh trinh
+// chieu lien tuc cho Lanh dao xem - KHONG can bam F5). Co che: cu moi CHECK_INTERVAL_MS, tai lai
+// (fetch) noi dung THAT SU dang o tren server (khong lay tu cache trinh duyet/CDN nho tham so
+// chong-cache "_="), tim khoi "var RAW_DATA = {...};" moi nhat roi so sanh voi khoi dang hien
+// thi tren man hinh nay - neu KHAC NHAU (co nghia la push_to_github.bat vua chay va day du lieu
+// moi tu Excel len), tu dong tai lai ca trang. Truoc khi tai lai, LUU LAI id cua slide dang xem
+// (qua sessionStorage) de ngay khi trang moi tai xong, tu dong cuon thang toi dung slide do -
+// nguoi xem khong bi giat ve dau trang, khong nhan ra la trang vua duoc lam moi.
+(function(){
+  var CHECK_INTERVAL_MS = 3 * 60 * 1000; // kiem tra 3 phut / lan - du nhanh de cap nhat kip thoi,
+                                          // du thua de khong tao ganh nang tai may chu GitHub Pages
+  var RESTORE_KEY = 'dashAutoReloadRestoreSlide';
+
+  // Ngay khi trang vua tai xong: neu co luu vi tri slide truoc do (do chinh co che nay tu-reload
+  // gay ra), cuon thang toi ngay (khong hieu ung truot) roi xoa dau vet, tranh vong lap.
+  try {
+    var restoreId = sessionStorage.getItem(RESTORE_KEY);
+    if (restoreId) {
+      sessionStorage.removeItem(RESTORE_KEY);
+      window.addEventListener('load', function(){
+        var el = document.getElementById(restoreId);
+        if (el && el.scrollIntoView) el.scrollIntoView({behavior: 'auto', block: 'start'});
+      });
+    }
+  } catch(e){}
+
+  function currentSlideId(){
+    var panels = document.querySelectorAll('main.stage > section.panel, section.panel');
+    var best = null, bestDist = Infinity;
+    for (var i = 0; i < panels.length; i++){
+      var r = panels[i].getBoundingClientRect();
+      var dist = Math.abs(r.top);
+      if (dist < bestDist){ bestDist = dist; best = panels[i]; }
+    }
+    return best ? best.id : '';
+  }
+
+  function extractRawDataText(html){
+    var m = /var RAW_DATA = (\{[\s\S]*?\});/.exec(html);
+    return m ? m[1] : null;
+  }
+
+  function getCurrentRawDataText(){
+    var scripts = document.getElementsByTagName('script');
+    for (var i = 0; i < scripts.length; i++){
+      var t = scripts[i].textContent;
+      if (t && t.indexOf('var RAW_DATA') !== -1) return extractRawDataText(t);
+    }
+    return null;
+  }
+
+  var bootRawData = getCurrentRawDataText();
+
+  function checkForUpdate(){
+    if (!bootRawData) return; // khong doc duoc du lieu goc thi thoi, tranh reload lien tuc sai
+    var url = window.location.pathname + '?_=' + Date.now();
+    fetch(url, {cache: 'no-store'})
+      .then(function(res){ return res.text(); })
+      .then(function(html){
+        var newRawData = extractRawDataText(html);
+        if (newRawData && newRawData !== bootRawData) {
+          try { sessionStorage.setItem(RESTORE_KEY, currentSlideId()); } catch(e){}
+          window.location.href = window.location.pathname + '?_=' + Date.now();
+        }
+      })
+      .catch(function(){ /* mat mang tam thoi / GitHub Pages dang bao tri - bo qua, thu lai lan sau */ });
+  }
+
+  setInterval(checkForUpdate, CHECK_INTERVAL_MS);
 })();
 
 

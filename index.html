@@ -679,6 +679,18 @@
   var sections = Array.prototype.slice.call(document.querySelectorAll('section.panel'));
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('#navlist a'));
 
+  // Khoi phuc DUNG SLIDE dang xem lan truoc (luu trong localStorage, xem navObserver ben duoi) -
+  // chay NGAY (khong doi 'load') de nhay toi truoc khi trang kip ve xong slide bia, tranh nguoi
+  // xem thay giat hinh. Ap dung cho MOI truong hop tai lai trang: F5 thu cong, dong/mo lai trinh
+  // duyet, hoac do co che tu-lam-moi khi co du lieu Excel moi (xem IIFE cuoi file).
+  try {
+    var lastSlideId = localStorage.getItem('dashLastSlide');
+    if (lastSlideId) {
+      var lastSlideEl = document.getElementById(lastSlideId);
+      if (lastSlideEl && lastSlideEl.scrollIntoView) lastSlideEl.scrollIntoView({behavior:'auto', block:'start'});
+    }
+  } catch(e){}
+
   navLinks.forEach(function(a){
     a.addEventListener('click', function(e){
       e.preventDefault();
@@ -706,6 +718,8 @@
       if(entry.isIntersecting && entry.intersectionRatio >= 0.5){
         navLinks.forEach(function(l){ l.classList.remove('active'); });
         link.classList.add('active');
+        // Ghi lai slide dang xem de lan tai trang sau (F5/tu-lam-moi) tu dong quay lai dung day.
+        try { localStorage.setItem('dashLastSlide', entry.target.id); } catch(e){}
       }
     });
   }, {root:scroller, threshold:[0.5]});
@@ -4429,7 +4443,23 @@
     // tren, tu duoi, tu phia sau...) tu do, khong gioi han, giong het co che xoay CSS3D tu do o
     // Slide 06 (keo theo moi huong = xoay toan canh, cuon chuot = zoom).
     var BASE_AZ = -34, BASE_EL = 22, BASE_SCALE = 2.55;
-    var curAz = BASE_AZ, curEl = BASE_EL, curScale = BASE_SCALE;
+    // Luu/khoi phuc TRON GOI trang thai xem (goc xoay curAz/curEl, do zoom curScale, va co dang
+    // khoa/pause hay khong) qua localStorage theo tung svgId. Muc tieu: khi bam nut khoa (❚❚) de
+    // pause, so do PHAI GIU DUNG goc nhin ngay tai thoi diem bam (khong tu tra ve goc mac dinh),
+    // va khi trang duoc tai lai (F5 / tu-lam-moi) thi tiep tuc hien thi dung goc + trang thai khoa
+    // do — khong reset ve BASE_AZ/BASE_EL/BASE_SCALE nhu truoc.
+    var VIEW_KEY = 'p3dView_' + svgId;
+    var savedView = null;
+    try {
+      var savedRaw = localStorage.getItem(VIEW_KEY);
+      if (savedRaw) savedView = JSON.parse(savedRaw);
+    } catch(e){}
+    var curAz = (savedView && typeof savedView.az === 'number') ? savedView.az : BASE_AZ;
+    var curEl = (savedView && typeof savedView.el === 'number') ? savedView.el : BASE_EL;
+    var curScale = (savedView && typeof savedView.scale === 'number') ? savedView.scale : BASE_SCALE;
+    function saveView(lockedNow){
+      try { localStorage.setItem(VIEW_KEY, JSON.stringify({az: curAz, el: curEl, scale: curScale, locked: lockedNow})); } catch(e){}
+    }
 
     function project(pt, az){
       var rad = Math.PI/180;
@@ -4603,9 +4633,7 @@
     // Trang thai nay duoc LUU vao localStorage (theo tung svgId) de khi trang HTML duoc tai lai
     // (F5, hoac do co che tu-lam-moi khi co du lieu Excel moi - xem IIFE tu-reload o cuoi file),
     // nut khoa van GIU NGUYEN trang thai da chon truoc do, khong bi reset ve mac dinh.
-    var LOCK_KEY = 'p3dLocked_' + svgId;
-    var locked = false;
-    try { locked = localStorage.getItem(LOCK_KEY) === '1'; } catch(e){}
+    var locked = !!(savedView && savedView.locked);
     function scheduleRender(){
       if(!pending){ pending = true; requestAnimationFrame(function(){ render(curAz); pending=false; }); }
     }
@@ -4649,7 +4677,7 @@
     if(btnReset) btnReset.addEventListener('click', function(){ if(locked) return; curAz=BASE_AZ; curEl=BASE_EL; curScale=BASE_SCALE; scheduleRender(); });
     if(btnLock) btnLock.addEventListener('click', function(){
       locked = !locked;
-      try { localStorage.setItem(LOCK_KEY, locked ? '1' : '0'); } catch(e){}
+      saveView(locked); // luu dung goc xoay/zoom HIEN TAI (curAz/curEl/curScale) tai thoi diem bam
       dragging = false;
       svg.style.cursor = locked ? 'not-allowed' : 'grab';
       btnLock.classList.toggle('active', locked);
@@ -4673,31 +4701,9 @@
 (function(){
   var CHECK_INTERVAL_MS = 3 * 60 * 1000; // kiem tra 3 phut / lan - du nhanh de cap nhat kip thoi,
                                           // du thua de khong tao ganh nang tai may chu GitHub Pages
-  var RESTORE_KEY = 'dashAutoReloadRestoreSlide';
-
-  // Ngay khi trang vua tai xong: neu co luu vi tri slide truoc do (do chinh co che nay tu-reload
-  // gay ra), cuon thang toi ngay (khong hieu ung truot) roi xoa dau vet, tranh vong lap.
-  try {
-    var restoreId = sessionStorage.getItem(RESTORE_KEY);
-    if (restoreId) {
-      sessionStorage.removeItem(RESTORE_KEY);
-      window.addEventListener('load', function(){
-        var el = document.getElementById(restoreId);
-        if (el && el.scrollIntoView) el.scrollIntoView({behavior: 'auto', block: 'start'});
-      });
-    }
-  } catch(e){}
-
-  function currentSlideId(){
-    var panels = document.querySelectorAll('main.stage > section.panel, section.panel');
-    var best = null, bestDist = Infinity;
-    for (var i = 0; i < panels.length; i++){
-      var r = panels[i].getBoundingClientRect();
-      var dist = Math.abs(r.top);
-      if (dist < bestDist){ bestDist = dist; best = panels[i]; }
-    }
-    return best ? best.id : '';
-  }
+  // KHONG can tu luu vi tri slide o day nua - co che chung o dau file (navObserver ghi vao
+  // localStorage['dashLastSlide'], khoi phuc ngay luc script IIFE dau tien chay) da tu dong ap
+  // dung cho MOI truong hop tai lai trang, ke ca lan reload do chinh IIFE nay gay ra ben duoi.
 
   function extractRawDataText(html){
     var m = /var RAW_DATA = (\{[\s\S]*?\});/.exec(html);
@@ -4723,7 +4729,6 @@
       .then(function(html){
         var newRawData = extractRawDataText(html);
         if (newRawData && newRawData !== bootRawData) {
-          try { sessionStorage.setItem(RESTORE_KEY, currentSlideId()); } catch(e){}
           window.location.href = window.location.pathname + '?_=' + Date.now();
         }
       })

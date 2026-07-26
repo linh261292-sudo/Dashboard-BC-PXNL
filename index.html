@@ -28,13 +28,14 @@
     --font-display:'Sora','Be Vietnam Pro','Segoe UI',system-ui,-apple-system,sans-serif;
     --font-body:'Be Vietnam Pro','Segoe UI',system-ui,-apple-system,sans-serif;
     --nav-w:264px;
+    --nav-w-collapsed:80px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{font-family:var(--font-body); background:#EEF3F8; color:var(--ink); overflow-x:hidden;}
   ::selection{background:var(--blue); color:#fff;}
 
-  #scroller{margin-left:var(--nav-w); height:100dvh; overflow-y:auto; overflow-x:hidden; scroll-snap-type:y mandatory;}
+  #scroller{margin-left:var(--nav-w-collapsed); height:100dvh; overflow-y:auto; overflow-x:hidden; scroll-snap-type:y mandatory;}
   section.panel{
     position:relative; min-height:100dvh; scroll-snap-align:start; scroll-snap-stop:always;
     display:flex; flex-direction:column; justify-content:center;
@@ -81,7 +82,7 @@
        khac voi phan noi dung chinh (sang) dung chung bo bien --ink/--ink-muted/--line o :root */
     --ink:#EFF6FC; --ink-muted:#9FB9D1; --ink-faint:#6E88A3; --line:rgba(159,185,209,0.16);
     color:var(--ink);
-    position:fixed; left:0; top:0; bottom:0; width:var(--nav-w);
+    position:fixed; left:0; top:0; bottom:0; width:var(--nav-w-collapsed);
     background:linear-gradient(180deg, var(--navy-deep), #081f38 60%, var(--navy-deep));
     border-right:1px solid var(--line); z-index:50; display:flex; flex-direction:column; padding:24px 16px;
   }
@@ -118,6 +119,36 @@
   }
   .navfoot{padding-top:14px; border-top:1px solid var(--line); font-size:10px; color:var(--ink-faint); line-height:1.55;}
   .navfoot b{color:var(--ink-muted);}
+
+  /* --- Sidebar THU NHO thanh 1 dai icon (chi con logo + so thu tu) theo mac dinh tren man hinh
+     may tinh/tablet ngang, va TU DONG MO RONG het chu khi ruoc chuot vao - nhuong lai toi da
+     khong gian ngang cho noi dung tung slide, giam thieu truong hop phai cuon chuot moi xem het
+     1 slide. CHI ap dung khi man hinh du rong (>820px); tren dien thoai sidebar van an/hien qua
+     nut #navToggle nhu truoc, khong bi anh huong boi co che thu nho/mo rong nay. */
+  @media (min-width:821px){
+    #sidenav{ transition:width .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
+    #sidenav:hover{ width:var(--nav-w); box-shadow:20px 0 60px -14px rgba(0,0,0,0.55); }
+    #sidenav .brand-text{
+      max-width:0; opacity:0; overflow:hidden; white-space:nowrap;
+      transition:max-width .28s cubic-bezier(.2,.7,.2,1), opacity .16s;
+    }
+    #sidenav:hover .brand-text{ max-width:180px; opacity:1; transition:max-width .28s cubic-bezier(.2,.7,.2,1), opacity .22s .07s; }
+    #sidenav .navlist a{ justify-content:center; }
+    #sidenav:hover .navlist a{ justify-content:flex-start; }
+    #sidenav .navlist a .lbl{
+      max-width:0; opacity:0; overflow:hidden; white-space:nowrap; display:inline-block;
+      transition:max-width .28s cubic-bezier(.2,.7,.2,1), opacity .16s;
+    }
+    #sidenav:hover .navlist a .lbl{ max-width:200px; opacity:1; transition:max-width .28s cubic-bezier(.2,.7,.2,1), opacity .22s .07s; }
+    #sidenav .navfoot{
+      max-height:0; opacity:0; overflow:hidden; padding-top:0; border-top-color:transparent; margin-top:0;
+      transition:opacity .14s, max-height .22s, padding-top .22s, border-top-color .22s;
+    }
+    #sidenav:hover .navfoot{
+      max-height:160px; opacity:1; padding-top:14px; border-top-color:var(--line);
+      transition:opacity .22s .08s, max-height .3s, padding-top .3s, border-top-color .3s;
+    }
+  }
 
   .eyebrow{
     font-family:var(--font-display); font-weight:700; font-size:clamp(11px,1vw,12.5px);
@@ -322,15 +353,15 @@
     </div>
   </div>
   <ul class="navlist" id="navlist">
-    <li><a href="#p0" data-target="p0"><span class="num">01</span> Trang bìa</a></li>
-    <li><a href="#pPO" data-target="pPO"><span class="num">02</span> Kế hoạch PO tàu than</a></li>
-    <li><a href="#pOGMap" data-target="pOGMap"><span class="num">03</span> Bản đồ vị trí tàu OG</a></li>
-    <li><a href="#p1" data-target="p1"><span class="num">04</span> Tổng quan tồn kho</a></li>
-    <li><a href="#p2" data-target="p2"><span class="num">05</span> Tình hình tàu than</a></li>
-    <li><a href="#pExp3D" data-target="pExp3D"><span class="num">06</span> Bố trí đống than lưu kho NMĐ SH1</a></li>
-    <li><a href="#p4" data-target="p4"><span class="num">07</span> Tồn kho trong tháng</a></li>
-    <li><a href="#p5" data-target="p5"><span class="num">08</span> Nhập than &amp; tiêu thụ</a></li>
-    <li><a href="#p7" data-target="p7"><span class="num">09</span> Cảnh báo &amp; dự báo nguồn than</a></li>
+    <li><a href="#p0" data-target="p0"><span class="num">01</span><span class="lbl">Trang bìa</span></a></li>
+    <li><a href="#pPO" data-target="pPO"><span class="num">02</span><span class="lbl">Kế hoạch PO tàu than</span></a></li>
+    <li><a href="#pOGMap" data-target="pOGMap"><span class="num">03</span><span class="lbl">Bản đồ vị trí tàu OG</span></a></li>
+    <li><a href="#p1" data-target="p1"><span class="num">04</span><span class="lbl">Tổng quan tồn kho</span></a></li>
+    <li><a href="#p2" data-target="p2"><span class="num">05</span><span class="lbl">Tình hình tàu than</span></a></li>
+    <li><a href="#pExp3D" data-target="pExp3D"><span class="num">06</span><span class="lbl">Bố trí đống than lưu kho NMĐ SH1</span></a></li>
+    <li><a href="#p4" data-target="p4"><span class="num">07</span><span class="lbl">Tồn kho trong tháng</span></a></li>
+    <li><a href="#p5" data-target="p5"><span class="num">08</span><span class="lbl">Nhập than &amp; tiêu thụ</span></a></li>
+    <li><a href="#p7" data-target="p7"><span class="num">09</span><span class="lbl">Cảnh báo &amp; dự báo nguồn than</span></a></li>
   </ul>
   <div class="navfoot">
     Nguồn: <b>So_do_luu_kho_than.xlsx</b><br>

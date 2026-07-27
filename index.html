@@ -4289,7 +4289,11 @@
     var PILE_GAP_TIGHT = 6.0, PILE_GAP_NORMAL = 20.0;
 
     var COAL_TOP = '#3a3a40', COAL_FRONT = '#141416', COAL_SIDE = '#232326', COAL_EDGE = '#050506';
-    var EMPTY_EDGE = '#00B050';
+    // Vien cho o/tang KHONG co than luu tru: truoc day mau xanh la (#00B050) + do mo 0.55 - qua
+    // noi bat, gay roi mat vi cac o trong chiem phan lon luoi (xem anh nguoi dung gui, khoanh
+    // vung mau cam). Doi sang mau toi trung tinh (gan mau navy chinh) + do mo RAT THAP de van con
+    // goi y khung luoi phan doan/tang khi can nhin, nhung khong con lan at cac o THAT SU co than.
+    var EMPTY_EDGE = '#0A2A4A';
     var KIN_ROOF = '#0083C7';
 
     // Moi tang duoc "sang" dan mot chut theo do cao (tier cao hon = mau nhat hon) — day la kieu bo
@@ -4442,15 +4446,25 @@
           }
         }
       });
-      var kinX0=0, kinX1=SEG_LEN*2;
-      var roofZ = N_TIER*TIER_H + 1.2;
-      var wRoof = BASE_WIDTH+3;
-      roofFaces.push({pts:[
-        [kinX0-1, yc-wRoof/2, roofZ],[kinX1+1, yc-wRoof/2, roofZ],
-        [kinX1+1, yc+wRoof/2, roofZ],[kinX0-1, yc+wRoof/2, roofZ]
-      ], color:KIN_ROOF, centroid:[(kinX0+kinX1)/2, yc, roofZ]});
       labels.push({pt:[TOTAL_LEN+10, yc, -1], text:yard, cls:'pile', sub:'Tổng: '+fmt(yardTotalQty[yard]||0)+' tấn'});
     });
+    // Mai che khu KIN: truoc day ve RIENG 1 mieng cho tung dong (4 mieng roi rac, ho giua cac
+    // dong do khoang cach PILE_GAP_TIGHT/NORMAL lon hon do "vuon" ra cua tung mieng - xem anh nguoi
+    // dung gui, cac mang mau xanh duong bi dut quang). Gio VE LIEN THANH 1 KHOI DUY NHAT, trai dai
+    // tu mep ngoai dong dau tien toi mep ngoai dong cuoi cung (gom ca phan khoang cach giua cac
+    // dong), de mai che hien thi lien mach qua ca Đống 1, 2.1, 2.2 va Đống 3.
+    (function(){
+      var kinX0=0, kinX1=SEG_LEN*2;
+      var roofZ = N_TIER*TIER_H + 1.2;
+      var wRoofHalf = (BASE_WIDTH+3)/2;
+      var allYC = PILE_ORDER.map(function(yard){ return y_centers[yard]; });
+      var yMin = Math.min.apply(null, allYC) - wRoofHalf;
+      var yMax = Math.max.apply(null, allYC) + wRoofHalf;
+      roofFaces.push({pts:[
+        [kinX0-1, yMin, roofZ],[kinX1+1, yMin, roofZ],
+        [kinX1+1, yMax, roofZ],[kinX0-1, yMax, roofZ]
+      ], color:KIN_ROOF, centroid:[(kinX0+kinX1)/2, (yMin+yMax)/2, roofZ]});
+    })();
     var frontYard = PILE_ORDER.reduce(function(a,b){ return y_centers[a]<y_centers[b]?a:b; });
     SEG_ORDER.forEach(function(seg, sIdx){
       var xb = segXBounds(sIdx);
@@ -4610,8 +4624,8 @@
           pl.setAttribute('points', polyPoints(it.proj));
           pl.setAttribute('fill','none');
           pl.setAttribute('stroke', EMPTY_EDGE);
-          pl.setAttribute('stroke-width','0.9');
-          pl.setAttribute('stroke-opacity','0.55');
+          pl.setAttribute('stroke-width','0.6');
+          pl.setAttribute('stroke-opacity','0.14');
           pl.setAttribute('vector-effect','non-scaling-stroke');
           svg.appendChild(pl);
         } else if(it.type==='hit'){

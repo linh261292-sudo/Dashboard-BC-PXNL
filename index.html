@@ -4744,8 +4744,11 @@
 // (qua sessionStorage) de ngay khi trang moi tai xong, tu dong cuon thang toi dung slide do -
 // nguoi xem khong bi giat ve dau trang, khong nhan ra la trang vua duoc lam moi.
 (function(){
-  var CHECK_INTERVAL_MS = 3 * 60 * 1000; // kiem tra 3 phut / lan - du nhanh de cap nhat kip thoi,
-                                          // du thua de khong tao ganh nang tai may chu GitHub Pages
+  // Truoc day kiem tra 3 phut/lan (phu hop luc con chay Task Scheduler moi GIO). Nay lich tu dong
+  // da doi thanh 1 LAN/NGAY luc 5h sang, nen kiem tra day (480 lan/ngay) la thua thai, ton request
+  // vo ich. Giãn ra 30 phut/lan (48 lan/ngay, giam ~90%) - van du nhanh de man hinh trinh chieu
+  // cap nhat trong vong toi da 30 phut sau khi du lieu moi cua 5h sang duoc day len GitHub.
+  var CHECK_INTERVAL_MS = 30 * 60 * 1000;
   // KHONG can tu luu vi tri slide o day nua - co che chung o dau file (navObserver ghi vao
   // localStorage['dashLastSlide'], khoi phuc ngay luc script IIFE dau tien chay) da tu dong ap
   // dung cho MOI truong hop tai lai trang, ke ca lan reload do chinh IIFE nay gay ra ben duoi.

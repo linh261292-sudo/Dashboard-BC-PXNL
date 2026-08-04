@@ -187,13 +187,21 @@
   /* --- Slide 03: bang "Vi tri hien tai tung tau" tach thanh nhieu the nho theo TUNG NHOM VI TRI
      (Dang den Indonesia / Indonesia / Indonesia-Go Gia / Go Gia / Go Gia-Cai Cui / Khu neo Cai Cui
      / Cang Song Hau 1) thay vi 1 bang gop chung nhu truoc, de de theo doi tau dang o chang nao. */
-  .pos-groups-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px;}
-  .pos-group{background:rgba(10,42,74,0.025); border:1px solid var(--line); border-radius:14px; padding:12px 14px 6px;}
-  .pos-group-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-family:var(--font-display); font-weight:700; font-size:12px; color:var(--ink); margin-bottom:6px;}
-  .pos-group-count{font-family:var(--font-body); font-weight:600; font-size:10.5px; color:var(--ink-faint); white-space:nowrap;}
+  .pos-groups-grid{display:flex; flex-wrap:wrap; align-items:flex-start; gap:0; margin-top:14px;}
+  .pos-group{background:rgba(10,42,74,0.025); border:1px solid var(--line); border-top:3px solid var(--pos-accent, var(--blue)); border-radius:14px; padding:12px 14px 6px; flex:1 1 250px; max-width:280px; min-width:230px;}
+  .pos-group-head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:4px 8px; font-family:var(--font-display); font-weight:700; font-size:12px; color:var(--ink); margin-bottom:6px;}
+  .pos-group-head span:first-child{flex:1 1 auto;}
+  .pos-group-count{font-family:var(--font-body); font-weight:600; font-size:10.5px; color:var(--ink-faint); white-space:nowrap; margin-left:auto;}
   .pos-group-tbl{font-size:11.5px;}
   .pos-group-tbl th{padding:5px 6px; font-size:9.5px;}
   .pos-group-tbl td{padding:7px 6px;}
+  /* align-self:flex-start + margin-top co dinh (khop voi tam tieu de the, KHONG dung center) -
+     vi cac the co so dong bang khac nhau nen rat cao thap khac nhau; neu center theo ca dong flex
+     (tinh theo the cao nhat), mui ten cua cac the ngan se troi lo lung giua khoang trong. */
+  .pos-flow-arrow{align-self:flex-start; margin-top:16px; flex:0 0 auto; width:26px; display:flex; align-items:center; justify-content:center; color:var(--blue); font-size:18px; line-height:1; opacity:0.55; animation:posArrowPulse 2.4s ease-in-out infinite;}
+  .pos-flow-divider{align-self:flex-start; margin-top:16px; flex:0 0 auto; width:26px; display:flex; align-items:center; justify-content:center; color:var(--ink-faint); font-size:14px; opacity:0.5;}
+  @keyframes posArrowPulse{0%,100%{opacity:0.32; transform:translateX(0);} 50%{opacity:0.8; transform:translateX(3px);}}
+  @media (max-width:900px){ .pos-flow-arrow{display:none;} .pos-group{max-width:100%; flex:1 1 100%;} }
 
   /* ---- Slide 05 (p2): bảng chi tiết tàu SB theo hợp đồng (HĐ 17/24/25/26) ---- */
   .hd-contracts-grid{display:grid; grid-template-columns:1fr; gap:16px; margin-top:14px;}
@@ -383,6 +391,9 @@
   .p3dexp-si-vals{display:flex; gap:9px; font-variant-numeric:tabular-nums; font-size:11px; color:#C7D9E8; white-space:nowrap;}
   .p3dexp-si-vals b{color:#7FD6FF; font-weight:700;}
   .p3dexp-si-vals i{font-style:normal; color:#6FE0A8; font-weight:700;}
+  .p3dexp-si-row.p3dexp-si-total{border-top:1px solid rgba(255,255,255,0.22); margin-top:2px; padding-top:7px;}
+  .p3dexp-si-total .p3dexp-si-yard{color:#fff;}
+  .p3dexp-si-total .p3dexp-si-vals b{color:#fff; font-size:12px;}
   @media (max-width:820px){ .p3dexp-stockinfo{position:static; width:100%; margin-bottom:10px;} }
 </style>
 </head>
@@ -612,9 +623,8 @@
 
       <div class="panel-card" data-reveal style="margin-top:6px;">
         <h3>Tàu mẹ (OG) đang giao nhận</h3>
-        <div class="hint" id="p2OgSbHint">–</div>
         <table class="data-tbl" style="margin-top:14px;">
-          <thead><tr><th>Tàu</th><th>Hợp đồng</th><th class="num">KL NOR (tấn)</th><th class="num">Đã bốc dỡ</th><th class="num">Còn lại</th></tr></thead>
+          <thead><tr><th>Tàu</th><th>Hợp đồng</th><th class="num">KL than (tấn)</th><th class="num">Đã bốc dỡ</th><th class="num">Còn lại</th></tr></thead>
           <tbody id="tbodyOG"></tbody>
         </table>
         <div id="progressBar" style="margin-top:20px;"></div>
@@ -624,7 +634,7 @@
         <h3>Tàu con / sà lan (SB) trung chuyển</h3>
         <div class="hint">Thuộc khối lượng của tàu mẹ tương ứng — không cộng vào tổng ở trên</div>
         <table class="data-tbl">
-          <thead><tr><th>Tàu</th><th>Trung chuyển từ</th><th class="num">KL (tấn)</th><th class="num">Đã bốc dỡ</th><th class="num">Còn lại</th></tr></thead>
+          <thead><tr><th>Tàu</th><th>Than từ Tàu OG</th><th class="num">KL (tấn)</th><th class="num">Đã bốc dỡ</th><th class="num">Còn lại</th></tr></thead>
           <tbody id="tbodySB"></tbody>
         </table>
       </div>
@@ -664,8 +674,7 @@
     <div class="bg-wrap"><div class="orb orb-blue" style="top:12%; left:78%;"></div></div>
     <div class="panel-inner">
       <div class="eyebrow" data-reveal="fade">07 · Diễn biến cả tháng</div>
-      <h2 class="title" data-reveal="fade" id="p4Title">Tồn kho trong Tháng</h2>
-      <p class="subtitle" data-reveal="fade" style="margin-bottom:20px;" id="p4Subtitle">–</p>
+      <h2 class="title" data-reveal="fade" id="p4Title" style="margin-bottom:20px;">Tồn kho trong Tháng</h2>
 
       <div class="panel-card" data-reveal>
         <h3 id="p4ChartTitle">Than tồn kho theo ngày (tấn)</h3>
@@ -684,8 +693,7 @@
     <div class="bg-wrap"><div class="orb orb-green" style="top:20%; left:12%;"></div></div>
     <div class="panel-inner">
       <div class="eyebrow" data-reveal="fade">08 · Cân đối nhập – xuất</div>
-      <h2 class="title" data-reveal="fade">Nhập than &amp; tiêu thụ theo ngày</h2>
-      <p class="subtitle" data-reveal="fade" style="margin-bottom:20px;" id="p5Subtitle">–</p>
+      <h2 class="title" data-reveal="fade" style="margin-bottom:20px;">Nhập than &amp; tiêu thụ theo ngày</h2>
 
       <div class="panel-card" data-reveal>
         <h3>Khối lượng nhập than so với tiêu thụ theo ngày (tấn)</h3>
@@ -4259,10 +4267,15 @@
     // Panel goc tren-phai so do 3D (Slide 06): tom tat ton kho Kín/Hở cho TUNG DONG trong so 4 dong
     // - dung lai R.yardDetail (da tinh san o computeReport, cung nguon voi bang Slide 04) nen luon
     // dong bo, khong tinh lai logic rieng.
-    set('p3dStockInfoBody', R.yardDetail.map(function(y){
+    var p3dStockInfoHtml = R.yardDetail.map(function(y){
       return '<div class="p3dexp-si-row"><span class="p3dexp-si-yard">'+y.label+'</span>'+
         '<span class="p3dexp-si-vals"><b>Kín '+fmt(y.kin)+'</b><i>Hở '+fmt(y.ho)+'</i></span></div>';
-    }).join(''));
+    }).join('');
+    p3dStockInfoHtml += '<div class="p3dexp-si-row p3dexp-si-total"><span class="p3dexp-si-yard">Tổng</span>'+
+      '<span class="p3dexp-si-vals"><b>Kín '+fmt(R.kin)+'</b><i>Hở '+fmt(R.ho)+'</i></span></div>'+
+      '<div class="p3dexp-si-row p3dexp-si-total" style="padding-top:2px;"><span class="p3dexp-si-yard"></span>'+
+      '<span class="p3dexp-si-vals"><b style="color:#fff;">Tổng tồn kho '+fmt(R.yardTotalStock)+' tấn</b></span></div>';
+    set('p3dStockInfoBody', p3dStockInfoHtml);
     set('ctiP4', 'Đỉnh '+fmt(R.tonkhoProd)+' tấn ('+R.reportDateShort+'), đáy '+fmt(R.dipValue)+' tấn ('+R.dipDay+'/'+R.month+')');
     set('ctiP5', 'Nhập '+fmt(R.totalNhap)+' tấn · Tiêu thụ '+fmt(R.totalTieuthu)+' tấn từ đầu tháng');
     set('ctiP7', 'Dự trữ còn '+digital2(R.reserveDays)+' ngày — '+R.statusWord);
@@ -4310,24 +4323,40 @@
       {key:'Cái Cui', label:'Khu neo Cái Cui'},
       {key:'Sông Hậu 1', label:'Cảng Sông Hậu 1'}
     ];
-    function posGroupCardHtml(label, rows){
+    // noi mau tu xanh duong (dang di chuyen ngoai bien) sang xanh la (da vao Cang) de nguoi xem
+    // thay duoc "huong tien trien" cua doi tau ngay tu mau sac, khong can doc het label.
+    function lerpHex(a, b, t){
+      var ah = parseInt(a.slice(1),16), bh = parseInt(b.slice(1),16);
+      var ar=(ah>>16)&255, ag=(ah>>8)&255, ab=ah&255;
+      var br=(bh>>16)&255, bg=(bh>>8)&255, bb=bh&255;
+      var r=Math.round(ar+(br-ar)*t), g=Math.round(ag+(bg-ag)*t), b2=Math.round(ab+(bb-ab)*t);
+      return 'rgb('+r+','+g+','+b2+')';
+    }
+    function posGroupCardHtml(label, rows, accentColor){
       var totalQty = rows.reduce(function(s,e){ return s+e.qty; }, 0);
       var body = rows.length
         ? rows.map(function(e){ return '<tr><td>'+e.name+'</td><td>'+e.fleet+'</td><td class="num">'+fmt1(e.qty)+'</td></tr>'; }).join('')
         : '<tr><td colspan="3" style="text-align:center; color:var(--ink-faint); font-size:11px;">Không có tàu</td></tr>';
-      return '<div class="pos-group">'+
+      var styleAttr = accentColor ? ' style="--pos-accent:'+accentColor+';"' : '';
+      return '<div class="pos-group"'+styleAttr+'>'+
         '<div class="pos-group-head"><span>'+label+'</span><span class="pos-group-count">'+rows.length+' tàu'+(rows.length?' · '+fmt1(totalQty)+' tấn':'')+'</span></div>'+
         '<table class="data-tbl pos-group-tbl"><thead><tr><th>Tàu</th><th>Đội tàu</th><th class="num">KL (tấn)</th></tr></thead><tbody>'+body+'</tbody></table>'+
       '</div>';
     }
-    var posGroupsHtml = POS_GROUPS.map(function(g){
-      return posGroupCardHtml(g.label, posEntries.filter(function(e){ return e.position === g.key; }));
-    }).join('');
+    var posGroupsHtml = '';
+    POS_GROUPS.forEach(function(g, gi){
+      var accent = lerpHex('#0083C7', '#00B050', gi/(POS_GROUPS.length-1));
+      posGroupsHtml += posGroupCardHtml(g.label, posEntries.filter(function(e){ return e.position === g.key; }), accent);
+      if(gi < POS_GROUPS.length-1) posGroupsHtml += '<div class="pos-flow-arrow" title="Hướng di chuyển của đội tàu">→</div>';
+    });
     // Vi tri phat sinh ngoai 7 nhom chuan (vd du lieu Excel doi/them ten vi tri sau nay) - KHONG bo
-    // sot, gom rieng vao the "Khác" thay vi lam mat tau khoi bang.
+    // sot, gom rieng vao the "Khác" thay vi lam mat tau khoi bang. Dung dau "•" (khong phai mui
+    // ten) truoc the nay vi day KHONG nam trong trinh tu hanh trinh chuan.
     var knownKeys = POS_GROUPS.map(function(g){ return g.key; });
     var otherEntries = posEntries.filter(function(e){ return knownKeys.indexOf(e.position) === -1; });
-    if(otherEntries.length) posGroupsHtml += posGroupCardHtml('Khác', otherEntries);
+    if(otherEntries.length){
+      posGroupsHtml += '<div class="pos-flow-divider" title="Vị trí ngoài lộ trình chuẩn">•</div>' + posGroupCardHtml('Khác', otherEntries, 'var(--ink-faint)');
+    }
     set('posGroupsGrid', posGroupsHtml);
 
     // ---- Slide 2: Tổng quan ----
@@ -4373,25 +4402,18 @@
     // ---- Slide 5: xu hướng ----
     set('p4Title', 'Tồn kho trong Tháng '+R.month+'/'+R.year);
     set('p4ChartTitle', 'Than tồn kho theo ngày (tấn) — tháng '+R.month+'/'+R.year+' (1–'+R.forecastEndDay+'/'+R.month+')');
-    var subtitle4;
-    if(R.dipIsStart || !R.dipIsInterior){
-      subtitle4 = 'Tồn kho tăng liên tục từ đầu tháng, đạt <b style="color:var(--ink);">'+kComma1(R.tonkhoProd)+'</b> tấn vào ngày '+R.reportDateShort+' — cao nhất kể từ đầu tháng.';
-    } else {
-      subtitle4 = 'Tồn kho giảm nhẹ đầu tháng xuống đáy <b style="color:var(--ink);">'+kComma1(R.dipValue)+'</b> tấn ('+R.dipDay+'/'+R.month+'), sau đó tăng liên tục và mạnh nhờ nhiều chuyến CSU nhập về, đạt <b style="color:var(--ink);">'+kComma1(R.tonkhoProd)+'</b> tấn vào ngày '+R.reportDateShort+' — cao nhất kể từ đầu tháng.';
-    }
-    if(R.hasForecast){
-      subtitle4 += ' Dự kiến đến hết tháng ('+R.forecastEndDay+'/'+R.month+'), tồn kho đạt khoảng <b style="color:var(--blue-soft);">'+kComma1(R.forecastEndValue)+'</b> tấn, dựa trên nhập bình quân '+fmt(R.avgNhap7)+' tấn/ngày, tiêu thụ bình quân '+fmt(R.avgTieuthu7)+' tấn/ngày và kế hoạch tàu PO giao trong tháng.';
-    }
-    set('p4Subtitle', subtitle4);
+    // (doan ghi chu dien giai xu huong ton kho - id p4Subtitle - da bo theo yeu cau, khong hien
+    // thi nua tren Slide 07.)
     set('p4ChartHint', 'Di chuột để xem chi tiết từng ngày · Nét liền: thực tế · Nét đứt: dự kiến từ '+R.reportDateShort+' đến hết tháng · Nguồn: Báo cáo sản lượng');
     document.getElementById('p4ForecastLegend').style.display = R.hasForecast ? 'flex' : 'none';
 
     // ---- Slide 6: nhập/tiêu thụ ----
-    var cmpWord = R.totalNhap >= R.totalTieuthu ? 'vượt xa' : 'thấp hơn';
-    set('p5Subtitle', 'Từ đầu tháng '+R.month+' đến '+R.reportDateShort+', tổng nhập <b style="color:var(--green-soft);">'+fmt(R.totalNhap)+' tấn</b> '+cmpWord+' tổng tiêu thụ <b style="color:var(--ink);">'+fmt(R.totalTieuthu)+' tấn</b> — nhiều chuyến CSU nhập về với khối lượng '+fmt(R.minNhap)+'–'+fmt(R.maxNhap)+' tấn/ngày, trong khi tiêu thụ vận hành duy trì ở mức '+fmt(R.minTieuthu)+'–'+fmt(R.maxTieuthu)+' tấn/ngày.');
+    // (doan ghi chu so sanh nhap/tieu thu - id p5Subtitle - da bo theo yeu cau, khong hien thi
+    // nua tren Slide 08.)
 
     // ---- Slide 7: tàu than ----
-    set('p2OgSbHint', R.ogVessels.length+' tàu mẹ (OG) đang giao nhận với tổng khối lượng hợp đồng <b style="color:var(--ink);">'+fmt(R.ogTotals.klNor)+' tấn</b>, đã bốc dỡ <b style="color:var(--ink);">'+fmt(R.ogTotals.done)+' tấn ('+pct1(R.ogTotals.pct)+')</b>, còn lại <b style="color:var(--amber);">'+fmt(R.ogTotals.remain)+' tấn</b>'+(R.sbVessels.length ? ('; riêng '+R.sbVessels.length+' tàu con/sà lan (SB) chỉ làm nhiệm vụ trung chuyển than từ các tàu mẹ này vào bờ, không tính gộp vào tổng để tránh trùng khối lượng.') : '.'));
+    // (ghi chu tong hop OG/SB phia tren bang - id p2OgSbHint - da bo theo yeu cau, khong hien thi
+    // nua; R.ogTotals/R.sbVessels van giu nguyen vi con dung o cho khac.)
     set('p6HintStock', 'Khối lượng than theo từng chuyến tàu đã nhập kho — '+R.reportDate);
     var vRows = R.vesselStock.map(function(v){ return '<tr><td>'+v.name+'</td><td class="num">'+fmt1(v.qty)+'</td></tr>'; }).join('');
     vRows += '<tr class="total"><td>Tổng</td><td class="num">'+fmt1(R.yardTotalStock)+'</td></tr>';

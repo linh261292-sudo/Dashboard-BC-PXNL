@@ -184,6 +184,33 @@
   .note{font-size:11.5px; color:var(--ink-faint); line-height:1.6; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);}
   .note b{color:var(--ink-muted);}
 
+  /* --- Slide 03: bang "Vi tri hien tai tung tau" tach thanh nhieu the nho theo TUNG NHOM VI TRI
+     (Dang den Indonesia / Indonesia / Indonesia-Go Gia / Go Gia / Go Gia-Cai Cui / Khu neo Cai Cui
+     / Cang Song Hau 1) thay vi 1 bang gop chung nhu truoc, de de theo doi tau dang o chang nao. */
+  .pos-groups-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px;}
+  .pos-group{background:rgba(10,42,74,0.025); border:1px solid var(--line); border-radius:14px; padding:12px 14px 6px;}
+  .pos-group-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-family:var(--font-display); font-weight:700; font-size:12px; color:var(--ink); margin-bottom:6px;}
+  .pos-group-count{font-family:var(--font-body); font-weight:600; font-size:10.5px; color:var(--ink-faint); white-space:nowrap;}
+  .pos-group-tbl{font-size:11.5px;}
+  .pos-group-tbl th{padding:5px 6px; font-size:9.5px;}
+  .pos-group-tbl td{padding:7px 6px;}
+
+  /* ---- Slide 05 (p2): bảng chi tiết tàu SB theo hợp đồng (HĐ 17/24/25/26) ---- */
+  .hd-contracts-grid{display:grid; grid-template-columns:1fr; gap:16px; margin-top:14px;}
+  .hd-contract-card{background:rgba(10,42,74,0.025); border:1px solid var(--line); border-radius:16px; padding:16px 18px;}
+  .hd-contract-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:10px;}
+  .hd-contract-name{font-family:var(--font-display); font-weight:800; font-size:14px; color:var(--navy);}
+  .hd-contract-sum{font-family:var(--font-body); font-weight:600; font-size:10.5px; color:var(--ink-faint); white-space:nowrap;}
+  .hd-lot{margin-top:10px;}
+  .hd-lot + .hd-lot{border-top:1px dashed var(--line); padding-top:10px;}
+  .hd-lot-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-family:var(--font-body); font-weight:700; font-size:11.5px; color:var(--ink); margin-bottom:6px;}
+  .hd-lot-qty{font-weight:600; font-size:10px; color:var(--blue); white-space:nowrap;}
+  .hd-lot-tbl-wrap{overflow-x:auto;}
+  .hd-lot-tbl{font-size:11px; width:100%;}
+  .hd-lot-tbl th{padding:5px 6px; font-size:9px; white-space:nowrap;}
+  .hd-lot-tbl td{padding:6px 6px; white-space:nowrap;}
+  .hd-lot-empty{font-size:11px; color:var(--ink-faint); font-style:italic; padding:4px 0;}
+
   .legend{display:flex; gap:16px; flex-wrap:wrap; font-size:11.5px; color:var(--ink-muted); margin-top:12px;}
   .legend span{display:inline-flex; align-items:center; gap:7px;}
   .legend i{width:10px; height:10px; border-radius:3px; display:inline-block;}
@@ -340,6 +367,23 @@
   .p3dexp-rbtn:hover{background:rgba(0,131,199,0.2);}
   .p3dexp-rbtn:active{background:rgba(0,131,199,0.34);}
   .p3dexp-rbtn.active{background:var(--blue); color:#fff; border-color:var(--blue);}
+
+  /* --- Slide 06: panel nho goc tren-phai tom tat ton kho Kin/Ho theo TUNG DONG (4 dong x 2 khu
+     vuc = 8 so lieu), de Lanh dao nam nhanh so lieu ma khong can hover tung o than tren so do 3D. */
+  .p3dexp-stockinfo{
+    position:absolute; top:16px; right:20px; z-index:2; width:min(240px, 42vw);
+    background:rgba(8,24,42,0.82); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+    border:1px solid rgba(255,255,255,0.14); border-radius:14px; padding:12px 14px 8px;
+    box-shadow:0 14px 34px -14px rgba(0,0,0,0.6);
+  }
+  .p3dexp-stockinfo-title{font-family:var(--font-display); font-weight:700; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#9FB9D1; margin-bottom:6px;}
+  .p3dexp-si-row{display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:11.5px; padding:5px 0; border-top:1px solid rgba(255,255,255,0.08);}
+  .p3dexp-si-row:first-child{border-top:none;}
+  .p3dexp-si-yard{font-weight:700; color:#fff; white-space:nowrap;}
+  .p3dexp-si-vals{display:flex; gap:9px; font-variant-numeric:tabular-nums; font-size:11px; color:#C7D9E8; white-space:nowrap;}
+  .p3dexp-si-vals b{color:#7FD6FF; font-weight:700;}
+  .p3dexp-si-vals i{font-style:normal; color:#6FE0A8; font-weight:700;}
+  @media (max-width:820px){ .p3dexp-stockinfo{position:static; width:100%; margin-bottom:10px;} }
 </style>
 </head>
 <body>
@@ -386,16 +430,13 @@
     <div class="panel-inner">
       <div class="cover-badge" data-reveal="fade"><span class="dot-live"></span> <span id="badgeCoverPeriod">Kỳ báo cáo: Tháng 7/2026 · Cập nhật 16/07/2026</span></div>
       <div class="eyebrow" data-reveal="fade">Báo cáo lãnh đạo · Vận hành nhiên liệu</div>
-      <h1 class="title" data-reveal="fade">Hệ Thống Cung Cấp, Vận Chuyển<br>và <span class="grad-text">Lưu Trữ Than NMNĐ Sông Hậu 1</span></h1>
+      <h1 class="title" data-reveal="fade">TÌNH HÌNH VẬN CHUYỂN<br>VÀ <span class="grad-text">LƯU TRỮ THAN NMNĐ SÔNG HẬU 1</span></h1>
 
       <div class="cover-kpis" data-reveal="fade">
         <div class="cover-kpi"><div class="cv-num" id="cvTonkho">–</div><div class="cv-lbl" id="cvTonkhoLbl">Tồn kho (tấn)</div></div>
         <div class="cover-kpi"><div class="cv-num" id="cvQuotaPct">–</div><div class="cv-lbl" id="cvQuotaLbl">Tồn kho theo định mức tháng</div></div>
-        <div class="cover-kpi"><div class="cv-num" id="cvReserve">–</div><div class="cv-lbl">Ngày dự trữ còn lại</div></div>
-        <div class="cover-kpi"><div class="cv-num" id="cvSbRemain">–</div><div class="cv-lbl" id="cvSbRemainLbl">Tồn tàu SB tại Cảng SH1, khu neo</div></div>
-        <div class="cover-kpi"><div class="cv-num" id="cvSbReserve" style="color:var(--green);">–</div><div class="cv-lbl">Dự kiến đáp ứng theo tàu SB tại Cảng</div></div>
-        <div class="cover-kpi"><div class="cv-num" id="cvGrowth">–</div><div class="cv-lbl">Tồn kho tăng trong tháng</div></div>
-        <div class="cover-kpi"><div class="cv-num" id="cvStatus" style="color:var(--green);">–</div><div class="cv-lbl">Trạng thái đáp ứng kho</div></div>
+        <div class="cover-kpi"><div class="cv-num" id="cvSbAnchor">–</div><div class="cv-lbl" id="cvSbAnchorLbl">Tàu SB tại khu neo</div></div>
+        <div class="cover-kpi"><div class="cv-num" id="cvSbPort">–</div><div class="cv-lbl" id="cvSbPortLbl">Tàu SB tại Cảng đang bốc dỡ</div></div>
       </div>
 
       <div class="cover-toc" data-reveal="fade">
@@ -478,10 +519,7 @@
       <div class="panel-card" data-reveal style="margin-top:20px;">
         <h3>Vị trí hiện tại từng tàu</h3>
         <div class="hint" id="posTableHint">–</div>
-        <table class="data-tbl">
-          <thead><tr><th>Tàu</th><th>Đội tàu</th><th>Vị trí hiện tại</th><th class="num">Khối lượng (tấn)</th></tr></thead>
-          <tbody id="tbodyShipPositions"></tbody>
-        </table>
+        <div class="pos-groups-grid" id="posGroupsGrid"></div>
       </div>
     </div>
   </section>
@@ -590,6 +628,12 @@
           <tbody id="tbodySB"></tbody>
         </table>
       </div>
+
+      <div class="panel-card" data-reveal id="hdContractsCard" style="margin-top:20px; display:none;">
+        <h3>Chi tiết tàu SB theo hợp đồng</h3>
+        <div class="hint">Theo dõi từng lô bốc dỡ theo hợp đồng · hàng/lô đã ẩn trên Excel sẽ không hiển thị ở đây</div>
+        <div class="hd-contracts-grid" id="hdContractsGrid"></div>
+      </div>
     </div>
   </section>
 
@@ -605,6 +649,10 @@
           <div class="p3dexp-rbtn" data-p3d-zoomout title="Thu nhỏ">−</div>
           <div class="p3dexp-rbtn" data-p3d-reset title="Đặt lại góc nhìn">⟲</div>
           <div class="p3dexp-rbtn" data-p3d-lock title="Khóa xoay (giữ cố định sơ đồ)">❚❚</div>
+        </div>
+        <div class="p3dexp-stockinfo">
+          <div class="p3dexp-stockinfo-title">Tồn kho theo đống (tấn)</div>
+          <div id="p3dStockInfoBody">–</div>
         </div>
         <svg id="pExp3DSvg" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
@@ -641,7 +689,7 @@
 
       <div class="panel-card" data-reveal>
         <h3>Khối lượng nhập than so với tiêu thụ theo ngày (tấn)</h3>
-        <div class="hint">Cột xanh dương: nhập than trong ngày &nbsp;·&nbsp; Cột xanh lá: khối lượng tiêu thụ trong ngày</div>
+        <div class="hint">Di chuột để xem chi tiết từng ngày &nbsp;·&nbsp; Đường xanh dương: nhập than trong ngày &nbsp;·&nbsp; Đường xanh lá: khối lượng tiêu thụ trong ngày</div>
         <div id="inChart"></div>
         <div class="legend">
           <span><i style="background:var(--blue);"></i> Nhập than trong ngày</span>
@@ -3355,7 +3403,292 @@
       "etaGiao": "19-07-26",
       "etaHoanThanh": "07-08-26"
     }
-  ]
+  ],
+  "hdContracts": {
+    "HĐ 17": [
+      {
+        "lot": "04",
+        "vessel": "MV. VIỆT THUẬN 80-06 (OG05-HĐ17)",
+        "totalQty": 73600.0,
+        "rows": [
+          {
+            "name": "Việt Thuận 10-05",
+            "nor": "15h00-25/07/2026",
+            "port": "CSU02",
+            "klNor": 10592.82,
+            "klUnloaded": 10586.93,
+            "start": "11h30-29/07/2026",
+            "end": "18h00-30/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-02",
+            "nor": "11h00-26/07/2026",
+            "port": "CSU01",
+            "klNor": 10582.53,
+            "klUnloaded": 1331.0,
+            "start": "20h30-30/07/2026",
+            "end": "",
+            "status": "Đang dỡ"
+          }
+        ]
+      }
+    ],
+    "HĐ 24": [
+      {
+        "lot": "11",
+        "vessel": "MV VIỆT THUẬN 80-05 (OG06-HĐ24)",
+        "totalQty": 73940.0,
+        "rows": [
+          {
+            "name": "Việt Thuận 10-05",
+            "nor": "11h00-18/07/2026",
+            "port": "CSU1",
+            "klNor": 10619.39,
+            "klUnloaded": 10614.46,
+            "start": "23h30-20/07/2026",
+            "end": "00h00-22/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 12-06",
+            "nor": "12h10-20/07/2026",
+            "port": "CSU2",
+            "klNor": 11290.02,
+            "klUnloaded": 11284.96,
+            "start": "04h50-25/07/2026",
+            "end": "11h40-26/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-03",
+            "nor": "10h25-21/07/2026",
+            "port": "CSU1",
+            "klNor": 10427.31,
+            "klUnloaded": 10417.07,
+            "start": "08h00-26/07/2026",
+            "end": "18h20-27/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-01",
+            "nor": "10h45-21/07/2026",
+            "port": "CSU2",
+            "klNor": 10533.63,
+            "klUnloaded": 10522.31,
+            "start": "14h50-26/07/2026",
+            "end": "21h30-27/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 10-03",
+            "nor": "11h40-22/07/2026",
+            "port": "CSU1",
+            "klNor": 10302.79,
+            "klUnloaded": 10291.11,
+            "start": "21h00-27/07/2026",
+            "end": "07h30-29/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-05",
+            "nor": "11h05-23/07/2026",
+            "port": "CSU2",
+            "klNor": 10453.28,
+            "klUnloaded": 10442.77,
+            "start": "00h10-28/07/2026",
+            "end": "07h15-29/07/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 12-02",
+            "nor": "14h30-24/07/2026",
+            "port": "CSU1",
+            "klNor": 10374.69,
+            "klUnloaded": 10356.93,
+            "start": "11h00-29/07/2026",
+            "end": "17h00-30/07/2026",
+            "status": "Đã xong"
+          }
+        ]
+      },
+      {
+        "lot": "12",
+        "vessel": "MV ORIENTAL GOLD (OG05-HĐ24)",
+        "totalQty": 66000.0,
+        "rows": [
+          {
+            "name": "Minh Quang 01",
+            "nor": "09h25-27/07/2026",
+            "port": "CSU2",
+            "klNor": 9193.91,
+            "klUnloaded": 1194.0,
+            "start": "20h40-30/07/2026",
+            "end": "",
+            "status": "Đang dỡ"
+          }
+        ]
+      }
+    ],
+    "HĐ 25": [
+      {
+        "lot": "13",
+        "vessel": "MV YI LI (OG13)",
+        "totalQty": 71000.0,
+        "rows": [
+          {
+            "name": "Việt Thuận 10-03",
+            "nor": "17h15-18/04/2026",
+            "port": "CSU01",
+            "klNor": 10377.21,
+            "klUnloaded": 10371.24,
+            "start": "08h50-19/04/2026",
+            "end": "18h50-20/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-01",
+            "nor": "17h40-19/04/2026",
+            "port": "CSU02",
+            "klNor": 10491.72,
+            "klUnloaded": 10485.7,
+            "start": "20h30-20/04/2026",
+            "end": "02h10-22/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-05",
+            "nor": "19h00-20/04/2026",
+            "port": "CSU01",
+            "klNor": 10620.42,
+            "klUnloaded": 10613.54,
+            "start": "21h20-20/04/2026",
+            "end": "11h50-22/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-06",
+            "nor": "18h10-21/04/2026",
+            "port": "CSU02",
+            "klNor": 10686.29,
+            "klUnloaded": 10672.99,
+            "start": "06h10-22/04/2026",
+            "end": "18h40-23/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-03",
+            "nor": "19h20-22/04/2026",
+            "port": "CSU01",
+            "klNor": 10673.52,
+            "klUnloaded": 10659.23,
+            "start": "22h10-22/04/2026",
+            "end": "04h30-24/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-02",
+            "nor": "12h45-24/04/2026",
+            "port": "CSU01",
+            "klNor": 9799.75,
+            "klUnloaded": 9786.84,
+            "start": "02h50-26/04/2026",
+            "end": "18h20-27/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Epic-09",
+            "nor": "10h25-23/04/2026",
+            "port": "CSU01",
+            "klNor": 8420.49,
+            "klUnloaded": 8407.64,
+            "start": "20h40-05/05/2026",
+            "end": "04h30-07/05/2026",
+            "status": "Đã xong"
+          }
+        ]
+      }
+    ],
+    "HĐ 26": [
+      {
+        "lot": "13",
+        "vessel": "MV VIET THUAN 80-03 (OG13)",
+        "totalQty": 71500.0,
+        "rows": [
+          {
+            "name": "Việt Thuận 12-01",
+            "nor": "19h35-22/04/2026",
+            "port": "CSU02",
+            "klNor": 11542.03,
+            "klUnloaded": 11535.1,
+            "start": "22h30-23/04/2026",
+            "end": "11h50-25/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 12-06",
+            "nor": "23h00-23/04/2026",
+            "port": "CSU01",
+            "klNor": 10957.95,
+            "klUnloaded": 10951.14,
+            "start": "12h20-24/04/2026",
+            "end": "22h25-25/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 12-02",
+            "nor": "08h15-24/04/2026",
+            "port": "CSU02",
+            "klNor": 11492.87,
+            "klUnloaded": 11487.05,
+            "start": "11h50-25/04/2026",
+            "end": "22h40-26/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 10-03",
+            "nor": "14h30-25/04/2026",
+            "port": "CSU02",
+            "klNor": 10004.83,
+            "klUnloaded": 9990.21,
+            "start": "01h50-27/04/2026",
+            "end": "12h55-28/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-01",
+            "nor": "14h00-26/04/2026",
+            "port": "CSU01",
+            "klNor": 10015.33,
+            "klUnloaded": 9999.9,
+            "start": "22h10-27/04/2026",
+            "end": "12h40-29/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-05",
+            "nor": "14h40-27/04/2026",
+            "port": "CSU02",
+            "klNor": 8684.67,
+            "klUnloaded": 8670.66,
+            "start": "18h40-28/04/2026",
+            "end": "15h30-30/04/2026",
+            "status": "Đã xong"
+          },
+          {
+            "name": "Việt Thuận 11-03",
+            "nor": "15h30-28/04/2026",
+            "port": "CSU01",
+            "klNor": 8876.23,
+            "klUnloaded": 8862.97,
+            "start": "17h40-29/04/2026",
+            "end": "14h50-01/05/2026",
+            "status": "Đã xong"
+          }
+        ]
+      }
+    ]
+  }
 };
 
   /* ================= CẤU HÌNH BÃI (cố định, không đổi theo dữ liệu) ================= */
@@ -3552,6 +3885,13 @@
     // Số ngày dự trữ riêng theo lượng than còn lại trên các tàu SB tại cảng (chưa nhập bãi),
     // so với tốc độ tiêu thụ bình quân 7 ngày gần nhất — khác với R.reserveDays (tính trên toàn bộ tồn kho tại bãi).
     R.sbReserveDays = R.avgTieuthu7 > 0 ? (R.sbTotals.remain / R.avgTieuthu7) : 0;
+    // Tach doi tau SB thanh 2 nhom theo vi tri, phuc vu 2 the KPI rieng tren Trang bia: nhom dang
+    // o "Sông Hậu 1" nghia la DA CAP CANG va dang boc do trut than vao bo; moi vi tri con lai (Cai
+    // Cui / Gò Gia-Cai Cui...) nghia la con dang o khu neo/tren duong ve, CHUA cap cang.
+    R.sbAtPort = R.sbVessels.filter(function(v){ return v.position === 'Sông Hậu 1'; });
+    R.sbAtAnchor = R.sbVessels.filter(function(v){ return v.position !== 'Sông Hậu 1'; });
+    R.sbAtPortQty = R.sbAtPort.reduce(function(s,v){ return s+v.remain; }, 0);
+    R.sbAtAnchorQty = R.sbAtAnchor.reduce(function(s,v){ return s+v.remain; }, 0);
 
     // ---- kế hoạch tàu PO trong tháng (sheet "Kế hoạch tàu PO trong tháng") ----
     R.poShips = (raw.poShips || []).map(function(v){
@@ -3584,6 +3924,25 @@
     R.hdDaysToImport = R.avgNhap7 > 0 ? (R.hdTotals.conLai / R.avgNhap7) : 0;
     R.hdImportDoneDate = R.avgNhap7 > 0 ? addDaysFmt(R.reportDate, R.hdDaysToImport) : '–';
     R.hdDaysOfConsumption = R.avgTieuthu7 > 0 ? (R.hdTotals.conLai / R.avgTieuthu7) : 0;
+
+    // ---- bảng chi tiết tàu SB theo từng hợp đồng (sheet "HĐ 17"/"HĐ 24"/"HĐ 25"/"HĐ 26") ----
+    // raw.hdContracts: { "HĐ 17": [ {lot, vessel, totalQty, rows:[{name,nor,port,klNor,klUnloaded,start,end,status}]} , ... ], ... }
+    R.hdContracts = [];
+    var hdContractsRaw = raw.hdContracts || {};
+    Object.keys(hdContractsRaw).forEach(function(label){
+      var lots = (hdContractsRaw[label] || []).map(function(lot){
+        var rows = (lot.rows || []).map(function(r){
+          return { name:r.name, nor:r.nor, port:r.port, klNor:r.klNor, klUnloaded:r.klUnloaded, start:r.start, end:r.end, status:r.status };
+        });
+        var qtyFromRows = rows.reduce(function(s,r){ return s + (r.klUnloaded||0); }, 0);
+        return { lot: lot.lot, vessel: lot.vessel, totalQty: (lot.totalQty!=null ? lot.totalQty : qtyFromRows), rows: rows };
+      });
+      if(lots.length){
+        var vesselCount = lots.reduce(function(s,l){ return s+l.rows.length; }, 0);
+        var qtySum = lots.reduce(function(s,l){ return s+(l.totalQty||0); }, 0);
+        R.hdContracts.push({ label:label, lots:lots, vesselCount:vesselCount, qtySum:qtySum });
+      }
+    });
 
     // vessel còn lại nhiều nhất trong số tàu mẹ (dùng cho đề xuất hành động)
     R.topRemainOG = R.ogVessels.slice().sort(function(a,b){ return b.remain-a.remain; })[0];
@@ -3881,13 +4240,13 @@
     set('cvTonkhoLbl', 'Tồn kho '+R.reportDateShort+' (tấn)');
     set('cvQuotaPct', pct1(R.quotaPct));
     set('cvQuotaLbl', 'Tồn '+fmt(R.tonkhoProd)+' / định mức '+fmt(R.monthQuota)+' tấn than');
-    set('cvReserve', digital2(R.reserveDays));
-    set('cvSbRemain', fmt1(R.sbTotals.remain)+'<span style="font-size:.5em; font-weight:600; margin-left:3px;">tấn</span>');
-    set('cvSbRemainLbl', R.sbVessels.length+' tàu SB tại Cảng SH1, khu neo');
-    set('cvSbReserve', digital2(R.sbReserveDays)+'<span style="font-size:.5em; font-weight:600; margin-left:3px;">ngày</span>');
-    set('cvGrowth', digitalPct1(R.monthGrowthPct));
-    set('cvStatus', R.statusWord);
-    document.getElementById('cvStatus').style.color = R.statusColor;
+    set('cvSbAnchor', fmt1(R.sbAtAnchorQty)+'<span style="font-size:.5em; font-weight:600; margin-left:3px;">tấn</span>');
+    set('cvSbAnchorLbl', R.sbAtAnchor.length+' tàu SB tại khu neo');
+    set('cvSbPort', fmt1(R.sbAtPortQty)+'<span style="font-size:.5em; font-weight:600; margin-left:3px;">tấn</span>');
+    set('cvSbPortLbl', R.sbAtPort.length+' tàu SB tại Cảng đang bốc dỡ');
+    // (2 the KPI "Tồn kho tăng trong tháng" va "Trạng thái đáp ứng kho" (cvGrowth/cvStatus) đã bị
+    // bỏ khỏi Trang bìa theo yêu cầu — R.monthGrowthPct/R.statusWord/R.statusColor vẫn giữ nguyên
+    // vì còn dùng ở nơi khác (mục lục tóm tắt, Slide 04, Slide 07).)
 
     // Tong hop nhanh noi dung tu cac Slide 02-09 hien thi ngay tren Trang bia (thay cho doan van
     // ban mo ta dai truoc day) — moi the la 1 diem tin nhanh lay du lieu THAT tu cung 1 object R,
@@ -3897,6 +4256,13 @@
     set('ctiP1', 'Tồn '+fmt(R.tonkhoProd)+' tấn, thay đổi '+digitalPct1(R.monthGrowthPct)+' so đầu tháng');
     set('ctiP2', R.ogVessels.length+' tàu OG đang giao nhận, còn lại '+fmt(R.ogTotals.remain)+' tấn');
     set('ctiExp3D', 'Tổng '+fmt(R.yardTotalStock)+' tấn theo 4 đống · 7 phân đoạn · 5 tầng');
+    // Panel goc tren-phai so do 3D (Slide 06): tom tat ton kho Kín/Hở cho TUNG DONG trong so 4 dong
+    // - dung lai R.yardDetail (da tinh san o computeReport, cung nguon voi bang Slide 04) nen luon
+    // dong bo, khong tinh lai logic rieng.
+    set('p3dStockInfoBody', R.yardDetail.map(function(y){
+      return '<div class="p3dexp-si-row"><span class="p3dexp-si-yard">'+y.label+'</span>'+
+        '<span class="p3dexp-si-vals"><b>Kín '+fmt(y.kin)+'</b><i>Hở '+fmt(y.ho)+'</i></span></div>';
+    }).join(''));
     set('ctiP4', 'Đỉnh '+fmt(R.tonkhoProd)+' tấn ('+R.reportDateShort+'), đáy '+fmt(R.dipValue)+' tấn ('+R.dipDay+'/'+R.month+')');
     set('ctiP5', 'Nhập '+fmt(R.totalNhap)+' tấn · Tiêu thụ '+fmt(R.totalTieuthu)+' tấn từ đầu tháng');
     set('ctiP7', 'Dự trữ còn '+digital2(R.reserveDays)+' ngày — '+R.statusWord);
@@ -3924,15 +4290,45 @@
     set('ogGeoMapHint', 'Vị trí tương đối theo dữ liệu sheet "Tau OG Indonesia-VTau" và "Tàu SB tại VTau- Cảng SH1" — cập nhật '+R.reportDate+'.');
     set('ogMapBadge', '<span class="dot"></span>Vị trí theo báo cáo '+R.reportDate);
     renderOgGeoMap(R.ogIndoVtau, R.sbVessels, R.reportDate);
-    set('posTableHint', 'Vị trí hiện tại của từng tàu — cập nhật '+R.reportDate+'.');
-    var posRows = [];
+    set('posTableHint', 'Vị trí hiện tại của từng tàu, tách theo từng chặng hành trình — cập nhật '+R.reportDate+'.');
+    // Gop chung tau me (OG) + tau con/sa lan (SB) thanh 1 danh sach, roi CHIA theo tung nhom vi tri
+    // (thay vi 1 bang duy nhat gop het nhu truoc) de de theo doi tau dang o chang nao trong hanh
+    // trinh Indonesia -> Go Gia -> Cai Cui -> Song Hau 1.
+    var posEntries = [];
     R.ogIndoVtau.forEach(function(v){
-      posRows.push('<tr><td>'+v.name+(v.code?(' ('+v.code+')'):'')+'</td><td>Tàu mẹ (OG)</td><td>'+(v.position||'—')+'</td><td class="num">'+fmt1(v.klHang)+'</td></tr>');
+      posEntries.push({name:v.name+(v.code?(' ('+v.code+')'):''), fleet:'Tàu mẹ (OG)', position:v.position||'', qty:v.klHang});
     });
     R.sbVessels.forEach(function(v){
-      posRows.push('<tr><td>'+v.name+'</td><td>Tàu con/sà lan (SB)</td><td>'+(v.position||'—')+'</td><td class="num">'+fmt1(v.klNor)+'</td></tr>');
+      posEntries.push({name:v.name, fleet:'Tàu con/sà lan (SB)', position:v.position||'', qty:v.klNor});
     });
-    set('tbodyShipPositions', posRows.length ? posRows.join('') : '<tr><td colspan="4" style="text-align:center; color:var(--ink-muted);">Chưa có dữ liệu vị trí tàu</td></tr>');
+    var POS_GROUPS = [
+      {key:'Đang đến Indonesia', label:'Đang đến Indonesia'},
+      {key:'Indonesia', label:'Indonesia'},
+      {key:'Indonesia-Gò Gia', label:'Indonesia → Gò Gia'},
+      {key:'Gò Gia', label:'Gò Gia'},
+      {key:'Gò Gia-Cái Cui', label:'Gò Gia → Cái Cui (khu neo)'},
+      {key:'Cái Cui', label:'Khu neo Cái Cui'},
+      {key:'Sông Hậu 1', label:'Cảng Sông Hậu 1'}
+    ];
+    function posGroupCardHtml(label, rows){
+      var totalQty = rows.reduce(function(s,e){ return s+e.qty; }, 0);
+      var body = rows.length
+        ? rows.map(function(e){ return '<tr><td>'+e.name+'</td><td>'+e.fleet+'</td><td class="num">'+fmt1(e.qty)+'</td></tr>'; }).join('')
+        : '<tr><td colspan="3" style="text-align:center; color:var(--ink-faint); font-size:11px;">Không có tàu</td></tr>';
+      return '<div class="pos-group">'+
+        '<div class="pos-group-head"><span>'+label+'</span><span class="pos-group-count">'+rows.length+' tàu'+(rows.length?' · '+fmt1(totalQty)+' tấn':'')+'</span></div>'+
+        '<table class="data-tbl pos-group-tbl"><thead><tr><th>Tàu</th><th>Đội tàu</th><th class="num">KL (tấn)</th></tr></thead><tbody>'+body+'</tbody></table>'+
+      '</div>';
+    }
+    var posGroupsHtml = POS_GROUPS.map(function(g){
+      return posGroupCardHtml(g.label, posEntries.filter(function(e){ return e.position === g.key; }));
+    }).join('');
+    // Vi tri phat sinh ngoai 7 nhom chuan (vd du lieu Excel doi/them ten vi tri sau nay) - KHONG bo
+    // sot, gom rieng vao the "Khác" thay vi lam mat tau khoi bang.
+    var knownKeys = POS_GROUPS.map(function(g){ return g.key; });
+    var otherEntries = posEntries.filter(function(e){ return knownKeys.indexOf(e.position) === -1; });
+    if(otherEntries.length) posGroupsHtml += posGroupCardHtml('Khác', otherEntries);
+    set('posGroupsGrid', posGroupsHtml);
 
     // ---- Slide 2: Tổng quan ----
     var growthWord = R.monthGrowthAbs >= 0 ? 'tăng' : 'giảm';
@@ -4007,6 +4403,31 @@
       var sbRows = R.sbVessels.map(function(v){ return '<tr><td>'+v.name+'</td><td>'+v.fromLabel+'</td><td class="num">'+fmt1(v.klNor)+'</td><td class="num">'+fmt1(v.done)+'</td><td class="num">'+fmt1(v.remain)+'</td></tr>'; }).join('');
       sbRows += '<tr class="total"><td>Tổng</td><td>—</td><td class="num">'+fmt1(R.sbTotals.klNor)+'</td><td class="num">'+fmt1(R.sbTotals.done)+'</td><td class="num">'+fmt1(R.sbTotals.remain)+'</td></tr>';
       set('tbodySB', sbRows);
+    }
+    if(R.hdContracts.length){
+      var hdCardsHtml = R.hdContracts.map(function(c){
+        var lotsHtml = c.lots.map(function(lot){
+          var rowsHtml;
+          if(lot.rows.length){
+            rowsHtml = '<div class="hd-lot-tbl-wrap"><table class="data-tbl hd-lot-tbl"><thead><tr><th>Tàu</th><th>NOR</th><th>Cảng</th><th class="num">KL NOR</th><th class="num">Đã dỡ</th><th>Thời gian dỡ hàng</th><th>Tình trạng</th></tr></thead><tbody>'+
+              lot.rows.map(function(r){
+                var timeRange = (r.start||'–') + ' → ' + (r.end || 'đang dỡ');
+                return '<tr><td>'+r.name+'</td><td>'+(r.nor||'–')+'</td><td>'+(r.port||'–')+'</td>'+
+                  '<td class="num">'+(r.klNor!=null?fmt1(r.klNor):'–')+'</td><td class="num">'+(r.klUnloaded!=null?fmt1(r.klUnloaded):'–')+'</td>'+
+                  '<td>'+timeRange+'</td><td>'+(r.status||'–')+'</td></tr>';
+              }).join('') + '</tbody></table></div>';
+          } else {
+            rowsHtml = '<div class="hd-lot-empty">Chưa có dữ liệu tàu cho lô này.</div>';
+          }
+          return '<div class="hd-lot"><div class="hd-lot-head"><span>Lô '+lot.lot+' · '+lot.vessel+'</span>'+
+            (lot.totalQty!=null ? '<span class="hd-lot-qty">'+fmt1(lot.totalQty)+' tấn</span>' : '')+'</div>'+rowsHtml+'</div>';
+        }).join('');
+        return '<div class="hd-contract-card"><div class="hd-contract-head"><span class="hd-contract-name">'+c.label+'</span>'+
+          '<span class="hd-contract-sum">'+c.vesselCount+' tàu · '+fmt1(c.qtySum)+' tấn</span></div>'+lotsHtml+'</div>';
+      }).join('');
+      set('hdContractsGrid', hdCardsHtml);
+      var hdContractsCardEl = document.getElementById('hdContractsCard');
+      if(hdContractsCardEl) hdContractsCardEl.style.display = '';
     }
     set('hdTrackingHint', R.hdTracking.length+' hợp đồng đang theo dõi — tổng KL giao <b style="color:var(--ink);">'+fmt(R.hdTotals.klGiao)+' tấn</b>, đã dỡ vào kho <b style="color:var(--ink);">'+fmt(R.hdTotals.klDaDoKho)+' tấn ('+pct1(R.hdTotals.pct)+')</b> — theo sheet "Theo dõi KL HĐ giao nhận", cập nhật '+R.reportDate+'.');
     function miniBar(pct){
@@ -4201,17 +4622,15 @@
     document.getElementById('trendChart').appendChild(svg);
   })();
 
-  /* ================= NHẬP vs TIÊU THỤ (dual bar, dữ liệu thực) ================= */
+  /* ================= NHẬP vs TIÊU THỤ (dual line, dữ liệu thực) ================= */
   (function(){
     var n = days.length;
     var w = 980, h = 320, padL = 50, padR = 20, padT = 24, padB = 34;
     var plotW = w-padL-padR, plotH = h-padT-padB;
     var maxV = niceCeil(Math.max.apply(null, nhapArr.concat(tieuthuArr)));
     var gridSteps4 = [0, maxV/4, maxV/2, maxV*3/4, maxV];
-    var slot = plotW/n;
-    var barW = Math.min(16, slot*0.42);
 
-    function xAt(i){ return padL + i*slot + slot/2; }
+    function xAt(i){ return n>1 ? padL + (i/(n-1))*plotW : padL+plotW/2; }
     function yAt(v){ return padT + plotH - (v/maxV)*plotH; }
 
     var svg = svgEl('svg', {width:'100%', viewBox:'0 0 '+w+' '+h, style:'max-width:100%; display:block; overflow:visible;'});
@@ -4221,24 +4640,53 @@
       var t = svgEl('text', {x:padL-8, y:y+3, 'text-anchor':'end', 'font-size':'10', fill:'#4C6478', 'font-family':'Be Vietnam Pro, sans-serif'});
       t.textContent = (Math.round(v/100)/10)+'K'; svg.appendChild(t);
     });
-
-    days.forEach(function(_, i){
-      var cx = xAt(i);
-      [{v:nhapArr[i], dx:-barW-1, color:'#0083C7', label:'Nhập'}, {v:tieuthuArr[i], dx:1, color:'#00B050', label:'Tiêu thụ'}].forEach(function(bar){
-        var bh = (bar.v/maxV)*plotH;
-        var y = padT+plotH-bh;
-        var rect = svgEl('rect', {x:cx+bar.dx, y:padT+plotH, width:barW, height:0, rx:2, fill:bar.color});
-        rect.style.transition = 'height .8s cubic-bezier(.2,.7,.2,1), y .8s cubic-bezier(.2,.7,.2,1)';
-        svg.appendChild(rect);
-        setTimeout(function(){ rect.setAttribute('y', y); rect.setAttribute('height', bh); }, 30 + i*14);
-        rect.addEventListener('mousemove', function(e){ showTip(e.pageX, e.pageY, 'Ngày <b>'+days[i]+'/'+REPORT.month+'</b><br>'+bar.label+': <b>'+fmt(bar.v)+' tấn</b>'); });
-        rect.addEventListener('mouseleave', hideTip);
-      });
+    for(var i=0;i<n;i++){
       if((i+1)%3===0 || i===0 || i===n-1){
-        var xl = svgEl('text', {x:cx, y:h-10, 'text-anchor':'middle', 'font-size':'9', fill:'#4C6478', 'font-family':'Be Vietnam Pro, sans-serif'});
+        var xl = svgEl('text', {x:xAt(i), y:h-10, 'text-anchor':'middle', 'font-size':'9', fill:'#4C6478', 'font-family':'Be Vietnam Pro, sans-serif'});
         xl.textContent = (i+1); svg.appendChild(xl);
       }
+    }
+
+    var series = [{arr:nhapArr, color:'#0083C7', label:'Nhập than'}, {arr:tieuthuArr, color:'#00B050', label:'Tiêu thụ'}];
+    series.forEach(function(s, si){
+      var pathD = 'M '+xAt(0)+' '+yAt(s.arr[0]);
+      for(var i=1;i<n;i++){ pathD += ' L '+xAt(i)+' '+yAt(s.arr[i]); }
+      var linePath = svgEl('path', {d:pathD, fill:'none', stroke:s.color, 'stroke-width':2.5, 'stroke-linejoin':'round', 'stroke-linecap':'round'});
+      var totalLen = 2200;
+      linePath.style.strokeDasharray = totalLen; linePath.style.strokeDashoffset = totalLen;
+      linePath.style.transition = 'stroke-dashoffset 1.8s cubic-bezier(.2,.7,.2,1)';
+      svg.appendChild(linePath);
+      setTimeout(function(lp){ return function(){ lp.style.strokeDashoffset = 0; }; }(linePath), 120 + si*90);
+
+      for(var i=0;i<n;i++){
+        var dot = svgEl('circle', {cx:xAt(i), cy:yAt(s.arr[i]), r:3, fill:'#fff', stroke:s.color, 'stroke-width':2});
+        svg.appendChild(dot);
+      }
+      [0, n-1].forEach(function(i){
+        var lbl = svgEl('text', {x:xAt(i), y:yAt(s.arr[i])-10, 'text-anchor': i===0?'start':'end', 'font-size':'10.5', 'font-family':'Sora, sans-serif', 'font-weight':'700', fill:s.color});
+        lbl.textContent = (s.arr[i]/1000).toFixed(1)+'K'; svg.appendChild(lbl);
+      });
     });
+
+    var hoverLine = svgEl('line', {x1:0,x2:0,y1:padT,y2:padT+plotH, stroke:'rgba(10,42,74,0.35)', 'stroke-width':1, visibility:'hidden'});
+    svg.appendChild(hoverLine);
+    var hoverDots = series.map(function(s){ var d = svgEl('circle', {r:5, fill:s.color, stroke:'#fff', 'stroke-width':1.5, visibility:'hidden'}); svg.appendChild(d); return d; });
+    var hitRect = svgEl('rect', {x:padL, y:padT, width:plotW, height:plotH, fill:'transparent'});
+    svg.appendChild(hitRect);
+
+    hitRect.addEventListener('mousemove', function(e){
+      var rectBounds = svg.getBoundingClientRect();
+      var scaleX = w / rectBounds.width;
+      var mx = (e.clientX - rectBounds.left) * scaleX;
+      var idx = n>1 ? Math.round(((mx-padL)/plotW)*(n-1)) : 0;
+      idx = Math.max(0, Math.min(n-1, idx));
+      var xp = xAt(idx);
+      hoverLine.setAttribute('x1', xp); hoverLine.setAttribute('x2', xp); hoverLine.setAttribute('visibility','visible');
+      series.forEach(function(s, si){ hoverDots[si].setAttribute('cx', xp); hoverDots[si].setAttribute('cy', yAt(s.arr[idx])); hoverDots[si].setAttribute('visibility','visible'); });
+      showTip(e.pageX, e.pageY, 'Ngày <b>'+days[idx]+'/'+REPORT.month+'</b><br>Nhập than: <b>'+fmt(nhapArr[idx])+' tấn</b><br>Tiêu thụ: <b>'+fmt(tieuthuArr[idx])+' tấn</b>');
+    });
+    hitRect.addEventListener('mouseleave', function(){ hoverLine.setAttribute('visibility','hidden'); hoverDots.forEach(function(d){ d.setAttribute('visibility','hidden'); }); hideTip(); });
+
     document.getElementById('inChart').appendChild(svg);
   })();
 

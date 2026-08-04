@@ -58,15 +58,28 @@ SHEET_OG_INDO = "Tau OG Indonesia-VTau"
 SHEET_SB = "Tàu SB tại VTau- Cảng SH1"
 SHEET_HD_TRACKING = "Theo dõi KL HĐ giao nhận"
 SHEET_PO = "Kế hoạch tàu PO trong tháng"
-# 4 sheet CHI TIET tung "Lô" boc do theo TUNG hop dong rieng (khac voi SHEET_HD_TRACKING o tren -
-# sheet do chi co 1 dong tong hop/hop dong; 4 sheet nay liet ke tung tau TS/SB rieng le trong tung
+# Cac sheet CHI TIET tung "Lô" boc do theo TUNG hop dong rieng (khac voi SHEET_HD_TRACKING o tren -
+# sheet do chi co 1 dong tong hop/hop dong; cac sheet nay liet ke tung tau TS/SB rieng le trong tung
 # lo hang) - cung la TUY CHON, dung cho bang "thong tin tau SB" o Slide 05.
-SHEET_HD_DETAIL = {
-    "HĐ 17": "HĐ 17",
-    "HĐ 24": "HĐ 24",
-    "HĐ 25": "HĐ 25",
-    "HĐ 26": "HĐ 26",
-}
+# QUAN TRONG: KHONG liet ke ten sheet co dinh nua — anh Linh se tiep tuc them cac hop dong moi
+# trong tuong lai voi ten dang "HĐ <so>" (vd "HĐ 27", "HĐ 28"...), nen script TU DONG DO TIM moi
+# sheet co ten khop mau nay trong workbook moi lan chay (xem detect_hd_detail_sheets() ben duoi),
+# khong can sua code moi khi co hop dong moi.
+_HD_SHEET_RE = re.compile(r"^H[ĐD]\s*\d+$", re.IGNORECASE)
+
+
+def detect_hd_detail_sheets(wb):
+    """Tu dong tim tat ca sheet co ten dang "HĐ <so>" (vd 'HĐ 17', 'HĐ24'...) trong workbook,
+    sap xep theo so hop dong tang dan de thu tu hien thi tren Slide 05 on dinh, khong phu thuoc
+    thu tu sheet trong file Excel."""
+    names = [n for n in wb.sheetnames if _HD_SHEET_RE.match(n.strip())]
+
+    def sort_key(n):
+        m = re.search(r"\d+", n)
+        return int(m.group()) if m else 0
+
+    names.sort(key=sort_key)
+    return names
 
 
 def log(msg):
@@ -535,20 +548,22 @@ def main():
     hd_tracking = optional_sheet(SHEET_HD_TRACKING, extract_hd_tracking, "theo doi hop dong giao nhan")
     po_ships = optional_sheet(SHEET_PO, extract_po_ships, "ke hoach tau PO trong thang")
 
-    # 4 sheet chi tiet tung hop dong (HĐ 17/24/25/26) - dung rieng try/except QUANH TUNG SHEET (khong
-    # chi optional_sheet ben tren) vi day la parser QUET NOI DUNG phuc tap hon han cac ham khac; neu
-    # 1 sheet bi doi cau truc bat ngo trong tuong lai gay loi, CHI sheet do bi bo qua (rong []), 3
-    # sheet con lai + toan bo dashboard van chay binh thuong, khong lam dung ca script.
+    # Sheet chi tiet tung hop dong (HĐ 17/24/25/26/... tu dong do tim, xem detect_hd_detail_sheets())
+    # - dung rieng try/except QUANH TUNG SHEET (khong chi optional_sheet ben tren) vi day la parser
+    # QUET NOI DUNG phuc tap hon han cac ham khac; neu 1 sheet bi doi cau truc bat ngo trong tuong
+    # lai gay loi, CHI sheet do bi bo qua (rong []), cac sheet con lai + toan bo dashboard van chay
+    # binh thuong, khong lam dung ca script.
+    hd_sheet_names = detect_hd_detail_sheets(wb)
+    if not hd_sheet_names:
+        log("CANH BAO: khong tim thay sheet nao dang 'HĐ <so>' (vd 'HĐ 17') trong file Excel - "
+            "bo qua toan bo bang chi tiet tau SB theo hop dong tren Slide 05.")
     hd_contracts = {}
-    for label, sheet_key in SHEET_HD_DETAIL.items():
-        if sheet_key not in wb.sheetnames:
-            log("CANH BAO: khong tim thay sheet '%s' - bo qua bang chi tiet %s tren Slide 05." % (sheet_key, label))
-            hd_contracts[label] = []
-            continue
+    for sheet_name in hd_sheet_names:
+        label = sheet_name.strip()
         try:
-            hd_contracts[label] = extract_hd_detail_sheet(wb[sheet_key])
+            hd_contracts[label] = extract_hd_detail_sheet(wb[sheet_name])
         except Exception as e:
-            log("CANH BAO: loi doc sheet '%s' (%s) - bo qua bang chi tiet %s tren Slide 05." % (sheet_key, str(e), label))
+            log("CANH BAO: loi doc sheet '%s' (%s) - bo qua bang chi tiet %s tren Slide 05." % (sheet_name, str(e), label))
             hd_contracts[label] = []
 
     raw_data = {
@@ -602,10 +617,11 @@ def main():
     log("OK: da cap nhat index.html tu du lieu ngay %s — %d lo than dang ton tai bai, "
         "%d lo than (pileStock) cho slide 3D moi, %d ngay du lieu trong thang %d/%d, "
         "%d tau OG Indonesia-VTau, %d tau con/sa lan (SB), %d hop dong theo doi giao nhan, "
-        "%d tau PO ke hoach, %d lo dang hien (chua an) trong 4 hop dong HĐ 17/24/25/26." % (
+        "%d tau PO ke hoach, %d lo dang hien (chua an) trong %d hop dong (%s)." % (
             report_date, len(stock_rows), len(pile_stock_rows), len(month_days), month, year,
             len(og_indo_vtau), len(sb_vessels), len(hd_tracking), len(po_ships),
-            hd_contracts_lot_count))
+            hd_contracts_lot_count, len(hd_sheet_names),
+            ", ".join(hd_sheet_names) if hd_sheet_names else "khong co"))
 
 
 if __name__ == "__main__":

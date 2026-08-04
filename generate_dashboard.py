@@ -58,6 +58,15 @@ SHEET_OG_INDO = "Tau OG Indonesia-VTau"
 SHEET_SB = "Tàu SB tại VTau- Cảng SH1"
 SHEET_HD_TRACKING = "Theo dõi KL HĐ giao nhận"
 SHEET_PO = "Kế hoạch tàu PO trong tháng"
+# 4 sheet CHI TIET tung "Lô" boc do theo TUNG hop dong rieng (khac voi SHEET_HD_TRACKING o tren -
+# sheet do chi co 1 dong tong hop/hop dong; 4 sheet nay liet ke tung tau TS/SB rieng le trong tung
+# lo hang) - cung la TUY CHON, dung cho bang "thong tin tau SB" o Slide 05.
+SHEET_HD_DETAIL = {
+    "HĐ 17": "HĐ 17",
+    "HĐ 24": "HĐ 24",
+    "HĐ 25": "HĐ 25",
+    "HĐ 26": "HĐ 26",
+}
 
 
 def log(msg):
@@ -399,6 +408,90 @@ def extract_po_ships(ws):
     return rows
 
 
+_LO_RE = re.compile(r"^\s*L[oôo]\s*(\d+)\s*:\s*(.+?)\s*$", re.IGNORECASE)
+
+
+def extract_hd_detail_sheet(ws):
+    """Sheet CHI TIET 1 hop dong (HĐ 17 / HĐ 24 / HĐ 25 / HĐ 26...): moi sheet co the co NHIEU
+    khoi "Lô" (dot boc do) noi tiep nhau, moi khoi gom: 1 dong tieu de "Lô 0X : <ten tau me OG>"
+    (cot B), 1 dong "Khối lượng hàng" ghi tong KL cua lo (cot B nhan, so luong o cot D), 1 dong
+    tieu de cot bat dau bang "STT" (cot B), roi cac dong du lieu tung tau TS/SB (STT so o cot B)
+    cho toi khi gap dong trong hoac khoi "Lô" ke tiep.
+
+    QUAN TRONG: parser nay QUET THEO NOI DUNG O COT B (khong dua vao so dong co dinh), vi cac
+    sheet lech nhau 1 dong (co sheet co dong trong dem giua tieu de va "Khối lượng hàng", co sheet
+    khong) - da kiem chung thuc te tren du lieu that co it nhat 2 kieu bo tri khac nhau.
+
+    Bo qua CAC DONG BI AN (row_dimensions[r].hidden) - theo dung quy uoc ghi trong dong 1 cua cac
+    sheet nay ("LÔ NÀO ĐÃ BỐC DỠ XONG HOÀN TOÀN, ĐỀ NGHỊ ANH EM DDC CHO ẨN CÁC HÀNG CỦA LÔ ĐÓ"):
+    cac lo/dong da an la lo cu da xong hoan toan, khong can hien thi lai tren dashboard."""
+    lots = []
+    cur = None
+    in_data = False
+    r = 1
+    empty_streak = 0
+    max_r = ws.max_row or 500
+    while r <= max_r and empty_streak < 40:
+        try:
+            hidden = bool(ws.row_dimensions[r].hidden)
+        except Exception:
+            hidden = False
+        if hidden:
+            r += 1
+            continue
+        b = ws.cell(r, 2).value
+        if b is None:
+            empty_streak += 1
+            # LUU Y: KHONG tat in_data o day. Trong 1 "Lô" co the co nhieu nhom tau (vd nhom
+            # tau TS lon roi den nhom sa lan/tug nho) duoc ngan cach boi 1 dong trong va STT
+            # danh so lai tu 1, nhung KHONG co dong tieu de "Lô .../STT" moi o giua - neu tat
+            # in_data tai day se lam mat toan bo nhom tau thu 2 tro di cua lo. in_data chi tat
+            # khi gap dong tieu de "Lô X:" moi (xem nhanh _LO_RE ben duoi).
+            r += 1
+            continue
+        empty_streak = 0
+        b_str = str(b).strip()
+        m = _LO_RE.match(b_str)
+        if m:
+            cur = {"lot": m.group(1), "vessel": m.group(2), "totalQty": None, "rows": []}
+            lots.append(cur)
+            in_data = False
+            r += 1
+            continue
+        if b_str.startswith("Khối lượng hàng") and cur is not None:
+            d = ws.cell(r, 4).value
+            try:
+                cur["totalQty"] = round(float(d), 2) if d is not None else None
+            except Exception:
+                cur["totalQty"] = None
+            in_data = False
+            r += 1
+            continue
+        if b_str == "STT":
+            in_data = True
+            r += 1
+            continue
+        if in_data and cur is not None:
+            name = ws.cell(r, 3).value
+            if name:
+                kl_nor = ws.cell(r, 6).value
+                kl_boc = ws.cell(r, 7).value
+                cur["rows"].append({
+                    "name": str(name).strip(),
+                    "nor": str(ws.cell(r, 4).value).strip() if ws.cell(r, 4).value else "",
+                    "port": str(ws.cell(r, 5).value).strip() if ws.cell(r, 5).value else "",
+                    "klNor": round(float(kl_nor), 2) if kl_nor is not None else None,
+                    "klUnloaded": round(float(kl_boc), 2) if kl_boc is not None else None,
+                    "start": str(ws.cell(r, 8).value).strip() if ws.cell(r, 8).value else "",
+                    "end": str(ws.cell(r, 9).value).strip() if ws.cell(r, 9).value else "",
+                    "status": str(ws.cell(r, 10).value).strip() if ws.cell(r, 10).value else "",
+                })
+        r += 1
+    # Bo cac lo khong co dong du lieu nao (vd lo bi an toan bo, hoac khoi tieu de mo coi khong co
+    # bang di kem) - tranh hien the rong tren dashboard.
+    return [lot for lot in lots if lot["rows"]]
+
+
 def main():
     try:
         import openpyxl
@@ -442,6 +535,22 @@ def main():
     hd_tracking = optional_sheet(SHEET_HD_TRACKING, extract_hd_tracking, "theo doi hop dong giao nhan")
     po_ships = optional_sheet(SHEET_PO, extract_po_ships, "ke hoach tau PO trong thang")
 
+    # 4 sheet chi tiet tung hop dong (HĐ 17/24/25/26) - dung rieng try/except QUANH TUNG SHEET (khong
+    # chi optional_sheet ben tren) vi day la parser QUET NOI DUNG phuc tap hon han cac ham khac; neu
+    # 1 sheet bi doi cau truc bat ngo trong tuong lai gay loi, CHI sheet do bi bo qua (rong []), 3
+    # sheet con lai + toan bo dashboard van chay binh thuong, khong lam dung ca script.
+    hd_contracts = {}
+    for label, sheet_key in SHEET_HD_DETAIL.items():
+        if sheet_key not in wb.sheetnames:
+            log("CANH BAO: khong tim thay sheet '%s' - bo qua bang chi tiet %s tren Slide 05." % (sheet_key, label))
+            hd_contracts[label] = []
+            continue
+        try:
+            hd_contracts[label] = extract_hd_detail_sheet(wb[sheet_key])
+        except Exception as e:
+            log("CANH BAO: loi doc sheet '%s' (%s) - bo qua bang chi tiet %s tren Slide 05." % (sheet_key, str(e), label))
+            hd_contracts[label] = []
+
     raw_data = {
         "reportDate": report_date,
         "month": month,
@@ -453,6 +562,7 @@ def main():
         "ogIndonesiaVtau": og_indo_vtau,
         "hdTracking": hd_tracking,
         "poShips": po_ships,
+        "hdContracts": hd_contracts,
     }
 
     with open(HTML_PATH, "r", encoding="utf-8") as f:
@@ -488,12 +598,14 @@ def main():
     with open(HTML_PATH, "w", encoding="utf-8") as f:
         f.write(new_html)
 
+    hd_contracts_lot_count = sum(len(v) for v in hd_contracts.values())
     log("OK: da cap nhat index.html tu du lieu ngay %s — %d lo than dang ton tai bai, "
         "%d lo than (pileStock) cho slide 3D moi, %d ngay du lieu trong thang %d/%d, "
         "%d tau OG Indonesia-VTau, %d tau con/sa lan (SB), %d hop dong theo doi giao nhan, "
-        "%d tau PO ke hoach." % (
+        "%d tau PO ke hoach, %d lo dang hien (chua an) trong 4 hop dong HĐ 17/24/25/26." % (
             report_date, len(stock_rows), len(pile_stock_rows), len(month_days), month, year,
-            len(og_indo_vtau), len(sb_vessels), len(hd_tracking), len(po_ships)))
+            len(og_indo_vtau), len(sb_vessels), len(hd_tracking), len(po_ships),
+            hd_contracts_lot_count))
 
 
 if __name__ == "__main__":

@@ -449,7 +449,7 @@
       <h1 class="title" data-reveal="fade">TÌNH HÌNH VẬN CHUYỂN<br>VÀ <span class="grad-text">LƯU TRỮ THAN NMNĐ SÔNG HẬU 1</span></h1>
 
       <div class="cover-kpis" data-reveal="fade">
-        <div class="cover-kpi"><div class="cv-num" id="cvTonkho">–</div><div class="cv-lbl" id="cvTonkhoLbl">Tồn kho (tấn)</div></div>
+        <div class="cover-kpi"><div class="cv-num" id="cvTonkho">–</div><div class="cv-lbl" id="cvTonkhoLbl">Tồn kho than lúc 00h00 (tấn)</div></div>
         <div class="cover-kpi"><div class="cv-num" id="cvQuotaPct">–</div><div class="cv-lbl" id="cvQuotaLbl">Tồn kho theo định mức tháng</div></div>
         <div class="cover-kpi"><div class="cv-num" id="cvSbAnchor">–</div><div class="cv-lbl" id="cvSbAnchorLbl">Tàu SB tại khu neo</div></div>
         <div class="cover-kpi"><div class="cv-num" id="cvSbPort">–</div><div class="cv-lbl" id="cvSbPortLbl">Tàu SB tại Cảng đang bốc dỡ</div></div>
@@ -556,7 +556,7 @@
         <div class="panel-card" data-reveal>
           <div class="kpi-grid">
             <div class="card" data-reveal-child>
-              <div class="k-label">Tồn kho lúc 24h00: <span class="pill blue" id="k1Pill">Sản lượng</span></div>
+              <div class="k-label">Tồn kho than lúc 00h00: <span class="pill blue" id="k1Pill">Sản lượng</span></div>
               <div class="k-value" id="k1Value">–<span class="unit">K tấn</span></div>
               <div class="k-sub">Theo báo cáo sản lượng hàng ngày</div>
             </div>
@@ -626,7 +626,7 @@
     <div class="bg-wrap"><div class="orb orb-green" style="top:60%; left:70%;"></div></div>
     <div class="panel-inner">
       <div class="eyebrow" data-reveal="fade">05 · Tình hình tàu than</div>
-      <h2 class="title" data-reveal="fade">Tình hình tàu than giao nhận</h2>
+      <h2 class="title" data-reveal="fade">Tình hình Tàu than từ Gò Gia về Sông Hậu 1</h2>
 
       <div class="panel-card" data-reveal style="margin-top:6px;" id="hdContractsCard">
         <h3>Tàu OG và tàu SB theo hợp đồng</h3>
@@ -4236,7 +4236,7 @@
     // ---- Cover ----
     set('badgeCoverPeriod', 'Kỳ báo cáo: Tháng '+R.month+'/'+R.year+' · Cập nhật '+R.reportDate);
     set('cvTonkho', digitalK2(R.tonkhoProd));
-    set('cvTonkhoLbl', 'Tồn kho '+R.reportDateShort+' (tấn)');
+    set('cvTonkhoLbl', 'Tồn kho than lúc 00h00 (tấn)');
     set('cvQuotaPct', pct1(R.quotaPct));
     set('cvQuotaLbl', 'Tồn '+fmt(R.tonkhoProd)+' / định mức '+fmt(R.monthQuota)+' tấn than');
     set('cvSbAnchor', fmt1(R.sbAtAnchorQty)+'<span style="font-size:.5em; font-weight:600; margin-left:3px;">tấn</span>');
@@ -4372,13 +4372,26 @@
       if(wrapRect.width < 2){ return; } // panel chua hien (vd chua cuon toi) - doi lan goi sau
       svg.setAttribute('viewBox', '0 0 '+wrapRect.width+' '+wrapRect.height);
 
+      // Diem neo cho ket noi CUNG HANG luon o 1 do cao CO DINH tinh tu dinh the (vung tieu de
+      // pos-group-head), KHONG dung "giua chieu cao ca the" - vi cac the cung hang co so dong du
+      // lieu khac nhau (vd "Gò Gia" 5 dong vs "Indonesia → Gò Gia" 1 dong) nen "giua than the" se
+      // lech nhau, ve ra duong CHEO thay vi NGANG THANG. Neo co dinh nay dam bao duong noi cung
+      // hang luon la 1 duong ngang tuyet doi, dung yeu cau "mui ten phai thang" cua anh Linh.
+      var HEAD_Y = 20;
       function edgePoint(rect, side){
         var x, y;
-        if(side === 'left'){ x = rect.left; y = rect.top + rect.height/2; }
-        else if(side === 'right'){ x = rect.right; y = rect.top + rect.height/2; }
+        if(side === 'left'){ x = rect.left; y = rect.top + HEAD_Y; }
+        else if(side === 'right'){ x = rect.right; y = rect.top + HEAD_Y; }
         else if(side === 'top'){ x = rect.left + rect.width/2; y = rect.top; }
         else { x = rect.left + rect.width/2; y = rect.bottom; }
         return { x: x - wrapRect.left, y: y - wrapRect.top };
+      }
+      function arrowHead(parts, tipX, tipY, angle, color){
+        var ah = 10, aw = 5;
+        var backX = tipX - ah*Math.cos(angle), backY = tipY - ah*Math.sin(angle);
+        var lx = backX - aw*Math.sin(angle), ly = backY + aw*Math.cos(angle);
+        var rx = backX + aw*Math.sin(angle), ry = backY - aw*Math.cos(angle);
+        parts.push('<path d="M '+lx+' '+ly+' L '+tipX+' '+tipY+' L '+rx+' '+ry+' Z" fill="'+color+'" opacity="0.85"/>');
       }
 
       var parts = [];
@@ -4387,30 +4400,29 @@
         var rA = cards[i].getBoundingClientRect(), rB = cards[i+1].getBoundingClientRect();
         var color = lerpHex('#0083C7', '#00B050', cards.length>2 ? i/(cards.length-2) : 0);
         var sameRow = Math.abs(rA.top - rB.top) < 10;
-        var startPt, endPt;
+        var pathD;
         if(sameRow){
           // cung hang: the sau co the nam ben TRAI (hang bi dao nguoc) hoac ben PHAI (hang binh
-          // thuong) the truoc - chon canh gan nhau nhat theo huong thuc te thay vi gia dinh cung.
-          if(rB.left >= rA.left){ startPt = edgePoint(rA,'right'); endPt = edgePoint(rB,'left'); }
-          else { startPt = edgePoint(rA,'left'); endPt = edgePoint(rB,'right'); }
+          // thuong) the truoc - 1 doan THANG NGANG duy nhat, cung do cao HEAD_Y ca 2 dau.
+          var toRight = rB.left >= rA.left;
+          var sp = toRight ? edgePoint(rA,'right') : edgePoint(rA,'left');
+          var ep = toRight ? edgePoint(rB,'left') : edgePoint(rB,'right');
+          pathD = 'M '+sp.x+' '+sp.y+' L '+ep.x+' '+ep.y;
+          parts.push('<path d="'+pathD+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 7" opacity="0.75"/>');
+          arrowHead(parts, ep.x, ep.y, toRight ? 0 : Math.PI, color);
         } else {
-          // khac hang: noi tu canh duoi/tren phu hop tuy the sau nam hang duoi hay hang tren.
-          if(rB.top > rA.top){ startPt = edgePoint(rA,'bottom'); endPt = edgePoint(rB,'top'); }
-          else { startPt = edgePoint(rA,'top'); endPt = edgePoint(rB,'bottom'); }
+          // khac hang (wrap xuong/len dong): duong GAP KHUC vuong goc kieu so do khoi - THANG
+          // DUNG tu canh duoi/tren the truoc, THANG NGANG qua giua khe ho giua 2 hang, roi THANG
+          // DUNG vao canh tren/duoi the sau - KHONG dung duong cheo, dung dung net ve tay thang
+          // cua anh Linh (hinh mui ten do) thay vi 1 net cheo don.
+          var down = rB.top > rA.top;
+          var sp2 = down ? edgePoint(rA,'bottom') : edgePoint(rA,'top');
+          var ep2 = down ? edgePoint(rB,'top') : edgePoint(rB,'bottom');
+          var midY = (sp2.y + ep2.y) / 2;
+          pathD = 'M '+sp2.x+' '+sp2.y+' L '+sp2.x+' '+midY+' L '+ep2.x+' '+midY+' L '+ep2.x+' '+ep2.y;
+          parts.push('<path d="'+pathD+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 7" opacity="0.75"/>');
+          arrowHead(parts, ep2.x, ep2.y, down ? Math.PI/2 : -Math.PI/2, color);
         }
-        var dx = endPt.x - startPt.x, dy = endPt.y - startPt.y;
-        var angle = Math.atan2(dy, dx);
-        var pathD = 'M '+startPt.x+' '+startPt.y+' L '+endPt.x+' '+endPt.y;
-        // dung net cham "1 7" giong voi kieu duong hanh trinh tren ban do o dau Slide 03 (WP.*
-        // waypoints ben tren) de dong bo ngon ngu thi giac "day la duong di" trong toan slide.
-        parts.push('<path d="'+pathD+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 7" opacity="0.75"/>');
-        // mui ten tam giac xoay theo dung huong duong thang (atan2) - hoat dong dung cho MOI
-        // huong (trai/phai/tren/duoi/cheo) thay vi chi 2 huong co dinh nhu truoc.
-        var ah = 10, aw = 5;
-        var backX = endPt.x - ah*Math.cos(angle), backY = endPt.y - ah*Math.sin(angle);
-        var lx = backX - aw*Math.sin(angle), ly = backY + aw*Math.cos(angle);
-        var rx = backX + aw*Math.sin(angle), ry = backY - aw*Math.cos(angle);
-        parts.push('<path d="M '+lx+' '+ly+' L '+endPt.x+' '+endPt.y+' L '+rx+' '+ry+' Z" fill="'+color+'" opacity="0.85"/>');
       }
       svg.innerHTML = parts.join('');
     }

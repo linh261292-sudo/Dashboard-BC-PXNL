@@ -186,6 +186,22 @@
   .note{font-size:11.5px; color:var(--ink-faint); line-height:1.6; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);}
   .note b{color:var(--ink-muted);}
 
+  /* --- Slide moi sau Slide 07: bieu do thoi gian lam hang may boc do CSU (thanh cheo ngang
+     100%-stacked, thay cho bieu do tron de de doc % nho va so sanh 2 ky voi nhau) --- */
+  .csu-row{margin-bottom:22px;}
+  .csu-row:last-of-type{margin-bottom:0;}
+  .csu-row-head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
+  .csu-row-label{font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--ink);}
+  .csu-row-total{font-size:11.5px; color:var(--ink-faint);}
+  .csu-bar{display:flex; gap:2px; height:34px; width:100%;}
+  .csu-seg{display:flex; align-items:center; justify-content:center; min-width:0; cursor:default; transition:filter .15s ease;}
+  .csu-seg:hover{filter:brightness(1.08);}
+  .csu-seg:first-child{border-radius:8px 0 0 8px;}
+  .csu-seg:last-child{border-radius:0 8px 8px 0;}
+  .csu-seg:only-child{border-radius:8px;}
+  .csu-seg-lbl{font-family:var(--font-display); font-size:11.5px; font-weight:700; white-space:nowrap; pointer-events:none;}
+  .csu-empty{font-size:12.5px; color:var(--ink-faint); padding:10px 0;}
+
   /* --- Slide 03: bang "Vi tri hien tai tung tau" tach thanh nhieu the nho theo TUNG NHOM VI TRI
      (Dang den Indonesia / Indonesia / Indonesia-Go Gia / Go Gia / Go Gia-Cai Cui / Khu neo Cai Cui
      / Cang Song Hau 1) thay vi 1 bang gop chung nhu truoc, de de theo doi tau dang o chang nao. */
@@ -420,7 +436,8 @@
     <li><a href="#p2" data-target="p2"><span class="num">05</span><span class="lbl">Tình hình tàu than</span></a></li>
     <li><a href="#pExp3D" data-target="pExp3D"><span class="num">06</span><span class="lbl">Bố trí đống than lưu kho NMĐ SH1</span></a></li>
     <li><a href="#p4" data-target="p4"><span class="num">07</span><span class="lbl">Tồn kho &amp; Nhập than trong tháng</span></a></li>
-    <li><a href="#p7" data-target="p7"><span class="num">08</span><span class="lbl">Cảnh báo &amp; dự báo nguồn than</span></a></li>
+    <li><a href="#pCSU" data-target="pCSU"><span class="num">08</span><span class="lbl">Hiệu suất bốc dỡ CSU</span></a></li>
+    <li><a href="#p7" data-target="p7"><span class="num">09</span><span class="lbl">Cảnh báo &amp; dự báo nguồn than</span></a></li>
   </ul>
   <div class="navfoot">
     Nguồn: <b>So_do_luu_kho_than.xlsx</b><br>
@@ -461,7 +478,8 @@
         <div class="cover-toc-item" data-target="p2"><span class="cti-num">05</span><div><div class="cti-title">Tình hình tàu than</div><div class="cti-stat" id="ctiP2">–</div></div></div>
         <div class="cover-toc-item" data-target="pExp3D"><span class="cti-num">06</span><div><div class="cti-title">Bố trí đống than lưu kho</div><div class="cti-stat" id="ctiExp3D">–</div></div></div>
         <div class="cover-toc-item" data-target="p4"><span class="cti-num">07</span><div><div class="cti-title">Tồn kho &amp; nhập than trong tháng</div><div class="cti-stat"><span id="ctiP4">–</span><br><span id="ctiP5">–</span></div></div></div>
-        <div class="cover-toc-item" data-target="p7"><span class="cti-num">08</span><div><div class="cti-title">Cảnh báo &amp; dự báo</div><div class="cti-stat" id="ctiP7">–</div></div></div>
+        <div class="cover-toc-item" data-target="pCSU"><span class="cti-num">08</span><div><div class="cti-title">Hiệu suất bốc dỡ CSU</div><div class="cti-stat" id="ctiCSU">–</div></div></div>
+        <div class="cover-toc-item" data-target="p7"><span class="cti-num">09</span><div><div class="cti-title">Cảnh báo &amp; dự báo</div><div class="cti-stat" id="ctiP7">–</div></div></div>
       </div>
     </div>
     <div class="scrolldown"><span>Cuộn để xem chi tiết</span><span class="chevron"></span></div>
@@ -687,11 +705,27 @@
     </div>
   </section>
 
-  <!-- ===================== 07. CẢNH BÁO ===================== -->
+  <!-- ===================== 08. HIỆU SUẤT BỐC DỠ CSU ===================== -->
+  <section class="panel" id="pCSU">
+    <div class="bg-wrap"><div class="orb orb-blue" style="top:14%; left:84%;"></div></div>
+    <div class="panel-inner">
+      <div class="eyebrow" data-reveal="fade">08 · Hiệu suất bốc dỡ</div>
+      <h2 class="title" data-reveal="fade" style="margin-bottom:20px;">Thời gian làm hàng máy bốc dỡ CSU</h2>
+
+      <div class="panel-card" data-reveal>
+        <h3>Cơ cấu thời gian làm hàng CSU</h3>
+        <div class="hint" id="csuHint">Di chuột vào từng đoạn để xem chi tiết · Nguồn: sheet "Nhập S.liệu làm hàng CSU"</div>
+        <div id="csuChart"></div>
+        <div class="legend" id="csuLegend"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 09. CẢNH BÁO ===================== -->
   <section class="panel" id="p7">
     <div class="bg-wrap"><div class="orb orb-amber" style="top:15%; left:70%;"></div></div>
     <div class="panel-inner">
-      <div class="eyebrow" data-reveal="fade">08 · Cảnh báo &amp; dự báo nguồn than về</div>
+      <div class="eyebrow" data-reveal="fade">09 · Cảnh báo &amp; dự báo nguồn than về</div>
       <h2 class="title" data-reveal="fade">Đánh giá dự trữ &amp; Dự báo nguồn than về</h2>
       <p class="subtitle" data-reveal="fade" style="margin-bottom:24px;" id="p7Subtitle">–</p>
 
@@ -7306,6 +7340,88 @@
         ]
       }
     ]
+  },
+  "csuTime": {
+    "day": {
+      "items": [
+        {
+          "label": "Thời gian làm hàng (CSU làm việc)",
+          "pct": 0.7208,
+          "hours": 34.6
+        },
+        {
+          "label": "Thời gian gom vét (Xe làm việc)",
+          "pct": 0.0813,
+          "hours": 3.9
+        },
+        {
+          "label": "Thời gian dừng bình thường (CSU di chuyển, cẩu xe gom vét, giao/nhận ca, đổi tuyến nhập than, tắc than…)",
+          "pct": 0.1979,
+          "hours": 9.5
+        },
+        {
+          "label": "Thời gian trống cảng (chưa có tàu cập bến)",
+          "pct": 0.0,
+          "hours": 0.0
+        },
+        {
+          "label": "Thời gian dừng do sự cố thiết bị",
+          "pct": 0.0,
+          "hours": 0.0
+        },
+        {
+          "label": "Thời gian dừng bảo trì bảo dưỡng",
+          "pct": 0.0,
+          "hours": 0.0
+        },
+        {
+          "label": "Thời gian dừng do thời tiết, an toàn (mưa, bão…)",
+          "pct": 0.0,
+          "hours": 0.0
+        }
+      ],
+      "totalHours": 48.0
+    },
+    "month": {
+      "items": [
+        {
+          "label": "Thời gian làm hàng (CSU làm việc)",
+          "pct": 0.6008,
+          "hours": 230.7
+        },
+        {
+          "label": "Thời gian gom vét (Xe làm việc)",
+          "pct": 0.0828,
+          "hours": 31.8
+        },
+        {
+          "label": "Thời gian dừng bình thường (CSU di chuyển, cẩu xe gom vét, giao/nhận ca, đổi tuyến nhập than…)",
+          "pct": 0.2479,
+          "hours": 95.2
+        },
+        {
+          "label": "Thời gian trống cảng (chưa có tàu cập bến)",
+          "pct": 0.0,
+          "hours": 0.0
+        },
+        {
+          "label": "Thời gian dừng do sự cố thiết bị",
+          "pct": 0.0,
+          "hours": 0.0
+        },
+        {
+          "label": "Thời gian dừng bảo trì bảo dưỡng",
+          "pct": 0.0203,
+          "hours": 7.8
+        },
+        {
+          "label": "Thời gian dừng do thời tiết, an toàn (mưa, bão…)",
+          "pct": 0.0482,
+          "hours": 18.5
+        }
+      ],
+      "totalHours": 384.0
+    }
   }
 };
 
@@ -7599,6 +7715,12 @@
     R.forecastEndValue = R.hasForecast ? R.forecastDays[R.forecastDays.length-1].tonkho : R.tonkhoProd;
     R.forecastEndDay = daysInMonth;
 
+    // ---- thời gian làm hàng máy bốc dỡ CSU (sheet "Nhập S.liệu làm hàng CSU") — dùng cho
+    // biểu đồ Slide mới ngay sau Slide 07 (Tồn kho & Nhập than) ----
+    var csuRaw = raw.csuTime || {};
+    R.csuDay = csuRaw.day || null;
+    R.csuMonth = csuRaw.month || null;
+
     return R;
   }
 
@@ -7891,6 +8013,7 @@
     set('p3dStockInfoBody', p3dStockInfoHtml);
     set('ctiP4', 'Đỉnh '+fmt(R.tonkhoProd)+' tấn ('+R.reportDateShort+'), đáy '+fmt(R.dipValue)+' tấn ('+R.dipDay+'/'+R.month+')');
     set('ctiP5', 'Nhập '+fmt(R.totalNhap)+' tấn · Tiêu thụ '+fmt(R.totalTieuthu)+' tấn từ đầu tháng');
+    set('ctiCSU', R.csuDay ? ('CSU làm việc '+Math.round(R.csuDay.items[0].pct*100)+'% trong 24h gần nhất') : 'Chưa có dữ liệu CSU');
     set('ctiP7', 'Dự trữ còn '+digital2(R.reserveDays)+' ngày — '+R.statusWord);
 
     // ---- Slide 02: Kế hoạch PO tàu than ----
@@ -8449,6 +8572,81 @@
     hitRect.addEventListener('mouseleave', function(){ hoverLine.setAttribute('visibility','hidden'); hoverDots.forEach(function(d){ d.setAttribute('visibility','hidden'); }); hideTip(); });
 
     document.getElementById('inChart').appendChild(svg);
+  })();
+
+  /* ================= THỜI GIAN LÀM HÀNG CSU (thanh ngang 100%-stacked, Slide 08 #pCSU) =================
+     7 hạng mục CỐ ĐỊNH theo đúng thứ tự trong sheet "Nhập S.liệu làm hàng CSU" (mục III/IV) — màu lấy
+     từ bảng màu phân loại (categorical) đã kiểm chứng CVD/contrast qua skill dataviz, KHÔNG dùng màu
+     tự chọn bằng mắt. 2 hàng: 24h gần nhất (R.csuDay) và lũy kế trong tháng (R.csuMonth); dùng chung 1
+     chú giải bên dưới vì cùng 1 bộ hạng mục. */
+  (function(){
+    var CSU_CATS = [
+      { color:'#2a78d6', ink:'#12202E' },  // 1 Thời gian làm hàng (CSU làm việc)
+      { color:'#eb6834', ink:'#12202E' },  // 2 Thời gian gom vét (Xe làm việc)
+      { color:'#1baf7a', ink:'#12202E' },  // 3 Thời gian dừng bình thường
+      { color:'#eda100', ink:'#12202E' },  // 4 Thời gian trống cảng
+      { color:'#e87ba4', ink:'#12202E' },  // 5 Thời gian dừng do sự cố thiết bị
+      { color:'#008300', ink:'#fff'    },  // 6 Thời gian dừng bảo trì bảo dưỡng
+      { color:'#4a3aa7', ink:'#fff'    }   // 7 Thời gian dừng do thời tiết, an toàn
+    ];
+    var container = document.getElementById('csuChart');
+    var legendEl = document.getElementById('csuLegend');
+    if(!container) return;
+
+    function fmtH(v){ return (Math.round(v*10)/10).toLocaleString('vi-VN'); }
+
+    function buildRow(label, block){
+      var row = document.createElement('div');
+      row.className = 'csu-row';
+      if(!block || !block.items || !block.items.length){
+        row.innerHTML = '<div class="csu-row-head"><span class="csu-row-label">'+label+'</span></div>'+
+          '<div class="csu-empty">Chưa có dữ liệu trong sheet nguồn cho kỳ này.</div>';
+        return row;
+      }
+      var head = document.createElement('div');
+      head.className = 'csu-row-head';
+      head.innerHTML = '<span class="csu-row-label">'+label+'</span><span class="csu-row-total">'+fmtH(block.totalHours)+' giờ ghi nhận</span>';
+      row.appendChild(head);
+
+      var bar = document.createElement('div');
+      bar.className = 'csu-bar';
+      block.items.forEach(function(it, idx){
+        if(it.pct <= 0) return;
+        var cat = CSU_CATS[idx] || CSU_CATS[CSU_CATS.length-1];
+        var seg = document.createElement('div');
+        seg.className = 'csu-seg';
+        seg.style.flex = Math.max(it.pct, 0.001);
+        seg.style.background = cat.color;
+        if(it.pct >= 0.06){
+          var lbl = document.createElement('span');
+          lbl.className = 'csu-seg-lbl';
+          lbl.style.color = cat.ink;
+          lbl.textContent = Math.round(it.pct*100)+'%';
+          seg.appendChild(lbl);
+        }
+        seg.addEventListener('mousemove', function(e){
+          showTip(e.pageX, e.pageY, '<b>'+it.label+'</b><br>'+(Math.round(it.pct*1000)/10)+'% · '+fmtH(it.hours)+' giờ');
+        });
+        seg.addEventListener('mouseleave', hideTip);
+        bar.appendChild(seg);
+      });
+      row.appendChild(bar);
+      return row;
+    }
+
+    container.innerHTML = '';
+    var dayLabel = 'Trong 24 giờ (00h00–24h00)' + (REPORT.reportDate ? ' · '+REPORT.reportDateShort : '');
+    var monthLabel = 'Lũy kế trong tháng ' + REPORT.month + '/' + REPORT.year;
+    container.appendChild(buildRow(dayLabel, REPORT.csuDay));
+    container.appendChild(buildRow(monthLabel, REPORT.csuMonth));
+
+    if(legendEl){
+      var labelSource = (REPORT.csuDay && REPORT.csuDay.items) || (REPORT.csuMonth && REPORT.csuMonth.items) || [];
+      legendEl.innerHTML = labelSource.map(function(it, idx){
+        var cat = CSU_CATS[idx] || CSU_CATS[CSU_CATS.length-1];
+        return '<span><i style="background:'+cat.color+';"></i> '+it.label+'</span>';
+      }).join('');
+    }
   })();
 
   // (Khoi "PROGRESS BAR (tau OG)" - #progressBar - da bo cung voi bang "Tau me OG dang giao

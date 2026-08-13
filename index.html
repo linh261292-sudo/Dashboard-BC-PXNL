@@ -419,9 +419,8 @@
     <li><a href="#p1" data-target="p1"><span class="num">04</span><span class="lbl">Tổng quan tồn kho</span></a></li>
     <li><a href="#p2" data-target="p2"><span class="num">05</span><span class="lbl">Tình hình tàu than</span></a></li>
     <li><a href="#pExp3D" data-target="pExp3D"><span class="num">06</span><span class="lbl">Bố trí đống than lưu kho NMĐ SH1</span></a></li>
-    <li><a href="#p4" data-target="p4"><span class="num">07</span><span class="lbl">Tồn kho trong tháng</span></a></li>
-    <li><a href="#p5" data-target="p5"><span class="num">08</span><span class="lbl">Nhập than &amp; tiêu thụ</span></a></li>
-    <li><a href="#p7" data-target="p7"><span class="num">09</span><span class="lbl">Cảnh báo &amp; dự báo nguồn than</span></a></li>
+    <li><a href="#p4" data-target="p4"><span class="num">07</span><span class="lbl">Tồn kho &amp; Nhập than trong tháng</span></a></li>
+    <li><a href="#p7" data-target="p7"><span class="num">08</span><span class="lbl">Cảnh báo &amp; dự báo nguồn than</span></a></li>
   </ul>
   <div class="navfoot">
     Nguồn: <b>So_do_luu_kho_than.xlsx</b><br>
@@ -461,9 +460,8 @@
         <div class="cover-toc-item" data-target="p1"><span class="cti-num">04</span><div><div class="cti-title">Tổng quan tồn kho</div><div class="cti-stat" id="ctiP1">–</div></div></div>
         <div class="cover-toc-item" data-target="p2"><span class="cti-num">05</span><div><div class="cti-title">Tình hình tàu than</div><div class="cti-stat" id="ctiP2">–</div></div></div>
         <div class="cover-toc-item" data-target="pExp3D"><span class="cti-num">06</span><div><div class="cti-title">Bố trí đống than lưu kho</div><div class="cti-stat" id="ctiExp3D">–</div></div></div>
-        <div class="cover-toc-item" data-target="p4"><span class="cti-num">07</span><div><div class="cti-title">Tồn kho trong tháng</div><div class="cti-stat" id="ctiP4">–</div></div></div>
-        <div class="cover-toc-item" data-target="p5"><span class="cti-num">08</span><div><div class="cti-title">Nhập than &amp; tiêu thụ</div><div class="cti-stat" id="ctiP5">–</div></div></div>
-        <div class="cover-toc-item" data-target="p7"><span class="cti-num">09</span><div><div class="cti-title">Cảnh báo &amp; dự báo</div><div class="cti-stat" id="ctiP7">–</div></div></div>
+        <div class="cover-toc-item" data-target="p4"><span class="cti-num">07</span><div><div class="cti-title">Tồn kho &amp; nhập than trong tháng</div><div class="cti-stat"><span id="ctiP4">–</span><br><span id="ctiP5">–</span></div></div></div>
+        <div class="cover-toc-item" data-target="p7"><span class="cti-num">08</span><div><div class="cti-title">Cảnh báo &amp; dự báo</div><div class="cti-stat" id="ctiP7">–</div></div></div>
       </div>
     </div>
     <div class="scrolldown"><span>Cuộn để xem chi tiết</span><span class="chevron"></span></div>
@@ -658,49 +656,42 @@
     </div>
   </section>
 
-  <!-- ===================== 05. XU HƯỚNG ===================== -->
+  <!-- ===================== 05. XU HƯỚNG (Tồn kho + Nhập/Tiêu thụ, gộp chung 1 slide để so sánh) ===================== -->
   <section class="panel" id="p4">
-    <div class="bg-wrap"><div class="orb orb-blue" style="top:12%; left:78%;"></div></div>
+    <div class="bg-wrap"><div class="orb orb-blue" style="top:12%; left:78%;"></div><div class="orb orb-green" style="top:60%; left:8%;"></div></div>
     <div class="panel-inner">
       <div class="eyebrow" data-reveal="fade">07 · Diễn biến cả tháng</div>
-      <h2 class="title" data-reveal="fade" id="p4Title" style="margin-bottom:20px;">Tồn kho trong Tháng</h2>
+      <h2 class="title" data-reveal="fade" id="p4Title" style="margin-bottom:20px;">Tồn kho &amp; Nhập than trong Tháng</h2>
 
-      <div class="panel-card" data-reveal>
-        <h3 id="p4ChartTitle">Than tồn kho theo ngày (tấn)</h3>
-        <div class="hint" id="p4ChartHint">Di chuột để xem chi tiết từng ngày · Nguồn: Báo cáo sản lượng</div>
-        <div id="trendChart"></div>
-        <div class="legend" id="p4ForecastLegend" style="display:none;">
-          <span><i style="background:var(--blue);"></i> Tồn kho thực tế</span>
-          <span><i style="background:var(--blue); opacity:0.55;"></i> Dự kiến (đến hết tháng)</span>
+      <div class="two-col">
+        <div class="panel-card" data-reveal>
+          <h3 id="p4ChartTitle">Than tồn kho theo ngày (tấn)</h3>
+          <div class="hint" id="p4ChartHint">Di chuột để xem chi tiết từng ngày · Nguồn: Báo cáo sản lượng</div>
+          <div id="trendChart"></div>
+          <div class="legend" id="p4ForecastLegend" style="display:none;">
+            <span><i style="background:var(--blue);"></i> Tồn kho thực tế</span>
+            <span><i style="background:var(--blue); opacity:0.55;"></i> Dự kiến (đến hết tháng)</span>
+          </div>
+        </div>
+
+        <div class="panel-card" data-reveal>
+          <h3>Nhập than &amp; tiêu thụ theo ngày (tấn)</h3>
+          <div class="hint">Di chuột để xem chi tiết từng ngày &nbsp;·&nbsp; Đường xanh dương: nhập than trong ngày &nbsp;·&nbsp; Đường xanh lá: khối lượng tiêu thụ trong ngày</div>
+          <div id="inChart"></div>
+          <div class="legend">
+            <span><i style="background:var(--blue);"></i> Nhập than trong ngày</span>
+            <span><i style="background:var(--green);"></i> Tiêu thụ trong ngày</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== 06. NHẬP & TIÊU THỤ ===================== -->
-  <section class="panel" id="p5">
-    <div class="bg-wrap"><div class="orb orb-green" style="top:20%; left:12%;"></div></div>
-    <div class="panel-inner">
-      <div class="eyebrow" data-reveal="fade">08 · Cân đối nhập – xuất</div>
-      <h2 class="title" data-reveal="fade" style="margin-bottom:20px;">Nhập than &amp; tiêu thụ theo ngày</h2>
-
-      <div class="panel-card" data-reveal>
-        <h3>Khối lượng nhập than so với tiêu thụ theo ngày (tấn)</h3>
-        <div class="hint">Di chuột để xem chi tiết từng ngày &nbsp;·&nbsp; Đường xanh dương: nhập than trong ngày &nbsp;·&nbsp; Đường xanh lá: khối lượng tiêu thụ trong ngày</div>
-        <div id="inChart"></div>
-        <div class="legend">
-          <span><i style="background:var(--blue);"></i> Nhập than trong ngày</span>
-          <span><i style="background:var(--green);"></i> Tiêu thụ trong ngày</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== 08. CẢNH BÁO ===================== -->
+  <!-- ===================== 07. CẢNH BÁO ===================== -->
   <section class="panel" id="p7">
     <div class="bg-wrap"><div class="orb orb-amber" style="top:15%; left:70%;"></div></div>
     <div class="panel-inner">
-      <div class="eyebrow" data-reveal="fade">09 · Cảnh báo &amp; dự báo nguồn than về</div>
+      <div class="eyebrow" data-reveal="fade">08 · Cảnh báo &amp; dự báo nguồn than về</div>
       <h2 class="title" data-reveal="fade">Đánh giá dự trữ &amp; Dự báo nguồn than về</h2>
       <p class="subtitle" data-reveal="fade" style="margin-bottom:24px;" id="p7Subtitle">–</p>
 
@@ -7504,6 +7495,7 @@
       return {
         name:v.name,
         fromLabel: parent ? (parent.name + ' (' + parent.code + ')') : (v.parentCode || '—'),
+        parentCode: v.parentCode || '—',
         position: v.position || '',
         klNor:v.klNor, done:v.done, remain:v.remain
       };
@@ -7928,12 +7920,15 @@
     // Gop chung tau me (OG) + tau con/sa lan (SB) thanh 1 danh sach, roi CHIA theo tung nhom vi tri
     // (thay vi 1 bang duy nhat gop het nhu truoc) de de theo doi tau dang o chang nao trong hanh
     // trinh Indonesia -> Go Gia -> Cai Cui -> Song Hau 1.
+    // Cot "OG so" cua bang vi tri: voi tau me OG (sheet "Tau OG Indonesia-VTau") lay tu cot "Loại"
+    // (da co san trong v.code); voi tau con/sa lan SB (sheet "Tàu SB tại VTau- Cảng SH1") lay tu
+    // cot "OG số" (v.parentCode) - theo dung yeu cau anh Linh, thay cho nhan "Đội tàu" chung chung.
     var posEntries = [];
     R.ogIndoVtau.forEach(function(v){
-      posEntries.push({name:v.name+(v.code?(' ('+v.code+')'):''), fleet:'Tàu mẹ (OG)', position:v.position||'', qty:v.klHang});
+      posEntries.push({name:v.name+(v.code?(' ('+v.code+')'):''), ogNo:v.code||'–', position:v.position||'', qty:v.klHang});
     });
     R.sbVessels.forEach(function(v){
-      posEntries.push({name:v.name, fleet:'Tàu con/sà lan (SB)', position:v.position||'', qty:v.klNor});
+      posEntries.push({name:v.name, ogNo:v.parentCode||'–', position:v.position||'', qty:v.klNor});
     });
     var POS_GROUPS = [
       {key:'Đang đến Indonesia', label:'Đang đến Indonesia'},
@@ -8059,12 +8054,12 @@
     function posGroupCardHtml(label, rows, accentColor, extraClass){
       var totalQty = rows.reduce(function(s,e){ return s+e.qty; }, 0);
       var body = rows.length
-        ? rows.map(function(e){ return '<tr><td>'+e.name+'</td><td>'+e.fleet+'</td><td class="num">'+fmt1(e.qty)+'</td></tr>'; }).join('')
+        ? rows.map(function(e){ return '<tr><td>'+e.name+'</td><td>'+e.ogNo+'</td><td class="num">'+fmt1(e.qty)+'</td></tr>'; }).join('')
         : '<tr><td colspan="3" style="text-align:center; color:var(--ink-faint); font-size:11px;">Không có tàu</td></tr>';
       var styleAttr = accentColor ? ' style="--pos-accent:'+accentColor+';"' : '';
       return '<div class="pos-group'+(extraClass?' '+extraClass:'')+'"'+styleAttr+'>'+
         '<div class="pos-group-head"><span>'+label+'</span><span class="pos-group-count">'+rows.length+' tàu'+(rows.length?' · '+fmt1(totalQty)+' tấn':'')+'</span></div>'+
-        '<table class="data-tbl pos-group-tbl"><thead><tr><th>Tàu</th><th>Đội tàu</th><th class="num">KL (tấn)</th></tr></thead><tbody>'+body+'</tbody></table>'+
+        '<table class="data-tbl pos-group-tbl"><thead><tr><th>Tàu</th><th>OG số</th><th class="num">KL (tấn)</th></tr></thead><tbody>'+body+'</tbody></table>'+
       '</div>';
     }
     var posGroupsHtml = '';
@@ -8140,7 +8135,7 @@
     set('tbodyYardDetail', yardRows);
 
     // ---- Slide 5: xu hướng ----
-    set('p4Title', 'Tồn kho trong Tháng '+R.month+'/'+R.year);
+    set('p4Title', 'Tồn kho &amp; Nhập than trong Tháng '+R.month+'/'+R.year);
     set('p4ChartTitle', 'Than tồn kho theo ngày (tấn) — tháng '+R.month+'/'+R.year+' (1–'+R.forecastEndDay+'/'+R.month+')');
     // (doan ghi chu dien giai xu huong ton kho - id p4Subtitle - da bo theo yeu cau, khong hien
     // thi nua tren Slide 07.)

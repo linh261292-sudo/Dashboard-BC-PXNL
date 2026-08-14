@@ -180,6 +180,11 @@
 
   .two-col{display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start;}
   @media (max-width:980px){.two-col{grid-template-columns:1fr;}}
+  /* Hàng 2 thẻ mà nội dung dài-ngắn khác nhau (bảng nhiều dòng vs. lưới KPI/biểu đồ) — kéo
+     2 thẻ bằng chiều cao nhau rồi canh giữa phần thân thẻ ngắn hơn, để mép trên/dưới thẳng hàng. */
+  .two-col-balance{align-items:stretch;}
+  .panel-card-flex{display:flex; flex-direction:column;}
+  .card-body-center{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center;}
   .panel-card{background:linear-gradient(165deg, var(--surface), var(--surface-2)); border:1px solid var(--line); border-radius:20px; padding:22px 24px; box-shadow:0 20px 40px -20px rgba(0,0,0,0.55);}
   .panel-card h3{font-family:var(--font-display); font-size:14.5px; font-weight:700; margin-bottom:4px;}
   .panel-card .hint{font-size:11.5px; color:var(--ink-faint); margin-bottom:14px;}
@@ -574,7 +579,7 @@
       <div class="eyebrow" data-reveal="fade">04 · Tổng quan</div>
       <h2 class="title" data-reveal="fade" style="margin-bottom:26px;">Tổng tồn kho hiện tại</h2>
 
-      <div class="two-col">
+      <div class="two-col two-col-balance">
         <div class="panel-card" data-reveal>
           <div class="kpi-grid">
             <div class="card" data-reveal-child>
@@ -610,33 +615,39 @@
           </div>
         </div>
 
-        <div class="panel-card" data-reveal>
+        <div class="panel-card panel-card-flex" data-reveal>
           <h3>Bảng chi tiết tồn theo đống</h3>
           <div class="hint" id="p2TblHint">Khối lượng và tỷ trọng trong tổng tồn kho tại kho</div>
           <div class="hint" id="p1YardInsight" style="margin-top:2px;">–</div>
-          <table class="data-tbl">
-            <thead><tr><th>Khu vực</th><th class="num">Kín (tấn)</th><th class="num">Hở (tấn)</th><th class="num">Tổng (tấn)</th><th class="num">Tỷ trọng</th></tr></thead>
-            <tbody id="tbodyYardDetail"></tbody>
-          </table>
-          <div class="note">Vùng <b>Kín</b> tương ứng phân đoạn F–G (nhà kho có mái); vùng <b>Hở</b> tương ứng phân đoạn A–E (kho ngoài trời) — xem chi tiết trực quan ở mục 06.</div>
+          <div class="card-body-center">
+            <table class="data-tbl">
+              <thead><tr><th>Khu vực</th><th class="num">Kín (tấn)</th><th class="num">Hở (tấn)</th><th class="num">Tổng (tấn)</th><th class="num">Tỷ trọng</th></tr></thead>
+              <tbody id="tbodyYardDetail"></tbody>
+            </table>
+            <div class="note">Vùng <b>Kín</b> tương ứng phân đoạn F–G (nhà kho có mái); vùng <b>Hở</b> tương ứng phân đoạn A–E (kho ngoài trời) — xem chi tiết trực quan ở mục 06.</div>
+          </div>
         </div>
       </div>
 
-      <div class="two-col" style="margin-top:20px;">
-        <div class="panel-card" data-reveal>
+      <div class="two-col two-col-balance" style="margin-top:20px;">
+        <div class="panel-card panel-card-flex" data-reveal>
           <h3>Cơ cấu Kín / Hở (theo kho)</h3>
           <div class="hint" id="p1DonutHint">Tỷ trọng khối lượng than theo hình thức lưu chứa</div>
-          <div id="donutWrap" style="display:flex; align-items:center; gap:22px; flex-wrap:wrap;"></div>
-          <div class="legend" id="p1Legend"></div>
+          <div class="card-body-center">
+            <div id="donutWrap" style="display:flex; align-items:center; gap:22px; flex-wrap:wrap;"></div>
+            <div class="legend" id="p1Legend"></div>
+          </div>
         </div>
 
-        <div class="panel-card" data-reveal>
+        <div class="panel-card panel-card-flex" data-reveal>
           <h3>Tàu OG tồn trong kho</h3>
           <div class="hint" id="p6HintStock">Khối lượng than theo từng chuyến tàu đã nhập kho</div>
-          <table class="data-tbl">
-            <thead><tr><th>Tên tàu</th><th class="num">Khối lượng tồn (tấn)</th></tr></thead>
-            <tbody id="tbodyVesselStock"></tbody>
-          </table>
+          <div class="card-body-center">
+            <table class="data-tbl">
+              <thead><tr><th>Tên tàu</th><th class="num">Khối lượng tồn (tấn)</th></tr></thead>
+              <tbody id="tbodyVesselStock"></tbody>
+            </table>
+          </div>
           <div class="hint" style="margin-top:16px; font-weight:600; color:var(--ink); opacity:0.85;">Xem vị trí &amp; hành trình từng tàu tại Slide 03 · Bản đồ vị trí tàu OG.</div>
         </div>
       </div>
